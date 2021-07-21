@@ -49,11 +49,28 @@
             this.DisplayBtn = new System.Windows.Forms.Button();
             this.DelBtn = new System.Windows.Forms.Button();
             this.GetDeposit = new System.Windows.Forms.Button();
+            this.OrderResultGroupBox = new System.Windows.Forms.GroupBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Order_StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Order_StockName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Order_Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Order_PnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Order_State = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.AccountTextBox = new System.Windows.Forms.TextBox();
+            this.DepositTextBox = new System.Windows.Forms.TextBox();
+            this.TotalPnLTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.API)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TargetStocks)).BeginInit();
+            this.OrderResultGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // MarketType
@@ -88,15 +105,15 @@
             this.Log.Multiline = true;
             this.Log.Name = "Log";
             this.Log.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.Log.Size = new System.Drawing.Size(764, 360);
+            this.Log.Size = new System.Drawing.Size(764, 501);
             this.Log.TabIndex = 5;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.Log);
-            this.groupBox1.Location = new System.Drawing.Point(12, 39);
+            this.groupBox1.Location = new System.Drawing.Point(12, 167);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(776, 386);
+            this.groupBox1.Size = new System.Drawing.Size(776, 527);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Logs";
@@ -116,7 +133,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Status,
             this.CurrentTime});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 517);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 701);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1377, 22);
             this.statusStrip1.TabIndex = 8;
@@ -186,7 +203,7 @@
             // 
             // TestBtn
             // 
-            this.TestBtn.Location = new System.Drawing.Point(248, 479);
+            this.TestBtn.Location = new System.Drawing.Point(151, 677);
             this.TestBtn.Name = "TestBtn";
             this.TestBtn.Size = new System.Drawing.Size(75, 23);
             this.TestBtn.TabIndex = 10;
@@ -196,14 +213,14 @@
             // 
             // TestText
             // 
-            this.TestText.Location = new System.Drawing.Point(104, 479);
+            this.TestText.Location = new System.Drawing.Point(7, 677);
             this.TestText.Name = "TestText";
             this.TestText.Size = new System.Drawing.Size(138, 21);
             this.TestText.TabIndex = 11;
             // 
             // DisplayBtn
             // 
-            this.DisplayBtn.Location = new System.Drawing.Point(365, 479);
+            this.DisplayBtn.Location = new System.Drawing.Point(268, 677);
             this.DisplayBtn.Name = "DisplayBtn";
             this.DisplayBtn.Size = new System.Drawing.Size(75, 23);
             this.DisplayBtn.TabIndex = 12;
@@ -213,7 +230,7 @@
             // 
             // DelBtn
             // 
-            this.DelBtn.Location = new System.Drawing.Point(446, 479);
+            this.DelBtn.Location = new System.Drawing.Point(349, 677);
             this.DelBtn.Name = "DelBtn";
             this.DelBtn.Size = new System.Drawing.Size(75, 23);
             this.DelBtn.TabIndex = 13;
@@ -223,7 +240,7 @@
             // 
             // GetDeposit
             // 
-            this.GetDeposit.Location = new System.Drawing.Point(551, 478);
+            this.GetDeposit.Location = new System.Drawing.Point(454, 676);
             this.GetDeposit.Name = "GetDeposit";
             this.GetDeposit.Size = new System.Drawing.Size(75, 23);
             this.GetDeposit.TabIndex = 14;
@@ -231,11 +248,126 @@
             this.GetDeposit.UseVisualStyleBackColor = true;
             this.GetDeposit.Click += new System.EventHandler(this.GetDeposit_Click);
             // 
+            // OrderResultGroupBox
+            // 
+            this.OrderResultGroupBox.Controls.Add(this.dataGridView1);
+            this.OrderResultGroupBox.Location = new System.Drawing.Point(810, 431);
+            this.OrderResultGroupBox.Name = "OrderResultGroupBox";
+            this.OrderResultGroupBox.Size = new System.Drawing.Size(535, 269);
+            this.OrderResultGroupBox.TabIndex = 15;
+            this.OrderResultGroupBox.TabStop = false;
+            this.OrderResultGroupBox.Text = "OrderResult";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Order_StockCode,
+            this.Order_StockName,
+            this.Order_Price,
+            this.Order_PnL,
+            this.Order_State});
+            this.dataGridView1.Location = new System.Drawing.Point(7, 20);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowTemplate.Height = 23;
+            this.dataGridView1.Size = new System.Drawing.Size(522, 243);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // Order_StockCode
+            // 
+            this.Order_StockCode.HeaderText = "종목코드";
+            this.Order_StockCode.Name = "Order_StockCode";
+            // 
+            // Order_StockName
+            // 
+            this.Order_StockName.HeaderText = "종목명";
+            this.Order_StockName.Name = "Order_StockName";
+            // 
+            // Order_Price
+            // 
+            this.Order_Price.HeaderText = "현재가";
+            this.Order_Price.Name = "Order_Price";
+            // 
+            // Order_PnL
+            // 
+            this.Order_PnL.HeaderText = "수익률";
+            this.Order_PnL.Name = "Order_PnL";
+            // 
+            // Order_State
+            // 
+            this.Order_State.HeaderText = "상태";
+            this.Order_State.Name = "Order_State";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.TotalPnLTextBox);
+            this.groupBox3.Controls.Add(this.DepositTextBox);
+            this.groupBox3.Controls.Add(this.AccountTextBox);
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Location = new System.Drawing.Point(18, 39);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(781, 122);
+            this.groupBox3.TabIndex = 16;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "계좌현황";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "계좌번호";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 52);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "예수금";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 85);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(57, 12);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "총 수익률";
+            // 
+            // AccountTextBox
+            // 
+            this.AccountTextBox.Location = new System.Drawing.Point(68, 18);
+            this.AccountTextBox.Name = "AccountTextBox";
+            this.AccountTextBox.Size = new System.Drawing.Size(100, 21);
+            this.AccountTextBox.TabIndex = 3;
+            // 
+            // DepositTextBox
+            // 
+            this.DepositTextBox.Location = new System.Drawing.Point(68, 49);
+            this.DepositTextBox.Name = "DepositTextBox";
+            this.DepositTextBox.Size = new System.Drawing.Size(100, 21);
+            this.DepositTextBox.TabIndex = 4;
+            // 
+            // TotalPnLTextBox
+            // 
+            this.TotalPnLTextBox.Location = new System.Drawing.Point(68, 83);
+            this.TotalPnLTextBox.Name = "TotalPnLTextBox";
+            this.TotalPnLTextBox.Size = new System.Drawing.Size(100, 21);
+            this.TotalPnLTextBox.TabIndex = 5;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1377, 539);
+            this.ClientSize = new System.Drawing.Size(1377, 723);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.OrderResultGroupBox);
             this.Controls.Add(this.GetDeposit);
             this.Controls.Add(this.DelBtn);
             this.Controls.Add(this.DisplayBtn);
@@ -256,6 +388,10 @@
             this.statusStrip1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TargetStocks)).EndInit();
+            this.OrderResultGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -283,6 +419,20 @@
         private System.Windows.Forms.Button DisplayBtn;
         private System.Windows.Forms.Button DelBtn;
         private System.Windows.Forms.Button GetDeposit;
+        private System.Windows.Forms.GroupBox OrderResultGroupBox;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Order_StockCode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Order_StockName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Order_Price;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Order_PnL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Order_State;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox TotalPnLTextBox;
+        private System.Windows.Forms.TextBox DepositTextBox;
+        private System.Windows.Forms.TextBox AccountTextBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

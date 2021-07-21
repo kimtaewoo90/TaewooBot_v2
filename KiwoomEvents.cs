@@ -243,6 +243,12 @@ namespace TaewooBot_v2
             if (e.sRQName == "계좌평가현황요청")
             {
                 Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
+                TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
+
+
+                AccountTextBox.Text = AccountNumber;
+                DepositTextBox.Text = Deposit.ToString();
+                TotalPnLTextBox.Text = TotalPnL.ToString();
 
                 AccountStockLots = API.GetRepeatCnt(e.sTrCode, e.sRQName);
                 for (int nIdx = 0; nIdx < AccountStockLots; nIdx++)
@@ -254,6 +260,7 @@ namespace TaewooBot_v2
                     Accnt_StockPnL_Won[code] = API.GetCommData(e.sTrCode, e.sRQName, AccountStockLots, "손익금액").Trim();
 
                     string msg = $"종목명 : {Accnt_StockName[code]}, 보유수량 : {Accnt_StockLots[code]}, 손익율 : {Accnt_StockLots[code]}, 손익금액 : {Accnt_StockPnL_Won}";
+
                     write_sys_log(msg, 0);
                 }
 
@@ -309,5 +316,7 @@ namespace TaewooBot_v2
 
 
         }
+
+
     }
 }

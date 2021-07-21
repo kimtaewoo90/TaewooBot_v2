@@ -33,6 +33,7 @@ namespace TaewooBot_v2
         public string AccountNumber { get; set; } = null;
         public double Deposit { get; set; } = 0.0;
         public int AccountStockLots { get; set; }
+        public int TotalPnL { get; set; }
 
         // Slow Params
         public double LossCut { get; set; }
@@ -130,8 +131,6 @@ namespace TaewooBot_v2
                 CurTime = get_cur_tm(); // 현재시각 조회
                 CurrentTime.Text = CurTime; // 화면 하단 상태란에 메시지 출력
 
-
-
                 if (CurTime.CompareTo("08:30:01") >= 0 && CurTime.CompareTo("09:00:00") < 0)
                 {
                     
@@ -174,8 +173,11 @@ namespace TaewooBot_v2
                     break;
                 }
 
+                // After Market for test
                 else
                 {
+                    GetAccountInformation();
+                    break;
 
                 }
 

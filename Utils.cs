@@ -604,11 +604,14 @@ namespace TaewooBot_v2
             {
                 if (Double.Parse(pair.Value) > 3.0)
                 {
+                    GetAccountInformation();
                     // SendSellOrder(pair.Key);
+                    string scr_no = get_scr_no();
+                    // 1: 신규매수, 2: 신규매도, 3: 매수취소, 4: 매도취소, 5: 매수정정, 6:매도정정
+                    API.SendOrder("주식매도요청", scr_no, AccountNumber, 2, pair.Key, 10, 0, "03", ""); 
+
                 }
             }
-
-
         }
 
         public void MonitoringBuyStocks()
@@ -626,10 +629,17 @@ namespace TaewooBot_v2
                 // TODO : 100이 아니라 Indicator 개발하기.
                 if(Int32.Parse(pair.Value) > 100)
                 {
+                    GetAccountInformation();
+                    string scr_no = get_scr_no();
+                    
+                    // 1: 신규매수, 2: 신규매도, 3: 매수취소, 4: 매도취소, 5: 매수정정, 6:매도정정
+                    API.SendOrder("주식매수요청", scr_no, AccountNumber, 1, pair.Key, 10, 0, "03", "");
+
                     // SendBuyOrder(pair.Key);
                 }
             }
-        }      
+        }
+        
 
     }
 }
