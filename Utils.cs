@@ -503,6 +503,7 @@ namespace TaewooBot_v2
                     if (TargetStocks["StockCode", i].Value.ToString() == StockCode)
                     {
                         TargetStocks.Rows[i].Cells[2].Value = Price;
+                        TargetStocks.Rows[i].Cells[3].Value = TickSpeed;
                         TargetStocks.Rows[i].Cells[4].Value = PnL;
 
                     }
@@ -547,7 +548,32 @@ namespace TaewooBot_v2
 
         public void GetTickSpeed(string StockCode, string ContractLots)
         {
-            write_sys_log("ContractLots of [ " + StockCode + " ] is " + ContractLots, 0);
+            int TickSpeed = 0;
+
+            try
+            {
+                if (TickSpeedDict[StockCode] != null)
+                {
+                    TickSpeed = Int32.Parse(TickSpeedDict[StockCode]) + Int32.Parse(ContractLots);
+                }
+
+                else
+                {
+                    TickSpeed = Int32.Parse(ContractLots);
+                }
+
+                TickSpeedDict[StockCode] = TickSpeed.ToString();
+                write_sys_log("ContractLots of [ " + StockCode + " ] is " + ContractLots, 0);
+
+            }
+
+            catch (Exception err)
+            {
+                write_sys_log(err.ToString(), 0);
+            }
+
+
+
         }
 
         public void GetAccountInformation()

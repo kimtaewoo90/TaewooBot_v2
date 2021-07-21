@@ -291,10 +291,10 @@ namespace TaewooBot_v2
                 StockKrNameDict[Code] = KrName;
 
                 // ToDo : GetTickSpeed in here
-                //GetTickSpeed(Code, ContractLots);
+                GetTickSpeed(Code, ContractLots);
 
                 // Display the RTD data on TargetStocks DataGridView
-                DisplayTargetStocks("Update", Code, "", Price.ToString(), ContractLots, UpDownRate.ToString());
+                DisplayTargetStocks("Update", Code, "", Price.ToString(), TickSpeedDict[Code], UpDownRate.ToString());
 
                 // Logs
                 //write_sys_log("RTD for " + KrName + " : " + Price.ToString(), 0);
