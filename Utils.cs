@@ -197,6 +197,7 @@ namespace TaewooBot_v2
             _GetTrData = false;
             _GetRTD = false;
             LossCut = 0.03;
+            ScrNo = 1000;
         }
 
         public void RemoveDict(string StockCode)
@@ -401,19 +402,27 @@ namespace TaewooBot_v2
             // 중복 방지
             targetDict.Add(codes, scr_no);
 
-            
-            RqName = "";
-            RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
-            API.SetInputValue("종목코드", codes);
 
-            // 실시간 현재가 받아오기
-            int res = API.CommRqData("주식기본정보", "OPT10001", 0, scr_no);
+            while (true)
+            {
+                RqName = "";
+                RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
+                API.SetInputValue("종목코드", codes);
 
-            write_sys_log("Reqeust 'OPT10001' ReqRealData", 0);
-            delay(2000);
+                // 실시간 현재가 받아오기
+                int res = API.CommRqData(RqName, "OPT10001", 0, scr_no);
+
+                if (res == 0)
+                {
+                    write_sys_log("Reqeust 'OPT10001' ReqRealData", 0);
+                    break;
+                }
+                //delay(2000);
+            }
+
             for (; ; )
             {
-                if (repeatCnt == 5 || res != 0)
+                if (repeatCnt == 5)
                 {
                     write_sys_log("[ " + GetKrName(codes) + " ]의 시세 받기 실패.", 0);
                     break;
@@ -489,11 +498,12 @@ namespace TaewooBot_v2
             else if (Type == "Update")
             {
                 int UpdateCnt = TargetStocks.Rows.Count;
-                for (int i = 0; i < UpdateCnt; i++)
+                for (int i = 0; i < UpdateCnt-1; i++)
                 {
                     if (TargetStocks["StockCode", i].Value.ToString() == StockCode)
                     {
                         TargetStocks.Rows[i].Cells[2].Value = Price;
+                        TargetStocks.Rows[i].Cells[4].Value = PnL;
 
                     }
                 }
@@ -503,19 +513,36 @@ namespace TaewooBot_v2
 
         public void DeleteTargetStocks(string StockCode)
         {
-            int DelCnt = TargetStocks.Rows.Count;
-            for (int i = 0; i < DelCnt; i++)
+            try
             {
-                if (TargetStocks["StockCode", i].Value.ToString() == StockCode)
+                int DelCnt = TargetStocks.Rows.Count;
+                for (int i = 0; i < DelCnt; i++)
                 {
-                    // 해당 데이터 삭제
-                    TargetStocks.Rows.Remove(TargetStocks.Rows[i]);
+                    try
+                    {
+                        if (TargetStocks["StockCode", i].Value.ToString() == StockCode && TargetStocks != null)
+                        {
+                            // 해당 데이터 삭제
+                            TargetStocks.Rows.Remove(TargetStocks.Rows[i]);
 
-                    write_sys_log(StockCode + "종목이 삭제 되었습니다.", 0);
-                    break;
+                            write_sys_log(StockCode + "종목이 삭제 되었습니다.", 0);
+                            break;
+
+                        }
+                    }
+                    catch(Exception err)
+                    {
+                        write_sys_log(err.ToString(), 0);
+                    }
 
                 }
             }
+
+            catch (Exception err)
+            {
+                write_sys_log(err.ToString(), 0);
+            }
+
         }
 
         public void GetTickSpeed(string StockCode, string ContractLots)

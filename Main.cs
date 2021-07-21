@@ -152,8 +152,13 @@ namespace TaewooBot_v2
                         API.GetConditionLoad();
                     }
                     
+                    
+
                     for (; ; )  // 장 중 무한루프 실행
                     {
+                        // Test
+                        // break;
+
                         CurTime = get_cur_tm();
                         CurrentTime.Text = CurTime; // 화면 하단 상태란에 메시지 출력
 

@@ -54,7 +54,7 @@ namespace TaewooBot_v2
                 if (stockCount <= 100)
                 {
                     //g_rqname = "조건검색종목";
-                    API.CommKwRqData(stockCodeList, 0, stockCount, 0, "조건검색종목", "5100");
+                    API.CommKwRqData(stockCodeList, 0, stockCount, 0, "조건검색종목", "9999");
                 }
             }
             else if (e.strCodeList.Length == 0)
@@ -80,11 +80,33 @@ namespace TaewooBot_v2
 
                 write_sys_log(msg, 0);
 
-                // TargetStocks DataGridView 추가
-                DisplayTargetStocks("Insert", e.sTrCode.ToString(), stockName, "0", "0", "0");
+                bool DataGrid = false;
+                for(int i=0; i < TargetStocks.Rows.Count-1; i++)
+                {
+                    if(TargetStocks["StockCode", i].Value.ToString() == e.sTrCode)
+                    {
+                        DataGrid = true;
+                        break;
+                    }
+                }
 
+                if (DataGrid == false)
+                {
+                    DisplayTargetStocks("Insert", e.sTrCode.ToString(), stockName, "0", "0", "0");
+                }
+                // TargetStocks DataGridView 추가
+
+
+                delay(1000);
                 // 추가된 종목만 따로 실시간 요청
-                ReqRealData(e.sTrCode, scr_no);
+                //ReqRealData(e.sTrCode, scr_no);
+
+                RqName = "";
+                RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
+                API.SetInputValue("종목코드", e.sTrCode);
+
+                // 실시간 현재가 받아오기
+                int res = API.CommRqData(RqName, "OPT10001", 0, scr_no);
             }
 
             //종목 이탈
@@ -93,8 +115,8 @@ namespace TaewooBot_v2
                 string stockName = API.GetMasterCodeName(e.sTrCode);
                 write_sys_log("이탈종목 : " + "[" + stockName + " ].\n", 0);
 
-                string scr_no = targetDict[e.sTrCode];
-                API.DisconnectRealData(scr_no);
+                //string scr_no = targetDict[e.sTrCode];
+                //API.DisconnectRealData(scr_no);
 
                 int i = 0;
                 for (i = 0; i < TargetCodes.Count; i++)
@@ -102,7 +124,7 @@ namespace TaewooBot_v2
                     if (TargetCodes[i].Equals(e.sTrCode))
                     {
                         TargetCodes.RemoveAt(i);
-                        break;
+                        //break;
                     }
                 }
 
@@ -113,7 +135,7 @@ namespace TaewooBot_v2
 
                 write_sys_log("이탈종목 : " + stockName, 0);
 
-                DeleteTargetStocks(e.sTrCode.ToString());
+                //DeleteTargetStocks(e.sTrCode.ToString());
             }
 
             write_sys_log(TargetCodes.ToString(), 0);
@@ -175,10 +197,17 @@ namespace TaewooBot_v2
                 string KrName = API.GetCommData(e.sTrCode, e.sRQName, 0, "종목명").Trim().ToString();
                 string Price = API.GetCommData(e.sTrCode, e.sRQName, 0, "현재가").Trim().ToString();
 
+                try
+                {
+                    TargetCodes.Add(Code);
+                    StockKrNameDict.Add(Code, KrName);
+                    StockPriceDict.Add(Code, Price);
+                }
+                catch (Exception err)
+                {
+                    write_sys_log(err.ToString(), 0);
+                }
 
-                TargetCodes.Add(Code);
-                StockKrNameDict.Add(Code, KrName);
-                StockPriceDict.Add(Code, Price);
 
 
                 // StockInfo class의 instance가 동적으로 안되면 각 항목마다 DIct를 줘서 비교.
@@ -239,7 +268,9 @@ namespace TaewooBot_v2
         private void OnReceiveRealData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEvent e)
         {
 
-            if (e.sRealType == "주식시세")
+            //write_sys_log(e.sRealType, 0);
+
+            if (e.sRealType == "주식체결")
             {
                 int Volume = 0;
                 Volume = int.Parse(API.GetCommRealData(e.sRealType, 13)); // 누적거래량
@@ -260,18 +291,18 @@ namespace TaewooBot_v2
                 StockKrNameDict[Code] = KrName;
 
                 // ToDo : GetTickSpeed in here
-                GetTickSpeed(Code, ContractLots);
+                //GetTickSpeed(Code, ContractLots);
 
                 // Display the RTD data on TargetStocks DataGridView
                 DisplayTargetStocks("Update", Code, "", Price.ToString(), ContractLots, UpDownRate.ToString());
 
                 // Logs
-                write_sys_log("RTD for " + KrName + " : " + Price.ToString(), 0);
+                //write_sys_log("RTD for " + KrName + " : " + Price.ToString(), 0);
 
             }
 
 
-            if (e.sRealType == "주식체결")
+            if (e.sRealType == "주식시세")
             {
                 // 체결 시 들어옴.
             }
