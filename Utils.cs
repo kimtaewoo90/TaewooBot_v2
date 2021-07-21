@@ -593,6 +593,21 @@ namespace TaewooBot_v2
 
         public void MonitoringSellStocks()
         {
+            /*
+             Accnt_StockName
+             Accnt_StockLots
+             Accnt_StockPnL
+             Accnt_StockPnL_Won
+             */
+
+            foreach(KeyValuePair<string, string> pair in Accnt_StockPnL)
+            {
+                if (Double.Parse(pair.Value) > 3.0)
+                {
+                    // SendSellOrder(pair.Key);
+                }
+            }
+
 
         }
 
@@ -604,6 +619,16 @@ namespace TaewooBot_v2
             StockPriceDict
             TickSpeedDict
             */
+            int StockCnt = TickSpeedDict.Count;
+
+            foreach(KeyValuePair<string, string> pair in TickSpeedDict)
+            {
+                // TODO : 100이 아니라 Indicator 개발하기.
+                if(Int32.Parse(pair.Value) > 100)
+                {
+                    // SendBuyOrder(pair.Key);
+                }
+            }
         }      
 
     }
