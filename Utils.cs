@@ -70,35 +70,39 @@ namespace TaewooBot_v2
                 {
                     this.Log.AppendText("\n" + cur_dtm + text + Environment.NewLine);
                     // log 기록
-                    string date = DateTime.Now.ToString("yyyyMMdd");
-                    string path = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/";
-                    string FileName = date + "_log.txt";
 
-                    File.AppendAllText(path + FileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
+                    File.AppendAllText(Path + LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
                 }
             }
         }
 
         public void MakeLogFile()
         {
-            string date = DateTime.Now.ToString("yyyyMMdd");
-            string path = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/";
-            string FileName = date + "_log.txt";
 
-            FileInfo fileInfo = new FileInfo(path + FileName);
+            FileInfo fileInfo = new FileInfo(Path + LogFileName);
 
             if (fileInfo.Exists)
-            {
-
-            }
+            {}
             else
             {
-                File.WriteAllText(path + FileName, date + "의 로그기록을 시작합니다.", Encoding.Default);
+                File.WriteAllText(Path + LogFileName, date + "의 로그기록을 시작합니다.", Encoding.Default);
                 write_sys_log("로그파일 생성 완료", 0);
             }
 
         }
 
+        public void MakeTickDataFile()
+        {
+            FileInfo fileInfo = new FileInfo(TickPath + TickLogFileName);
+
+            if (fileInfo.Exists)
+            { }
+            else
+            {
+                File.WriteAllText(TickPath + TickLogFileName, date + "틱데이터의 기록을 시작합니다.", Encoding.Default);
+                write_sys_log("틱데이터파일 생성 완료", 0);
+            }
+        }
         // 로그인 함수 구현
         private void Login()
         {

@@ -28,6 +28,9 @@ namespace TaewooBot_v2
         public bool _GetTrData { get; set; }
         public bool _GetRTD { get; set; }
         public string RqName { get; set; }
+        public string CurTime { get; set; }
+
+        public bool Test { get; set; } = false;
 
         // About Account
         public string AccountNumber { get; set; } = null;
@@ -37,6 +40,15 @@ namespace TaewooBot_v2
 
         // Slow Params
         public double LossCut { get; set; }
+
+        // Logs File
+        public string date { get; set; } = DateTime.Now.ToString("yyyyMMdd");
+
+        public string Path { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/";
+        public string TickPath { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/TickLog/";
+
+        public string LogFileName { get; set; } = DateTime.Now.ToString("yyyyMMdd") + "_Log.txt";
+        public string TickLogFileName { get; set; } = DateTime.Now.ToString("yyyyMMdd") + "_TickLog.txt";
 
 
         List<string> TargetCodes = new List<string>();
@@ -72,6 +84,7 @@ namespace TaewooBot_v2
 
             InitialParams();
             MakeLogFile();
+            MakeTickDataFile();
 
             // Tr code 검색
             this.API.OnReceiveTrData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEventHandler(this.OnReceiveTrData);
@@ -123,8 +136,11 @@ namespace TaewooBot_v2
 
         public void m_thread1()
         {
-            string CurTime = null;
-
+     
+            if (TestCheck.Checked)
+            {
+                Test = true;
+            }
             for (; ; )  // 장전 30분 무한루프 실행
             {
 
@@ -139,9 +155,9 @@ namespace TaewooBot_v2
                 else if (CurTime.CompareTo("09:00:00") >= 0 && CurTime.CompareTo("15:19:59") < 0)
                 {
                     // 장 시작 OrderThread 시작
-                    OrderThread = true;
-                    Orders = new Thread(new ThreadStart(m_OrderThread));
-                    Orders.Start();
+                    //OrderThread = true;
+                    //Orders = new Thread(new ThreadStart(m_OrderThread));
+                    //Orders.Start();
 
                     // Step1. 조건검색 시작
                     if (_SearchCondition is false)
@@ -174,10 +190,10 @@ namespace TaewooBot_v2
                 }
 
                 // After Market for test
-                else
+                else if (Test == true)
                 {
                     GetAccountInformation();
-                    break;
+                    Test = false;
 
                 }
 
@@ -206,7 +222,10 @@ namespace TaewooBot_v2
 
         }
 
+        private void TestCheck_CheckedChanged(object sender, EventArgs e)
+        {
 
+        }
     }
 
     class ConditionInfo

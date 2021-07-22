@@ -57,12 +57,13 @@
             this.Order_PnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Order_State = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.AccountTextBox = new System.Windows.Forms.TextBox();
-            this.DepositTextBox = new System.Windows.Forms.TextBox();
             this.TotalPnLTextBox = new System.Windows.Forms.TextBox();
+            this.DepositTextBox = new System.Windows.Forms.TextBox();
+            this.AccountTextBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TestCheck = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.API)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -313,23 +314,26 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "계좌현황";
             // 
-            // label1
+            // TotalPnLTextBox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "계좌번호";
+            this.TotalPnLTextBox.Location = new System.Drawing.Point(68, 83);
+            this.TotalPnLTextBox.Name = "TotalPnLTextBox";
+            this.TotalPnLTextBox.Size = new System.Drawing.Size(100, 21);
+            this.TotalPnLTextBox.TabIndex = 5;
             // 
-            // label2
+            // DepositTextBox
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 52);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 12);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "예수금";
+            this.DepositTextBox.Location = new System.Drawing.Point(68, 49);
+            this.DepositTextBox.Name = "DepositTextBox";
+            this.DepositTextBox.Size = new System.Drawing.Size(100, 21);
+            this.DepositTextBox.TabIndex = 4;
+            // 
+            // AccountTextBox
+            // 
+            this.AccountTextBox.Location = new System.Drawing.Point(68, 18);
+            this.AccountTextBox.Name = "AccountTextBox";
+            this.AccountTextBox.Size = new System.Drawing.Size(100, 21);
+            this.AccountTextBox.TabIndex = 3;
             // 
             // label3
             // 
@@ -340,32 +344,41 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "총 수익률";
             // 
-            // AccountTextBox
+            // label2
             // 
-            this.AccountTextBox.Location = new System.Drawing.Point(68, 18);
-            this.AccountTextBox.Name = "AccountTextBox";
-            this.AccountTextBox.Size = new System.Drawing.Size(100, 21);
-            this.AccountTextBox.TabIndex = 3;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 52);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "예수금";
             // 
-            // DepositTextBox
+            // label1
             // 
-            this.DepositTextBox.Location = new System.Drawing.Point(68, 49);
-            this.DepositTextBox.Name = "DepositTextBox";
-            this.DepositTextBox.Size = new System.Drawing.Size(100, 21);
-            this.DepositTextBox.TabIndex = 4;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "계좌번호";
             // 
-            // TotalPnLTextBox
+            // TestCheck
             // 
-            this.TotalPnLTextBox.Location = new System.Drawing.Point(68, 83);
-            this.TotalPnLTextBox.Name = "TotalPnLTextBox";
-            this.TotalPnLTextBox.Size = new System.Drawing.Size(100, 21);
-            this.TotalPnLTextBox.TabIndex = 5;
+            this.TestCheck.AutoSize = true;
+            this.TestCheck.Location = new System.Drawing.Point(245, 13);
+            this.TestCheck.Name = "TestCheck";
+            this.TestCheck.Size = new System.Drawing.Size(49, 16);
+            this.TestCheck.TabIndex = 17;
+            this.TestCheck.Text = "Test";
+            this.TestCheck.UseVisualStyleBackColor = true;
+            this.TestCheck.CheckedChanged += new System.EventHandler(this.TestCheck_CheckedChanged);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1377, 723);
+            this.Controls.Add(this.TestCheck);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.OrderResultGroupBox);
             this.Controls.Add(this.GetDeposit);
@@ -433,6 +446,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox TestCheck;
     }
 }
 

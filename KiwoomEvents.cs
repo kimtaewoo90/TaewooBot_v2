@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.IO;
 
 namespace TaewooBot_v2
 {
@@ -295,17 +296,21 @@ namespace TaewooBot_v2
                 // Update Dictionary
                 StockPriceDict[Code] = Price.ToString();
                 StockPnLDict[Code] = UpDownRate.ToString();
-                StockKrNameDict[Code] = KrName;
+                StockKrNameDict[Code] = KrName.ToString();
+                TickSpeedDict[Code] = ContractLots.ToString();
+
+                string date = DateTime.Now.ToString("yyyyMMdd");
+                string path = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/";
+                string FileName = date + "_TickLog.txt";
+
+                // TickLog 기록
+                File.AppendAllText(path + FileName, $"[{CurTime}] {Code}/{Price.ToString()}/{UpDownRate.ToString()}/{ContractLots}" + Environment.NewLine, Encoding.Default);
 
                 // ToDo : GetTickSpeed in here
-                GetTickSpeed(Code, ContractLots);
+                // GetTickSpeed(Code, ContractLots);
 
                 // Display the RTD data on TargetStocks DataGridView
                 DisplayTargetStocks("Update", Code, "", Price.ToString(), TickSpeedDict[Code], UpDownRate.ToString());
-
-                // Logs
-                //write_sys_log("RTD for " + KrName + " : " + Price.ToString(), 0);
-
             }
 
 
