@@ -99,9 +99,13 @@ namespace TaewooBot_v2
 
 
                 delay(1000);
+
+
                 // 추가된 종목만 따로 실시간 요청
                 //ReqRealData(e.sTrCode, scr_no);
 
+
+                // 주가 데이터 요청.
                 RqName = "";
                 RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
                 API.SetInputValue("종목코드", e.sTrCode);
@@ -299,12 +303,8 @@ namespace TaewooBot_v2
                 StockKrNameDict[Code] = KrName.ToString();
                 TickSpeedDict[Code] = ContractLots.ToString();
 
-                string date = DateTime.Now.ToString("yyyyMMdd");
-                string path = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/";
-                string FileName = date + "_TickLog.txt";
-
                 // TickLog 기록
-                File.AppendAllText(path + FileName, $"[{CurTime}] {Code}/{Price.ToString()}/{UpDownRate.ToString()}/{ContractLots}" + Environment.NewLine, Encoding.Default);
+                File.AppendAllText(TickPath + TickLogFileName, $"[{CurTime}] {Code}/{Price.ToString()}/{UpDownRate.ToString()}/{ContractLots}" + Environment.NewLine, Encoding.Default);
 
                 // ToDo : GetTickSpeed in here
                 // GetTickSpeed(Code, ContractLots);

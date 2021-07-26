@@ -141,6 +141,7 @@ namespace TaewooBot_v2
             {
                 Test = true;
             }
+
             for (; ; )  // 장전 30분 무한루프 실행
             {
 
@@ -162,6 +163,9 @@ namespace TaewooBot_v2
                     // Step1. 조건검색 시작
                     if (_SearchCondition is false)
                     {
+
+                        GetAccountInformation();
+
                         _SearchCondition = true;
                         write_sys_log("Start SearchCondition", 0);
                         API.GetConditionLoad();
