@@ -595,6 +595,47 @@ namespace TaewooBot_v2
 
         }
 
+        public void RequestAllStocks()
+        {
+            string Market = "Kosdaq";
+
+            if (Market == "Kosdaq")
+            {
+                string res = API.GetCodeListByMarket("10");
+                Codes = res.Split(new char[] { ';' });
+
+            }
+            else if (Market == "Kospi")
+            {
+                string res = API.GetCodeListByMarket("0");
+                Codes = res.Split(new char[] { ';' });
+            }
+
+            else
+            {
+                string kospi = API.GetCodeListByMarket("0");
+                string kosdaq = API.GetCodeListByMarket("10");
+                string res = kospi + kosdaq;
+                Codes = res.Split(new char[] { ';' });
+            }
+
+            for (int i = 0; i < Codes.Length; i++)
+            {
+                string scr_no = get_scr_no();
+                // 주가 데이터 요청.
+                RqName = "";
+                RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
+                API.SetInputValue("종목코드", Codes[i]);
+
+                // 실시간 현재가 받아오기
+                int res = API.CommRqData(RqName, "OPT10001", 0, scr_no);
+
+                delay(300);
+            }
+
+        }
+
+
         public void MonitoringSellStocks()
         {
             /*

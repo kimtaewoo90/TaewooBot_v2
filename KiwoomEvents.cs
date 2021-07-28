@@ -84,6 +84,7 @@ namespace TaewooBot_v2
                 bool DataGrid = false;
                 for(int i=0; i < TargetStocks.Rows.Count-1; i++)
                 {
+                    // 기존 TargetStocks Dict에 편입종목이 포함되어 있는지 확인.
                     if(TargetStocks["StockCode", i].Value.ToString() == e.sTrCode)
                     {
                         DataGrid = true;
@@ -91,11 +92,12 @@ namespace TaewooBot_v2
                     }
                 }
 
+                // 기존 TargetStocks Dict에 지금 들어온 종목이 없을 때만 TargetStocks DataGridView 추가
                 if (DataGrid == false)
                 {
                     DisplayTargetStocks("Insert", e.sTrCode.ToString(), stockName, "0", "0", "0");
                 }
-                // TargetStocks DataGridView 추가
+                
 
 
                 delay(1000);
@@ -202,6 +204,10 @@ namespace TaewooBot_v2
                 string KrName = API.GetCommData(e.sTrCode, e.sRQName, 0, "종목명").Trim().ToString();
                 string Price = API.GetCommData(e.sTrCode, e.sRQName, 0, "현재가").Trim().ToString();
 
+
+                write_sys_log($"{KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
+
+                // Update Dict
                 try
                 {
                     TargetCodes.Add(Code);

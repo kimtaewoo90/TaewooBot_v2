@@ -43,15 +43,17 @@ namespace TaewooBot_v2
 
         // Logs File
         public string date { get; set; } = DateTime.Now.ToString("yyyyMMdd");
-
         public string Path { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/";
         public string TickPath { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/TickLog/";
-
         public string LogFileName { get; set; } = DateTime.Now.ToString("yyyyMMdd") + "_Log.txt";
         public string TickLogFileName { get; set; } = DateTime.Now.ToString("yyyyMMdd") + "_TickLog.txt";
 
-
+        // Stocks
         List<string> TargetCodes = new List<string>();
+        public string[] Codes;
+        public string Kospi { get; set; } = null;
+        public string Kosdaq { get; set; } = null;
+        public string AllMarket { get; set; } = null;
 
 
         // 항목별 DIctionary 설정
@@ -168,7 +170,13 @@ namespace TaewooBot_v2
 
                         _SearchCondition = true;
                         write_sys_log("Start SearchCondition", 0);
-                        API.GetConditionLoad();
+                        
+                        // 조건검색 종목
+                        //API.GetConditionLoad();
+
+                        // 전 종목
+                        RequestAllStocks();
+
                     }
                     
                     
@@ -197,6 +205,7 @@ namespace TaewooBot_v2
                 else if (Test == true)
                 {
                     GetAccountInformation();
+                    RequestAllStocks();
                     Test = false;
 
                 }
