@@ -56,6 +56,9 @@ namespace TaewooBot_v2
         public string AllMarket { get; set; } = null;
 
 
+        // Test
+        public int StockCnt { get; set; } = 0;
+
         // 항목별 DIctionary 설정
 
         Dictionary<string, string> targetDict = new Dictionary<string, string>();

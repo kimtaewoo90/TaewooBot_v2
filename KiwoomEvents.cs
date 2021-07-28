@@ -204,8 +204,8 @@ namespace TaewooBot_v2
                 string KrName = API.GetCommData(e.sTrCode, e.sRQName, 0, "종목명").Trim().ToString();
                 string Price = API.GetCommData(e.sTrCode, e.sRQName, 0, "현재가").Trim().ToString();
 
-
-                write_sys_log($"{KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
+                DisplayTargetStocks("Insert", Code, KrName, Price, "0", "0");
+                write_sys_log($"[{StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
 
                 // Update Dict
                 try
@@ -296,7 +296,7 @@ namespace TaewooBot_v2
                 string Code = e.sRealKey;
                 string KrName = GetKrName(Code);
                 double buy_amt;
-                double Price = double.Parse(API.GetCommRealData(e.sRealType, 10).Trim());  // current price;
+                double Price = Math.Abs(double.Parse(API.GetCommRealData(e.sRealType, 10).Trim()));  // current price;
                 double UpDownRate = double.Parse(API.GetCommRealData(e.sRealType, 12));
                 string ContractLots = API.GetCommRealData(e.sRealType, 15).Trim().ToString(); // 체결량
                 double buy_price = get_hoga_unit_price((int)Price, Code, -2);
@@ -310,7 +310,7 @@ namespace TaewooBot_v2
                 TickSpeedDict[Code] = ContractLots.ToString();
 
                 // TickLog 기록
-                File.AppendAllText(TickPath + TickLogFileName, $"[{CurTime}] {Code}/{Price.ToString()}/{UpDownRate.ToString()}/{ContractLots}" + Environment.NewLine, Encoding.Default);
+                File.AppendAllText(TickPath + TickLogFileName, $"[{CurTime}] : {Code} / {Price.ToString()} / {UpDownRate.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
 
                 // ToDo : GetTickSpeed in here
                 // GetTickSpeed(Code, ContractLots);

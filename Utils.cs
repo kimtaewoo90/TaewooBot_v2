@@ -595,6 +595,7 @@ namespace TaewooBot_v2
 
         }
 
+        // 전종목 주식데이터 요청
         public void RequestAllStocks()
         {
             string Market = "Kosdaq";
@@ -619,8 +620,10 @@ namespace TaewooBot_v2
                 Codes = res.Split(new char[] { ';' });
             }
 
-            for (int i = 0; i < Codes.Length; i++)
+            // 종목개수 제한...
+            for (int i = 0; i < 50; i++)
             {
+                StockCnt = i + 1;
                 string scr_no = get_scr_no();
                 // 주가 데이터 요청.
                 RqName = "";
