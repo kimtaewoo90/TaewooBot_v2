@@ -23,7 +23,6 @@ namespace TaewooBot_v2
         public string UserID { get; set; }
         public int ScrNo { get; set; }
         public bool IsThread { get; set; }
-        public bool OrderThread { get; set; } = false;
         public bool _SearchCondition { get; set; }
         public bool _GetTrData { get; set; }
         public bool _GetRTD { get; set; }
@@ -55,6 +54,13 @@ namespace TaewooBot_v2
         public string Kosdaq { get; set; } = null;
         public string AllMarket { get; set; } = null;
 
+        // Thread 간 동기화
+        public bool signal { get; set; } = false;
+        public bool order { get; set; } = false;
+        public string SignalStockCode { get; set; } = null;
+        public string SignalKrName { get; set; } = null;
+        public string SignalPrice { get; set; } = null;
+
 
         // Test
         public int StockCnt { get; set; } = 0;
@@ -73,8 +79,9 @@ namespace TaewooBot_v2
         Dictionary<string, string> Accnt_StockPnL = new Dictionary<string, string>();
         Dictionary<string, string> Accnt_StockPnL_Won = new Dictionary<string, string>();
 
-        Thread StockInfoThread = null;
-        Thread Orders = null;
+        Thread GetDataThread = null;
+        Thread MonitoringSignalThread = null;
+        Thread OrderThread = null;
 
 
         public Main()
@@ -133,13 +140,14 @@ namespace TaewooBot_v2
 
                 write_sys_log("AUTO TRADING SYSTEM is just started \r\n", 0);
                 IsThread = true;
-                StockInfoThread = new Thread(new ThreadStart(m_thread1));
-                StockInfoThread.Start();
+                GetDataThread = new Thread(new ThreadStart(GetData));
+                MonitoringSignalThread = new Thread(new ThreadStart(MonitoringSignal));
+                GetDataThread.Start();
 
             }
         }
 
-        public void m_thread1()
+        public void GetData()
         {
      
             if (TestCheck.Checked)
@@ -160,11 +168,6 @@ namespace TaewooBot_v2
 
                 else if (CurTime.CompareTo("09:00:00") >= 0 && CurTime.CompareTo("15:19:59") < 0)
                 {
-                    // 장 시작 OrderThread 시작
-                    //OrderThread = true;
-                    //Orders = new Thread(new ThreadStart(m_OrderThread));
-                    //Orders.Start();
-
                     // Step1. 조건검색 시작
                     if (_SearchCondition is false)
                     {
@@ -217,7 +220,26 @@ namespace TaewooBot_v2
             }
         }
 
-        public void m_OrderThread()
+        public void MonitoringSignal()
+        {
+            while(true)
+            {
+                if (signal == true)
+                {
+                    write_sys_log("Get the MonitroingSignalThread in here", 0);
+
+                    DisplayPosition(SignalStockCode, SignalKrName, SignalPrice, "", "Buy");
+
+                    order = true;
+                }
+
+
+
+            }
+        }
+
+
+        public void Order()
         {
             // 계좌상황 체크
             GetAccountInformation();

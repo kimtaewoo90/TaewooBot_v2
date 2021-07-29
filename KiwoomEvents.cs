@@ -317,6 +317,16 @@ namespace TaewooBot_v2
 
                 // Display the RTD data on TargetStocks DataGridView
                 DisplayTargetStocks("Update", Code, "", Price.ToString(), TickSpeedDict[Code], UpDownRate.ToString());
+
+                if(int.Parse(ContractLots) > 1000)
+                {
+                    SignalStockCode = Code;
+                    SignalKrName = KrName;
+                    SignalPrice = Price.ToString();
+
+                    signal = true;
+                    // TODO : 여기서 GetDataThread를 중지시켜야하나?
+                }
             }
 
 

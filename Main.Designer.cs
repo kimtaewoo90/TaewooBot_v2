@@ -50,7 +50,7 @@
             this.DelBtn = new System.Windows.Forms.Button();
             this.GetDeposit = new System.Windows.Forms.Button();
             this.OrderResultGroupBox = new System.Windows.Forms.GroupBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.PositionDataGrid = new System.Windows.Forms.DataGridView();
             this.Order_StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Order_StockName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Order_Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -70,7 +70,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TargetStocks)).BeginInit();
             this.OrderResultGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -251,7 +251,7 @@
             // 
             // OrderResultGroupBox
             // 
-            this.OrderResultGroupBox.Controls.Add(this.dataGridView1);
+            this.OrderResultGroupBox.Controls.Add(this.PositionDataGrid);
             this.OrderResultGroupBox.Location = new System.Drawing.Point(810, 431);
             this.OrderResultGroupBox.Name = "OrderResultGroupBox";
             this.OrderResultGroupBox.Size = new System.Drawing.Size(535, 269);
@@ -259,20 +259,20 @@
             this.OrderResultGroupBox.TabStop = false;
             this.OrderResultGroupBox.Text = "OrderResult";
             // 
-            // dataGridView1
+            // PositionDataGrid
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.PositionDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.PositionDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Order_StockCode,
             this.Order_StockName,
             this.Order_Price,
             this.Order_PnL,
             this.Order_State});
-            this.dataGridView1.Location = new System.Drawing.Point(7, 20);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(522, 243);
-            this.dataGridView1.TabIndex = 0;
+            this.PositionDataGrid.Location = new System.Drawing.Point(7, 20);
+            this.PositionDataGrid.Name = "PositionDataGrid";
+            this.PositionDataGrid.RowTemplate.Height = 23;
+            this.PositionDataGrid.Size = new System.Drawing.Size(522, 243);
+            this.PositionDataGrid.TabIndex = 0;
             // 
             // Order_StockCode
             // 
@@ -402,7 +402,7 @@
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TargetStocks)).EndInit();
             this.OrderResultGroupBox.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
@@ -433,7 +433,7 @@
         private System.Windows.Forms.Button DelBtn;
         private System.Windows.Forms.Button GetDeposit;
         private System.Windows.Forms.GroupBox OrderResultGroupBox;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView PositionDataGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn Order_StockCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn Order_StockName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Order_Price;
