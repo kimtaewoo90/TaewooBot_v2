@@ -202,6 +202,10 @@ namespace TaewooBot_v2
             _GetRTD = false;
             LossCut = 0.03;
             ScrNo = 1000;
+
+            //GetDataTextBox.Text = "Not yet";
+            //MonitoringTextBox.Text = "Not yet";
+            //OrderTextBox.Text = "Not yet";
         }
 
         public void RemoveDict(string StockCode)
@@ -690,6 +694,20 @@ namespace TaewooBot_v2
 
                     // SendBuyOrder(pair.Key);
                 }
+            }
+        }
+
+        // Thread간 winform 객체에 접근 
+        public void setText_Control(Control ctr, string txtValue)
+        {
+            if (ctr.InvokeRequired)
+            {
+                Ctr_Involk CI = new Ctr_Involk(setText_Control);
+                ctr.Invoke(CI, ctr, txtValue);
+            }
+            else
+            {
+                ctr.Text = txtValue;
             }
         }
         

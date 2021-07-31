@@ -64,6 +64,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.TestCheck = new System.Windows.Forms.CheckBox();
+            this.GetDataTextBox = new System.Windows.Forms.TextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.OrderTextBox = new System.Windows.Forms.TextBox();
+            this.MonitoringTextBox = new System.Windows.Forms.TextBox();
+            this.process1 = new System.Diagnostics.Process();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.API)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -72,6 +80,7 @@
             this.OrderResultGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).BeginInit();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // MarketType
@@ -134,9 +143,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Status,
             this.CurrentTime});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 701);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 743);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1377, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1677, 22);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "time";
             // 
@@ -204,7 +213,7 @@
             // 
             // TestBtn
             // 
-            this.TestBtn.Location = new System.Drawing.Point(151, 677);
+            this.TestBtn.Location = new System.Drawing.Point(164, 700);
             this.TestBtn.Name = "TestBtn";
             this.TestBtn.Size = new System.Drawing.Size(75, 23);
             this.TestBtn.TabIndex = 10;
@@ -214,14 +223,14 @@
             // 
             // TestText
             // 
-            this.TestText.Location = new System.Drawing.Point(7, 677);
+            this.TestText.Location = new System.Drawing.Point(20, 700);
             this.TestText.Name = "TestText";
             this.TestText.Size = new System.Drawing.Size(138, 21);
             this.TestText.TabIndex = 11;
             // 
             // DisplayBtn
             // 
-            this.DisplayBtn.Location = new System.Drawing.Point(268, 677);
+            this.DisplayBtn.Location = new System.Drawing.Point(281, 700);
             this.DisplayBtn.Name = "DisplayBtn";
             this.DisplayBtn.Size = new System.Drawing.Size(75, 23);
             this.DisplayBtn.TabIndex = 12;
@@ -231,7 +240,7 @@
             // 
             // DelBtn
             // 
-            this.DelBtn.Location = new System.Drawing.Point(349, 677);
+            this.DelBtn.Location = new System.Drawing.Point(362, 700);
             this.DelBtn.Name = "DelBtn";
             this.DelBtn.Size = new System.Drawing.Size(75, 23);
             this.DelBtn.TabIndex = 13;
@@ -241,7 +250,7 @@
             // 
             // GetDeposit
             // 
-            this.GetDeposit.Location = new System.Drawing.Point(454, 676);
+            this.GetDeposit.Location = new System.Drawing.Point(467, 699);
             this.GetDeposit.Name = "GetDeposit";
             this.GetDeposit.Size = new System.Drawing.Size(75, 23);
             this.GetDeposit.TabIndex = 14;
@@ -254,10 +263,10 @@
             this.OrderResultGroupBox.Controls.Add(this.PositionDataGrid);
             this.OrderResultGroupBox.Location = new System.Drawing.Point(810, 431);
             this.OrderResultGroupBox.Name = "OrderResultGroupBox";
-            this.OrderResultGroupBox.Size = new System.Drawing.Size(535, 269);
+            this.OrderResultGroupBox.Size = new System.Drawing.Size(839, 269);
             this.OrderResultGroupBox.TabIndex = 15;
             this.OrderResultGroupBox.TabStop = false;
-            this.OrderResultGroupBox.Text = "OrderResult";
+            this.OrderResultGroupBox.Text = "Positions";
             // 
             // PositionDataGrid
             // 
@@ -271,7 +280,7 @@
             this.PositionDataGrid.Location = new System.Drawing.Point(7, 20);
             this.PositionDataGrid.Name = "PositionDataGrid";
             this.PositionDataGrid.RowTemplate.Height = 23;
-            this.PositionDataGrid.Size = new System.Drawing.Size(522, 243);
+            this.PositionDataGrid.Size = new System.Drawing.Size(817, 243);
             this.PositionDataGrid.TabIndex = 0;
             // 
             // Order_StockCode
@@ -373,11 +382,85 @@
             this.TestCheck.UseVisualStyleBackColor = true;
             this.TestCheck.CheckedChanged += new System.EventHandler(this.TestCheck_CheckedChanged);
             // 
+            // GetDataTextBox
+            // 
+            this.GetDataTextBox.Location = new System.Drawing.Point(143, 20);
+            this.GetDataTextBox.Name = "GetDataTextBox";
+            this.GetDataTextBox.Size = new System.Drawing.Size(100, 21);
+            this.GetDataTextBox.TabIndex = 18;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label6);
+            this.groupBox4.Controls.Add(this.label5);
+            this.groupBox4.Controls.Add(this.label4);
+            this.groupBox4.Controls.Add(this.OrderTextBox);
+            this.groupBox4.Controls.Add(this.MonitoringTextBox);
+            this.groupBox4.Controls.Add(this.GetDataTextBox);
+            this.groupBox4.Location = new System.Drawing.Point(1379, 43);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(270, 133);
+            this.groupBox4.TabIndex = 19;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Bot Status";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 75);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 12);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "Order Thread";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(108, 12);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Monitoring Thread";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 23);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(93, 12);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "GetData Thread";
+            // 
+            // OrderTextBox
+            // 
+            this.OrderTextBox.Location = new System.Drawing.Point(143, 72);
+            this.OrderTextBox.Name = "OrderTextBox";
+            this.OrderTextBox.Size = new System.Drawing.Size(100, 21);
+            this.OrderTextBox.TabIndex = 20;
+            // 
+            // MonitoringTextBox
+            // 
+            this.MonitoringTextBox.Location = new System.Drawing.Point(143, 45);
+            this.MonitoringTextBox.Name = "MonitoringTextBox";
+            this.MonitoringTextBox.Size = new System.Drawing.Size(100, 21);
+            this.MonitoringTextBox.TabIndex = 19;
+            // 
+            // process1
+            // 
+            this.process1.StartInfo.Domain = "";
+            this.process1.StartInfo.LoadUserProfile = false;
+            this.process1.StartInfo.Password = null;
+            this.process1.StartInfo.StandardErrorEncoding = null;
+            this.process1.StartInfo.StandardOutputEncoding = null;
+            this.process1.StartInfo.UserName = "";
+            this.process1.SynchronizingObject = this;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1377, 723);
+            this.ClientSize = new System.Drawing.Size(1677, 765);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.TestCheck);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.OrderResultGroupBox);
@@ -405,6 +488,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -447,6 +532,14 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox TestCheck;
+        private System.Windows.Forms.TextBox GetDataTextBox;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox OrderTextBox;
+        private System.Windows.Forms.TextBox MonitoringTextBox;
+        private System.Diagnostics.Process process1;
     }
 }
 

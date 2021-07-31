@@ -61,6 +61,9 @@ namespace TaewooBot_v2
         public string SignalKrName { get; set; } = null;
         public string SignalPrice { get; set; } = null;
 
+        // Delegate winforms
+        delegate void Ctr_Involk(Control ctr, string text);
+
 
         // Test
         public int StockCnt { get; set; } = 0;
@@ -143,10 +146,11 @@ namespace TaewooBot_v2
                 GetDataThread = new Thread(new ThreadStart(GetData));
                 MonitoringSignalThread = new Thread(new ThreadStart(MonitoringSignal));
                 GetDataThread.Start();
-
+                MonitoringSignalThread.Start();
             }
         }
 
+        // Thread1 (GetData Thread)
         public void GetData()
         {
      
@@ -182,16 +186,15 @@ namespace TaewooBot_v2
 
                         // 전 종목
                         RequestAllStocks();
-
                     }
                     
-                    
-
                     for (; ; )  // 장 중 무한루프 실행
                     {
                         // Test
                         // break;
 
+                        setText_Control(GetDataTextBox, "running");
+                        
                         CurTime = get_cur_tm();
                         CurrentTime.Text = CurTime; // 화면 하단 상태란에 메시지 출력
 
@@ -212,6 +215,8 @@ namespace TaewooBot_v2
                 {
                     GetAccountInformation();
                     RequestAllStocks();
+                    setText_Control(GetDataTextBox, "running");
+
                     Test = false;
 
                 }
@@ -220,20 +225,29 @@ namespace TaewooBot_v2
             }
         }
 
+        // Thread2 (Monitoring Thread)
         public void MonitoringSignal()
         {
             while(true)
             {
+
+                setText_Control(MonitoringTextBox, "Singal is false");
+
                 if (signal == true)
                 {
+                    MonitoringTextBox.Text = "Singal is true";
+
                     write_sys_log("Get the MonitroingSignalThread in here", 0);
 
                     DisplayPosition(SignalStockCode, SignalKrName, SignalPrice, "", "Buy");
 
                     order = true;
+
+                    // 만약 한종목만 사면 여기서 
+                    // singal을 다시 false로 풀어주는게 아니라
+                    // order thread에서 Sell Order 가 끝나고 나서 signal, order flag를 false 로 풀어준다.
+
                 }
-
-
 
             }
         }
@@ -246,16 +260,24 @@ namespace TaewooBot_v2
 
             while (true)
             {
-                if (AccountStockLots != 0)
+                setText_Control(OrderTextBox, "Order is true");
+                if (order == true)
                 {
-                    // 매도까지 기다리기.
-                    MonitoringSellStocks();
+
+                    if (AccountStockLots != 0)
+                    {
+                        setText_Control(OrderTextBox, "BuyOrder is true");                        
+                        // 매도까지 기다리기.
+                        MonitoringSellStocks();
+                    }
+                    else
+                    {
+                        setText_Control(OrderTextBox, "SellOrder is true");
+                        // 조건에 맞는 종목 매수하기
+                        MonitoringBuyStocks();
+                    }
                 }
-                else
-                {
-                    // 조건에 맞는 종목 매수하기
-                    MonitoringBuyStocks();
-                }
+
             }
 
         }
