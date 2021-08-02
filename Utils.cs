@@ -85,7 +85,7 @@ namespace TaewooBot_v2
             {}
             else
             {
-                File.WriteAllText(Path + LogFileName, date + "의 로그기록을 시작합니다.", Encoding.Default);
+                File.WriteAllText(Path + LogFileName, date + "의 로그기록을 시작합니다.\n", Encoding.Default);
                 write_sys_log("로그파일 생성 완료", 0);
             }
 
@@ -99,7 +99,7 @@ namespace TaewooBot_v2
             { }
             else
             {
-                File.WriteAllText(TickPath + TickLogFileName, date + "틱데이터의 기록을 시작합니다.", Encoding.Default);
+                File.WriteAllText(TickPath + TickLogFileName, date + "틱데이터의 기록을 시작합니다\n.", Encoding.Default);
                 write_sys_log("틱데이터파일 생성 완료", 0);
             }
         }

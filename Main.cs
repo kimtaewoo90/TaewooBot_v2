@@ -75,12 +75,18 @@ namespace TaewooBot_v2
         Dictionary<string, string> StockPriceDict = new Dictionary<string, string>();
         Dictionary<string, string> TickSpeedDict = new Dictionary<string, string>();
         Dictionary<string, string> StockPnLDict = new Dictionary<string, string>();
+        Dictionary<string, string> StockHighPriceDict = new Dictionary<string, string>();
+        
+        Dictionary<string, List<string>> TickAvgDict = new Dictionary<string, List<string>>();
+        Dictionary<string, List<string>> StockDict = new Dictionary<string, List<string>>();
+
 
         // 계좌관련 Dictionary 설정
         Dictionary<string, string> Accnt_StockName = new Dictionary<string, string>();
         Dictionary<string, string> Accnt_StockLots = new Dictionary<string, string>();
         Dictionary<string, string> Accnt_StockPnL = new Dictionary<string, string>();
         Dictionary<string, string> Accnt_StockPnL_Won = new Dictionary<string, string>();
+
 
         Thread GetDataThread = null;
         Thread MonitoringSignalThread = null;
@@ -235,7 +241,8 @@ namespace TaewooBot_v2
 
                 if (signal == true)
                 {
-                    MonitoringTextBox.Text = "Singal is true";
+
+                    setText_Control(MonitoringTextBox, "Singal is true");
 
                     write_sys_log("Get the MonitroingSignalThread in here", 0);
 
@@ -263,18 +270,19 @@ namespace TaewooBot_v2
                 setText_Control(OrderTextBox, "Order is true");
                 if (order == true)
                 {
-
+                    // API OCX를 따로 두고 여기서 계속 매도 조건 Monitoring 하기.
                     if (AccountStockLots != 0)
                     {
                         setText_Control(OrderTextBox, "BuyOrder is true");                        
                         // 매도까지 기다리기.
-                        MonitoringSellStocks();
+                        //MonitoringSellStocks();
                     }
                     else
                     {
                         setText_Control(OrderTextBox, "SellOrder is true");
                         // 조건에 맞는 종목 매수하기
-                        MonitoringBuyStocks();
+
+                        //MonitoringBuyStocks();
                     }
                 }
 

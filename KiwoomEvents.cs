@@ -257,9 +257,9 @@ namespace TaewooBot_v2
                 TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
 
 
-                AccountTextBox.Text = AccountNumber;
-                DepositTextBox.Text = Deposit.ToString();
-                TotalPnLTextBox.Text = TotalPnL.ToString();
+                setText_Control(AccountTextBox, AccountNumber.ToString());
+                setText_Control(DepositTextBox, Deposit.ToString());
+                setText_Control(TotalPnLTextBox, TotalPnL.ToString());
 
                 AccountStockLots = API.GetRepeatCnt(e.sTrCode, e.sRQName);
                 for (int nIdx = 0; nIdx < AccountStockLots; nIdx++)
@@ -299,8 +299,10 @@ namespace TaewooBot_v2
                 double Price = Math.Abs(double.Parse(API.GetCommRealData(e.sRealType, 10).Trim()));  // current price;
                 double UpDownRate = double.Parse(API.GetCommRealData(e.sRealType, 12));
                 string ContractLots = API.GetCommRealData(e.sRealType, 15).Trim().ToString(); // 체결량
-                double buy_price = get_hoga_unit_price((int)Price, Code, -2);
- 
+                //double buy_price = get_hoga_unit_price((int)Price, Code, -2);
+                double highPrice = double.Parse(API.GetCommRealData(e.sRealType, 17).Trim());
+                string TickTime = API.GetCommRealData(e.sRealType, 20).Trim().ToString();
+
                 _GetRTD = true;
 
                 // Update Dictionary
@@ -308,6 +310,32 @@ namespace TaewooBot_v2
                 StockPnLDict[Code] = UpDownRate.ToString();
                 StockKrNameDict[Code] = KrName.ToString();
                 TickSpeedDict[Code] = ContractLots.ToString();
+                StockHighPriceDict[Code] = highPrice.ToString();
+
+                List<string> TickAvgList = new List<string>();
+                TickAvgList.Add(TickTime.ToString());
+                TickAvgList.Add(ContractLots.ToString());
+                TickAvgDict[Code] = TickAvgList;
+
+                // 분당 거래대금
+
+                // TODO : How To Calculate average Tick Speed in 1 Minute
+                // 틱 속도
+                var TickAvgBefore = StockDict[Code][5];
+                var TickAvgNow = ContractLots.ToString(); 
+
+                // Add Stock Info List
+                List<string> StockInfoList = new List<string>();
+                
+                StockInfoList.Add(TickTime.ToString());
+                StockInfoList.Add(KrName.ToString());
+                StockInfoList.Add(UpDownRate.ToString());
+                StockInfoList.Add(highPrice.ToString());
+                StockInfoList.Add(Price.ToString());
+                StockInfoList.Add(TickAvgNow.ToString()); ;
+
+                // StockDict Value Index : [0] : TickTime [1] : StockKrName, [2] : UpDownRate, [3] : HgihPrice, [4]: CurPrice, [5] : TickAverage, [6] : TradingAmtperMin
+                StockDict[Code] = StockInfoList;
 
                 // TickLog 기록
                 File.AppendAllText(TickPath + TickLogFileName, $"[{CurTime}] : {Code} / {Price.ToString()} / {UpDownRate.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
@@ -318,6 +346,8 @@ namespace TaewooBot_v2
                 // Display the RTD data on TargetStocks DataGridView
                 DisplayTargetStocks("Update", Code, "", Price.ToString(), TickSpeedDict[Code], UpDownRate.ToString());
 
+
+                // signal True Conditions
                 if(int.Parse(ContractLots) > 1000)
                 {
                     SignalStockCode = Code;
