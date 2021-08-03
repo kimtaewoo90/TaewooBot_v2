@@ -74,7 +74,7 @@ namespace TaewooBot_v2
                     this.logs.LogBox.AppendText("\n" + cur_dtm + text + Environment.NewLine);
                     // log 기록
 
-                    File.AppendAllText(Path + LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
+                    File.AppendAllText(botParams.Path + botParams.LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
                 }
             }
         }
@@ -82,13 +82,13 @@ namespace TaewooBot_v2
         public void MakeLogFile()
         {
 
-            FileInfo fileInfo = new FileInfo(Path + LogFileName);
+            FileInfo fileInfo = new FileInfo(botParams.Path + botParams.LogFileName);
 
             if (fileInfo.Exists)
             {}
             else
             {
-                File.WriteAllText(Path + LogFileName, date + "의 로그기록을 시작합니다.\n", Encoding.Default);
+                File.WriteAllText(botParams.Path + botParams.LogFileName, botParams.date + "의 로그기록을 시작합니다.\n", Encoding.Default);
                 write_sys_log("로그파일 생성 완료", 0);
             }
 
@@ -96,13 +96,13 @@ namespace TaewooBot_v2
 
         public void MakeTickDataFile()
         {
-            FileInfo fileInfo = new FileInfo(TickPath + TickLogFileName);
+            FileInfo fileInfo = new FileInfo(botParams.TickPath + botParams.TickLogFileName);
 
             if (fileInfo.Exists)
             { }
             else
             {
-                File.WriteAllText(TickPath + TickLogFileName, date + "틱데이터의 기록을 시작합니다\n.", Encoding.Default);
+                File.WriteAllText(botParams.TickPath + botParams.TickLogFileName, botParams.date + "틱데이터의 기록을 시작합니다\n.", Encoding.Default);
                 write_sys_log("틱데이터파일 생성 완료", 0);
             }
         }
@@ -136,8 +136,8 @@ namespace TaewooBot_v2
 
             Status.Text = "로그인 완료"; // 화면 하단 상태란에 메시지 출력
 
-            UserID = "";
-            UserID = API.GetLoginInfo("USER_ID").Trim(); // 사용자 아이디를 가져와서 클래스 변수(전역변수)에 저장
+            botParams.UserID = "";
+            botParams.UserID = API.GetLoginInfo("USER_ID").Trim(); // 사용자 아이디를 가져와서 클래스 변수(전역변수)에 저장
             //textBox1.Text = g_user_id; // 전역변수에 저장한 아이디를 텍스트박스에 출력
 
             accno_cnt = "";
@@ -146,11 +146,11 @@ namespace TaewooBot_v2
             // TODO : Error
             accno_arr = new string[int.Parse(accno_cnt)];
 
-            AccountNumber = API.GetLoginInfo("ACCNO").Trim().Replace(";","");
+            botParams.AccountNumber = API.GetLoginInfo("ACCNO").Trim().Replace(";","");
 
-            accno_arr = AccountNumber.Split(';');  // API에서 ';'를 구분자로 여러개의 계좌번호를 던져준다.
-            write_sys_log("Account Number : " + AccountNumber, 0);
-            write_sys_log("Welcome " + UserID, 0);
+            accno_arr = botParams.AccountNumber.Split(';');  // API에서 ';'를 구분자로 여러개의 계좌번호를 던져준다.
+            write_sys_log("Account Number : " + botParams.AccountNumber, 0);
+            write_sys_log("Welcome " + botParams.UserID, 0);
 
 
         }
@@ -187,24 +187,24 @@ namespace TaewooBot_v2
         // 요청번호 부여 함수 구현
         private string get_scr_no()
         {
-            if (ScrNo < 9999)
+            if (botParams.ScrNo < 9999)
             {
-                ScrNo++;
+                botParams.ScrNo++;
             }
-            else ScrNo = 1000;
+            else botParams.ScrNo = 1000;
 
-            return ScrNo.ToString();
+            return botParams.ScrNo.ToString();
         }
 
         // Params 초기화
         private void InitialParams()
         {
-            IsThread = false;
-            _SearchCondition = false;
-            _GetTrData = false;
-            _GetRTD = false;
-            LossCut = 0.03;
-            ScrNo = 1000;
+            botParams.IsThread = false;
+            botParams._SearchCondition = false;
+            botParams._GetTrData = false;
+            botParams._GetRTD = false;
+            botParams.LossCut = 0.03;
+            botParams.ScrNo = 1000;
 
             //GetDataTextBox.Text = "Not yet";
             //MonitoringTextBox.Text = "Not yet";
@@ -214,11 +214,11 @@ namespace TaewooBot_v2
         public void RemoveDict(string StockCode)
         {
 
-            targetDict.Remove(StockCode);
-            StockKrNameDict.Remove(StockCode);
-            StockPriceDict.Remove(StockCode);
-            TickSpeedDict.Remove(StockCode);
-            StockPnLDict.Remove(StockCode);
+            botParams.targetDict.Remove(StockCode);
+            botParams.StockKrNameDict.Remove(StockCode);
+            botParams.StockPriceDict.Remove(StockCode);
+            botParams.TickSpeedDict.Remove(StockCode);
+            botParams.StockPnLDict.Remove(StockCode);
 
 
         }
@@ -410,17 +410,17 @@ namespace TaewooBot_v2
 
             // Dictionary 에 조건검색 종목, 화면번호 저장
             // 중복 방지
-            targetDict.Add(codes, scr_no);
+            botParams.targetDict.Add(codes, scr_no);
 
 
             while (true)
             {
-                RqName = "";
-                RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
+                botParams.RqName = "";
+                botParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
                 API.SetInputValue("종목코드", codes);
 
                 // 실시간 현재가 받아오기
-                int res = API.CommRqData(RqName, "OPT10001", 0, scr_no);
+                int res = API.CommRqData(botParams.RqName, "OPT10001", 0, scr_no);
 
                 if (res == 0)
                 {
@@ -452,10 +452,10 @@ namespace TaewooBot_v2
                         //write_sys_log(TargetCodes.ToString(), 0);
                         // 데이터 조회 성공
                         
-                        if (TargetCodes.Contains(codes))
+                        if (botParams.TargetCodes.Contains(codes))
                         {
                             delay(200);
-                            string msg = $"{codes}'s price is {StockPriceDict[codes]}" ;
+                            string msg = $"{codes}'s price is {botParams.StockPriceDict[codes]}" ;
                             write_sys_log(msg, 0);
                             write_sys_log("종목 [ " + GetKrName(codes) + " ] 데이터 조회 완료", 0);
                             ExitFunc = true;
@@ -567,9 +567,9 @@ namespace TaewooBot_v2
 
             try
             {
-                if (TickSpeedDict[StockCode] != null)
+                if (botParams.TickSpeedDict[StockCode] != null)
                 {
-                    TickSpeed = Int32.Parse(TickSpeedDict[StockCode]) + Int32.Parse(ContractLots);
+                    TickSpeed = Int32.Parse(botParams.TickSpeedDict[StockCode]) + Int32.Parse(ContractLots);
                 }
 
                 else
@@ -577,7 +577,7 @@ namespace TaewooBot_v2
                     TickSpeed = Int32.Parse(ContractLots);
                 }
 
-                TickSpeedDict[StockCode] = TickSpeed.ToString();
+                botParams.TickSpeedDict[StockCode] = TickSpeed.ToString();
                 write_sys_log("ContractLots of [ " + StockCode + " ] is " + ContractLots, 0);
 
             }
@@ -594,15 +594,15 @@ namespace TaewooBot_v2
         public void GetAccountInformation()
         {
             string scr_no = get_scr_no();
-            API.SetInputValue("계좌번호", AccountNumber);
+            API.SetInputValue("계좌번호", botParams.AccountNumber);
             // 비밀번호는 숨기자 나중에
             API.SetInputValue("비밀번호", "");
             API.SetInputValue("상장폐지조회구분", "0");
             API.SetInputValue("비밀번호입력매체구분", "00");
 
 
-            RqName = "계좌평가현황요청";
-            API.CommRqData(RqName, "OPW00004", 0, scr_no);
+            botParams.RqName = "계좌평가현황요청";
+            API.CommRqData(botParams.RqName, "OPW00004", 0, scr_no);
 
         }
 
@@ -614,13 +614,13 @@ namespace TaewooBot_v2
             if (Market == "Kosdaq")
             {
                 string res = API.GetCodeListByMarket("10");
-                Codes = res.Split(new char[] { ';' });
+                botParams.Codes = res.Split(new char[] { ';' });
 
             }
             else if (Market == "Kospi")
             {
                 string res = API.GetCodeListByMarket("0");
-                Codes = res.Split(new char[] { ';' });
+                botParams.Codes = res.Split(new char[] { ';' });
             }
 
             else
@@ -628,21 +628,21 @@ namespace TaewooBot_v2
                 string kospi = API.GetCodeListByMarket("0");
                 string kosdaq = API.GetCodeListByMarket("10");
                 string res = kospi + kosdaq;
-                Codes = res.Split(new char[] { ';' });
+                botParams.Codes = res.Split(new char[] { ';' });
             }
 
             // 종목개수 제한...
             for (int i = 0; i < 50; i++)
             {
-                StockCnt = i + 1;
+                botParams.StockCnt = i + 1;
                 string scr_no = get_scr_no();
                 // 주가 데이터 요청.
-                RqName = "";
-                RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
-                API.SetInputValue("종목코드", Codes[i]);
+                botParams.RqName = "";
+                botParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
+                API.SetInputValue("종목코드", botParams.Codes[i]);
 
                 // 실시간 현재가 받아오기
-                int res = API.CommRqData(RqName, "OPT10001", 0, scr_no);
+                int res = API.CommRqData(botParams.RqName, "OPT10001", 0, scr_no);
 
                 delay(300);
             }
@@ -659,7 +659,7 @@ namespace TaewooBot_v2
              Accnt_StockPnL_Won
              */
 
-            foreach(KeyValuePair<string, string> pair in Accnt_StockPnL)
+            foreach(KeyValuePair<string, string> pair in botParams.Accnt_StockPnL)
             {
                 if (Double.Parse(pair.Value) > 3.0)
                 {
@@ -667,7 +667,7 @@ namespace TaewooBot_v2
                     // SendSellOrder(pair.Key);
                     string scr_no = get_scr_no();
                     // 1: 신규매수, 2: 신규매도, 3: 매수취소, 4: 매도취소, 5: 매수정정, 6:매도정정
-                    API.SendOrder("주식매도요청", scr_no, AccountNumber, 2, pair.Key, 10, 0, "03", ""); 
+                    API.SendOrder("주식매도요청", scr_no, botParams.AccountNumber, 2, pair.Key, 10, 0, "03", ""); 
 
                 }
             }
@@ -681,9 +681,9 @@ namespace TaewooBot_v2
             StockPriceDict
             TickSpeedDict
             */
-            int StockCnt = TickSpeedDict.Count;
+            int StockCnt = botParams.TickSpeedDict.Count;
 
-            foreach(KeyValuePair<string, string> pair in TickSpeedDict)
+            foreach(KeyValuePair<string, string> pair in botParams.TickSpeedDict)
             {
                 // TODO : 100이 아니라 Indicator 개발하기.
                 if(Int32.Parse(pair.Value) > 100)
@@ -692,7 +692,7 @@ namespace TaewooBot_v2
                     string scr_no = get_scr_no();
                     
                     // 1: 신규매수, 2: 신규매도, 3: 매수취소, 4: 매도취소, 5: 매수정정, 6:매도정정
-                    API.SendOrder("주식매수요청", scr_no, AccountNumber, 1, pair.Key, 10, 0, "03", "");
+                    API.SendOrder("주식매수요청", scr_no, botParams.AccountNumber, 1, pair.Key, 10, 0, "03", "");
 
                     // SendBuyOrder(pair.Key);
                 }

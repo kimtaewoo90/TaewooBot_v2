@@ -108,12 +108,12 @@ namespace TaewooBot_v2
 
 
                 // 주가 데이터 요청.
-                RqName = "";
-                RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
+                botParams.RqName = "";
+                botParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
                 API.SetInputValue("종목코드", e.sTrCode);
 
                 // 실시간 현재가 받아오기
-                int res = API.CommRqData(RqName, "OPT10001", 0, scr_no);
+                int res = API.CommRqData(botParams.RqName, "OPT10001", 0, scr_no);
             }
 
             //종목 이탈
@@ -126,16 +126,16 @@ namespace TaewooBot_v2
                 //API.DisconnectRealData(scr_no);
 
                 int i = 0;
-                for (i = 0; i < TargetCodes.Count; i++)
+                for (i = 0; i < botParams.TargetCodes.Count; i++)
                 {
-                    if (TargetCodes[i].Equals(e.sTrCode))
+                    if (botParams.TargetCodes[i].Equals(e.sTrCode))
                     {
-                        TargetCodes.RemoveAt(i);
+                        botParams.TargetCodes.RemoveAt(i);
                         //break;
                     }
                 }
 
-                TargetCodes.Remove(e.sTrCode);
+                botParams.TargetCodes.Remove(e.sTrCode);
 
                 // Remove 이탈Stock in Dictionary
                 RemoveDict(e.sTrCode);
@@ -145,20 +145,20 @@ namespace TaewooBot_v2
                 //DeleteTargetStocks(e.sTrCode.ToString());
             }
 
-            write_sys_log(TargetCodes.ToString(), 0);
+            write_sys_log(botParams.TargetCodes.ToString(), 0);
 
         }
 
         // Get TR Data
         private void OnReceiveTrData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent e)
         {
-            if (RqName.CompareTo(e.sRQName) != 0)
+            if (botParams.RqName.CompareTo(e.sRQName) != 0)
             {
                 write_sys_log("Should check the TRCode", 0);
             }
             else
             {
-                switch (RqName)
+                switch (botParams.RqName)
                 {
                     // OPW00001
                     case "예수금상세현황요청":
@@ -205,14 +205,14 @@ namespace TaewooBot_v2
                 string Price = API.GetCommData(e.sTrCode, e.sRQName, 0, "현재가").Trim().ToString();
 
                 DisplayTargetStocks("Insert", Code, KrName, Price, "0", "0");
-                write_sys_log($"[{StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
+                write_sys_log($"[{botParams.StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
 
                 // Update Dict
                 try
                 {
-                    TargetCodes.Add(Code);
-                    StockKrNameDict.Add(Code, KrName);
-                    StockPriceDict.Add(Code, Price);
+                    botParams.TargetCodes.Add(Code);
+                    botParams.StockKrNameDict.Add(Code, KrName);
+                    botParams.StockPriceDict.Add(Code, Price);
                 }
                 catch (Exception err)
                 {
@@ -247,35 +247,35 @@ namespace TaewooBot_v2
 
             if (e.sRQName == "예수금상세현황요청")
             {
-                Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
-                write_sys_log(Deposit.ToString(), 0);
+                botParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
+                write_sys_log(botParams.Deposit.ToString(), 0);
             }
 
             if (e.sRQName == "계좌평가현황요청")
             {
-                Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
-                TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
+                botParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
+                botParams.TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
 
 
-                setText_Control(AccountTextBox, AccountNumber.ToString());
-                setText_Control(DepositTextBox, Deposit.ToString());
-                setText_Control(TotalPnLTextBox, TotalPnL.ToString());
+                setText_Control(AccountTextBox, botParams.AccountNumber.ToString());
+                setText_Control(DepositTextBox, botParams.Deposit.ToString());
+                setText_Control(TotalPnLTextBox, botParams.TotalPnL.ToString());
 
-                AccountStockLots = API.GetRepeatCnt(e.sTrCode, e.sRQName);
-                for (int nIdx = 0; nIdx < AccountStockLots; nIdx++)
+                botParams.AccountStockLots = API.GetRepeatCnt(e.sTrCode, e.sRQName);
+                for (int nIdx = 0; nIdx < botParams.AccountStockLots; nIdx++)
                 {
-                    string code = API.GetCommData(e.sTrCode, e.sRQName, AccountStockLots, "종목코드").Trim();
-                    Accnt_StockName[code] = API.GetCommData(e.sTrCode, e.sRQName, AccountStockLots, "종목명").Trim();
-                    Accnt_StockLots[code] = API.GetCommData(e.sTrCode, e.sRQName, AccountStockLots, "보유수량").Trim();
-                    Accnt_StockPnL[code] = API.GetCommData(e.sTrCode, e.sRQName, AccountStockLots, "손익율").Trim();
-                    Accnt_StockPnL_Won[code] = API.GetCommData(e.sTrCode, e.sRQName, AccountStockLots, "손익금액").Trim();
+                    string code = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "종목코드").Trim();
+                    botParams.Accnt_StockName[code] = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "종목명").Trim();
+                    botParams.Accnt_StockLots[code] = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "보유수량").Trim();
+                    botParams.Accnt_StockPnL[code] = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "손익율").Trim();
+                    botParams.Accnt_StockPnL_Won[code] = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "손익금액").Trim();
 
-                    string msg = $"종목명 : {Accnt_StockName[code]}, 보유수량 : {Accnt_StockLots[code]}, 손익율 : {Accnt_StockLots[code]}, 손익금액 : {Accnt_StockPnL_Won}";
+                    string msg = $"종목명 : {botParams.Accnt_StockName[code]}, 보유수량 : {botParams.Accnt_StockLots[code]}, 손익율 : {botParams.Accnt_StockLots[code]}, 손익금액 : {botParams.Accnt_StockPnL_Won}";
 
                     write_sys_log(msg, 0);
                 }
 
-                if (AccountStockLots == 0)
+                if (botParams.AccountStockLots == 0)
                 {
                     write_sys_log("보유종목이 없습니다.", 0);
                 }
@@ -302,19 +302,19 @@ namespace TaewooBot_v2
                 double highPrice = double.Parse(API.GetCommRealData(e.sRealType, 17).Trim());
                 string TickTime = API.GetCommRealData(e.sRealType, 20).Trim().ToString();
 
-                _GetRTD = true;
+                botParams._GetRTD = true;
 
                 // Update Dictionary
-                StockPriceDict[Code] = Price.ToString();
-                StockPnLDict[Code] = UpDownRate.ToString();
-                StockKrNameDict[Code] = KrName.ToString();
-                TickSpeedDict[Code] = ContractLots.ToString();
-                StockHighPriceDict[Code] = highPrice.ToString();
+                botParams.StockPriceDict[Code] = Price.ToString();
+                botParams.StockPnLDict[Code] = UpDownRate.ToString();
+                botParams.StockKrNameDict[Code] = KrName.ToString();
+                botParams.TickSpeedDict[Code] = ContractLots.ToString();
+                botParams.StockHighPriceDict[Code] = highPrice.ToString();
 
                 List<string> TickAvgList = new List<string>();
                 TickAvgList.Add(TickTime.ToString());
                 TickAvgList.Add(ContractLots.ToString());
-                TickAvgDict[Code] = TickAvgList;
+                botParams.TickAvgDict[Code] = TickAvgList;
 
                 // 분당 거래대금
 
@@ -323,9 +323,9 @@ namespace TaewooBot_v2
 
                 string TickAvgBefore;
                 string TickAvgNow;
-                if (StockDict.Keys.Contains(Code))
+                if (botParams.StockDict.Keys.Contains(Code))
                 {
-                    TickAvgBefore = StockDict[Code][5];
+                    TickAvgBefore = botParams.StockDict[Code][5];
                     TickAvgNow = ContractLots.ToString();
                 }
                 else
@@ -345,26 +345,26 @@ namespace TaewooBot_v2
                 StockInfoList.Add(TickAvgNow.ToString()); ;
 
                 // StockDict Value Index : [0] : TickTime [1] : StockKrName, [2] : UpDownRate, [3] : HgihPrice, [4]: CurPrice, [5] : TickAverage, [6] : TradingAmtperMin
-                StockDict[Code] = StockInfoList;
+                botParams.StockDict[Code] = StockInfoList;
 
                 // TickLog 기록
-                File.AppendAllText(TickPath + TickLogFileName, $"[{CurTime}] : {Code} / {Price.ToString()} / {UpDownRate.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
+                File.AppendAllText(botParams.TickPath + botParams.TickLogFileName, $"[{botParams.CurTime}] : {Code} / {Price.ToString()} / {UpDownRate.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
 
                 // ToDo : GetTickSpeed in here
                 // GetTickSpeed(Code, ContractLots);
 
                 // Display the RTD data on TargetStocks DataGridView
-                DisplayTargetStocks("Update", Code, "", Price.ToString(), TickSpeedDict[Code], UpDownRate.ToString());
+                DisplayTargetStocks("Update", Code, "", Price.ToString(), botParams.TickSpeedDict[Code], UpDownRate.ToString());
 
 
                 // signal True Conditions
                 if(int.Parse(ContractLots) > 1000)
                 {
-                    SignalStockCode = Code;
-                    SignalKrName = KrName;
-                    SignalPrice = Price.ToString();
+                    botParams.SignalStockCode = Code;
+                    botParams.SignalKrName = KrName;
+                    botParams.SignalPrice = Price.ToString();
 
-                    signal = true;
+                    botParams.signal = true;
                     // TODO : 여기서 GetDataThread를 중지시켜야하나?
                 }
             }
