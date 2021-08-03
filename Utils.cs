@@ -17,6 +17,7 @@ namespace TaewooBot_v2
 {
     public partial class Main
     {
+
         // Utils
         //  현재시간 불러오기
         public string get_cur_tm()
@@ -33,6 +34,8 @@ namespace TaewooBot_v2
         // 시스템 로그 함수 구현
         public void write_sys_log(String text, int is_Clear)
         {
+
+            
             DateTime cur_time;
             String cur_dt;
             String cur_tm;
@@ -49,26 +52,26 @@ namespace TaewooBot_v2
 
             if (is_Clear == 1)
             {
-                if (this.Log.InvokeRequired)
+                if (logs.LogBox.InvokeRequired)
                 {
-                    Log.BeginInvoke(new Action(() => Log.Clear()));
+                    logs.LogBox.BeginInvoke(new Action(() => logs.LogBox.Clear()));
                 }
                 else
                 {
-                    this.Log.Clear();
+                    this.logs.LogBox.Clear();
                 }
             }
 
             else
             {
-                if (this.Log.InvokeRequired)
+                if (this.logs.LogBox.InvokeRequired)
                 {
-                    Log.BeginInvoke(new Action(() => Log.AppendText("\n" + cur_dtm + text + Environment.NewLine)));
+                    logs.LogBox.BeginInvoke(new Action(() => logs.LogBox.AppendText("\n" + cur_dtm + text + Environment.NewLine)));
                 }
 
                 else
                 {
-                    this.Log.AppendText("\n" + cur_dtm + text + Environment.NewLine);
+                    this.logs.LogBox.AppendText("\n" + cur_dtm + text + Environment.NewLine);
                     // log 기록
 
                     File.AppendAllText(Path + LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
@@ -403,7 +406,6 @@ namespace TaewooBot_v2
         {
             int repeatCnt = 0;
             int loopCnt = 0;
-            string ret = null;
             bool ExitFunc = false;
 
             // Dictionary 에 조건검색 종목, 화면번호 저장
@@ -490,14 +492,14 @@ namespace TaewooBot_v2
 
         }
 
-        public void DisplayTargetStocks(string Type, string StockCode, string StockName, string Price, string TickSpeed, string PnL)
+        public void DisplayTargetStocks(string Type, string StockCode, string StockName, string Price, string Change, string TickSpeed)
         {
             if (Type == "Insert")
             {
-                int AddCnt = TargetStocks.Rows.Count;
+                int AddCnt = universe.TargetStocks.Rows.Count;
                 // StockCode, StockKrName, Price, TickSpeed, PnL
-                
-                TargetStocks.Rows.Add(StockCode, StockName, Price, TickSpeed, PnL);
+
+                universe.TargetStocks.Rows.Add(StockCode, StockName, Price, TickSpeed, Change);
 
                 
                 write_sys_log(StockCode + "종목이 추가 되었습니다.", 0);
@@ -505,14 +507,14 @@ namespace TaewooBot_v2
 
             else if (Type == "Update")
             {
-                int UpdateCnt = TargetStocks.Rows.Count;
+                int UpdateCnt = universe.TargetStocks.Rows.Count;
                 for (int i = 0; i < UpdateCnt-1; i++)
                 {
-                    if (TargetStocks["StockCode", i].Value.ToString() == StockCode)
+                    if (universe.TargetStocks["StockCode", i].Value.ToString() == StockCode)
                     {
-                        TargetStocks.Rows[i].Cells[2].Value = Price;
-                        TargetStocks.Rows[i].Cells[3].Value = TickSpeed;
-                        TargetStocks.Rows[i].Cells[4].Value = PnL;
+                        universe.TargetStocks.Rows[i].Cells[2].Value = Price;
+                        universe.TargetStocks.Rows[i].Cells[3].Value = Change;
+                        universe.TargetStocks.Rows[i].Cells[4].Value = TickSpeed;
 
                     }
                 }
@@ -521,7 +523,7 @@ namespace TaewooBot_v2
 
         public void DisplayPosition(string StockCode, string StockName, string Price, string PnL, string status)
         {
-            PositionDataGrid.Rows.Add(StockCode, StockName, Price, PnL, status);
+            position.PositionDataGrid.Rows.Add(StockCode, StockName, Price, PnL, status);
         }
 
 
@@ -529,15 +531,15 @@ namespace TaewooBot_v2
         {
             try
             {
-                int DelCnt = TargetStocks.Rows.Count;
+                int DelCnt = universe.TargetStocks.Rows.Count;
                 for (int i = 0; i < DelCnt; i++)
                 {
                     try
                     {
-                        if (TargetStocks["StockCode", i].Value.ToString() == StockCode && TargetStocks != null)
+                        if (universe.TargetStocks["StockCode", i].Value.ToString() == StockCode && universe.TargetStocks != null)
                         {
                             // 해당 데이터 삭제
-                            TargetStocks.Rows.Remove(TargetStocks.Rows[i]);
+                            universe.TargetStocks.Rows.Remove(universe.TargetStocks.Rows[i]);
 
                             write_sys_log(StockCode + "종목이 삭제 되었습니다.", 0);
                             break;
@@ -710,7 +712,12 @@ namespace TaewooBot_v2
                 ctr.Text = txtValue;
             }
         }
-        
+
+        private void ParamsBtn_Click(object sender, EventArgs e)
+        {
+            Params.Show();
+        }
+
 
     }
 }

@@ -92,6 +92,12 @@ namespace TaewooBot_v2
         Thread MonitoringSignalThread = null;
         Thread OrderThread = null;
 
+        // Instance Other WinForms
+        Logs logs = new Logs();
+        Params Params = new Params();
+        Universe universe = new Universe();
+        Position position = new Position();
+
 
         public Main()
         {
@@ -103,14 +109,21 @@ namespace TaewooBot_v2
             this.API.OnReceiveRealData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEventHandler(this.DKHOpenAPI1_OnReceiveRealData);
             */
 
+            // Open Windows
+            logs.Show();
+            universe.Show();
+            position.Show();
+
+            // Initialize Parameters
             InitialParams();
+
+            // Make Log text files
             MakeLogFile();
             MakeTickDataFile();
 
             // Tr code 검색
             this.API.OnReceiveTrData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEventHandler(this.OnReceiveTrData);
             this.API.OnReceiveRealData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEventHandler(this.OnReceiveRealData);
-
 
             // 조건검색
             this.API.OnReceiveConditionVer += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveConditionVerEventHandler(this.OnReceiveConditionVer);
@@ -294,6 +307,8 @@ namespace TaewooBot_v2
         {
 
         }
+
+
     }
 
     class ConditionInfo

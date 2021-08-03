@@ -82,10 +82,10 @@ namespace TaewooBot_v2
                 write_sys_log(msg, 0);
 
                 bool DataGrid = false;
-                for(int i=0; i < TargetStocks.Rows.Count-1; i++)
+                for(int i=0; i < universe.TargetStocks.Rows.Count-1; i++)
                 {
                     // 기존 TargetStocks Dict에 편입종목이 포함되어 있는지 확인.
-                    if(TargetStocks["StockCode", i].Value.ToString() == e.sTrCode)
+                    if(universe.TargetStocks["StockCode", i].Value.ToString() == e.sTrCode)
                     {
                         DataGrid = true;
                         break;
@@ -295,7 +295,6 @@ namespace TaewooBot_v2
 
                 string Code = e.sRealKey;
                 string KrName = GetKrName(Code);
-                double buy_amt;
                 double Price = Math.Abs(double.Parse(API.GetCommRealData(e.sRealType, 10).Trim()));  // current price;
                 double UpDownRate = double.Parse(API.GetCommRealData(e.sRealType, 12));
                 string ContractLots = API.GetCommRealData(e.sRealType, 15).Trim().ToString(); // 체결량
@@ -321,9 +320,20 @@ namespace TaewooBot_v2
 
                 // TODO : How To Calculate average Tick Speed in 1 Minute
                 // 틱 속도
-                var TickAvgBefore = StockDict[Code][5];
-                var TickAvgNow = ContractLots.ToString(); 
 
+                string TickAvgBefore;
+                string TickAvgNow;
+                if (StockDict.Keys.Contains(Code))
+                {
+                    TickAvgBefore = StockDict[Code][5];
+                    TickAvgNow = ContractLots.ToString();
+                }
+                else
+                {
+                    TickAvgNow = ContractLots.ToString();
+                }
+                
+                
                 // Add Stock Info List
                 List<string> StockInfoList = new List<string>();
                 
