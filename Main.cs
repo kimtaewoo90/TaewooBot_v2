@@ -169,6 +169,7 @@ namespace TaewooBot_v2
                 {
                     GetAccountInformation();
                     RequestAllStocks();
+
                     setText_Control(GetDataTextBox, "running");
 
                     botParams.Test = false;
@@ -194,7 +195,7 @@ namespace TaewooBot_v2
 
                     write_sys_log("Get the MonitroingSignalThread in here", 0);
 
-                    DisplayPosition(botParams.SignalStockCode, botParams.SignalKrName, botParams.SignalPrice, "", "Buy");
+                    position.DisplayPosition(botParams.SignalStockCode, botParams.SignalKrName, botParams.SignalPrice, "", "Buy");
 
                     botParams.order = true;
 

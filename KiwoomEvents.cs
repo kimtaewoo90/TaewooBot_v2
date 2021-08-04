@@ -285,9 +285,7 @@ namespace TaewooBot_v2
         // Get Real Data
         private void OnReceiveRealData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEvent e)
         {
-
-            //write_sys_log(e.sRealType, 0);
-
+            // A03
             if (e.sRealType == "주식체결")
             {
                 int Volume = 0;

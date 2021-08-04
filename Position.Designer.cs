@@ -113,5 +113,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Change;
         private System.Windows.Forms.DataGridViewTextBoxColumn TradingPnL;
         public System.Windows.Forms.DataGridView PositionDataGrid;
+        private AxKHOpenAPILib.AxKHOpenAPI Position_API;
+
     }
 }

@@ -16,5 +16,22 @@ namespace TaewooBot_v2
         {
             InitializeComponent();
         }
+
+
+
+        public void DisplayPosition(string ShortCode, string KrName, string BalanceQty, string BuyPrice, string CurPrice, string Change, string TradingPnL)
+        {
+            if(PositionDataGrid.InvokeRequired)
+            {
+                PositionDataGrid.Invoke(new MethodInvoker(delegate ()
+                {
+                    PositionDataGrid.Rows.Add(ShortCode, KrName, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL);
+                }));
+            }
+            else
+            {
+                PositionDataGrid.Rows.Add(ShortCode, KrName, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL);
+            }
+        }
     }
 }

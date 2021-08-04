@@ -89,7 +89,7 @@
             // API
             // 
             this.API.Enabled = true;
-            this.API.Location = new System.Drawing.Point(699, -6);
+            this.API.Location = new System.Drawing.Point(388, -20);
             this.API.Name = "API";
             this.API.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("API.OcxState")));
             this.API.Size = new System.Drawing.Size(100, 50);
@@ -101,9 +101,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Status,
             this.CurrentTime});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 337);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 338);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(573, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(446, 22);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "time";
             // 
@@ -174,9 +174,10 @@
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(18, 39);
+            this.groupBox3.Controls.Add(this.API);
+            this.groupBox3.Location = new System.Drawing.Point(24, 57);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(524, 122);
+            this.groupBox3.Size = new System.Drawing.Size(386, 122);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "계좌현황";
@@ -257,7 +258,7 @@
             this.groupBox4.Controls.Add(this.GetDataTextBox);
             this.groupBox4.Location = new System.Drawing.Point(24, 185);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(270, 133);
+            this.groupBox4.Size = new System.Drawing.Size(386, 133);
             this.groupBox4.TabIndex = 19;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Bot Status";
@@ -327,7 +328,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(573, 359);
+            this.ClientSize = new System.Drawing.Size(446, 360);
             this.Controls.Add(this.ParamsBtn);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.TestCheck);
@@ -338,7 +339,6 @@
             this.Controls.Add(this.TestText);
             this.Controls.Add(this.TestBtn);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.API);
             this.Controls.Add(this.Start_Btn);
             this.Controls.Add(this.MarketType);
             this.Name = "Main";

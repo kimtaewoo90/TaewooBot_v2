@@ -521,12 +521,6 @@ namespace TaewooBot_v2
             }
         }
 
-        public void DisplayPosition(string StockCode, string StockName, string Price, string PnL, string status)
-        {
-            position.PositionDataGrid.Rows.Add(StockCode, StockName, Price, PnL, status);
-        }
-
-
         public void DeleteTargetStocks(string StockCode)
         {
             try
