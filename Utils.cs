@@ -15,8 +15,11 @@ using System.IO;
 
 namespace TaewooBot_v2
 {
-    public partial class Main
+    public partial class Utils
     {
+        Logs logs = new Logs();
+        Universe universe = new Universe();
+        BotParams botParams = new BotParams();
 
         // Utils
         //  현재시간 불러오기
@@ -106,54 +109,7 @@ namespace TaewooBot_v2
                 write_sys_log("틱데이터파일 생성 완료", 0);
             }
         }
-        // 로그인 함수 구현
-        private void Login()
-        {
-            int ret = 0;
-            int ret2 = 0;
 
-            String accno_cnt = null;
-            string[] accno_arr = null;
-
-            ret = API.CommConnect(); // 로그인 창 호출
-
-            Status.Text = "로그인 중..."; // 화면 하단 상태란에 메시지 출력
-
-            for (; ; )
-            {
-                ret2 = API.GetConnectState(); // 로그인 완료 여부를 가져옴
-                if (ret2 == 1)
-                {
-                    // 로그인 성공
-                    break;
-                }
-                else
-                {
-                    // 로그인 대기
-                    delay(1000); // 1초 지연
-                }
-            } // end for
-
-            Status.Text = "로그인 완료"; // 화면 하단 상태란에 메시지 출력
-
-            botParams.UserID = "";
-            botParams.UserID = API.GetLoginInfo("USER_ID").Trim(); // 사용자 아이디를 가져와서 클래스 변수(전역변수)에 저장
-            //textBox1.Text = g_user_id; // 전역변수에 저장한 아이디를 텍스트박스에 출력
-
-            accno_cnt = "";
-            accno_cnt = API.GetLoginInfo("ACCOUNT_CNT").Trim(); // 사용자의 증권계좌 수를 가져옴
-
-            // TODO : Error
-            accno_arr = new string[int.Parse(accno_cnt)];
-
-            botParams.AccountNumber = API.GetLoginInfo("ACCNO").Trim().Replace(";","");
-
-            accno_arr = botParams.AccountNumber.Split(';');  // API에서 ';'를 구분자로 여러개의 계좌번호를 던져준다.
-            write_sys_log("Account Number : " + botParams.AccountNumber, 0);
-            write_sys_log("Welcome " + botParams.UserID, 0);
-
-
-        }
 
         // 지연함수 구현
         [HandleProcessCorruptedStateExceptions]
@@ -185,7 +141,7 @@ namespace TaewooBot_v2
         }
 
         // 요청번호 부여 함수 구현
-        private string get_scr_no()
+        public string get_scr_no()
         {
             if (botParams.ScrNo < 9999)
             {
@@ -197,7 +153,7 @@ namespace TaewooBot_v2
         }
 
         // Params 초기화
-        private void InitialParams()
+        public void InitialParams()
         {
             botParams.IsThread = false;
             botParams._SearchCondition = false;
@@ -223,274 +179,7 @@ namespace TaewooBot_v2
 
         }
 
-        // 종목이름 요청
-        public string GetKrName(string Code)
-        {
-            string KrName = null;
-            KrName = API.GetMasterCodeName(Code);
-
-            return KrName;
-        }
-
-        // 호가가격단위 가져오기 메서드
-        public int get_hoga_unit_price(int price, string jongmok_cd, int hoga_unit_jump)
-        {
-            int market_type;
-            int rest;
-
-            market_type = 0;
-
-            try
-            {
-                // 시장구분 가져오기
-                market_type = int.Parse(API.GetMarketType(jongmok_cd).ToString());
-            }
-
-            catch (Exception ex)
-            {
-                write_sys_log("호가단위 가져오는 중 다음 에러 발생 : [ " + ex.Message + "]\n", 0);
-            }
-
-            // 천원 미만
-            if (price < 1000)
-            {
-                return price + (hoga_unit_jump * 1);
-            }
-            // 천원 이상 오천원 미만
-            else if (1000 <= price && price < 5000)
-            {
-                rest = price % 5;
-                if (rest == 0)
-                {
-                    return price + (hoga_unit_jump * 5);
-                }
-                else if (rest < 3)
-                {
-                    return (price - rest) + (hoga_unit_jump * 5);
-                }
-                else
-                {
-                    return (price + (5 - rest)) + (hoga_unit_jump * 5);
-                }
-            }
-            // 오천원 이상 만원 미만
-            else if (price >= 5000 && price < 10000)
-            {
-                rest = price % 10;
-                if (rest == 0)
-                {
-                    return price + (hoga_unit_jump * 10);
-                }
-                else if (rest < 5)
-                {
-                    return (price - rest) + (hoga_unit_jump * 10);
-                }
-                else
-                {
-                    return (price + (10 - rest)) + (hoga_unit_jump * 10);
-                }
-            }
-            // 만원 이상 오만원 미만
-            else if (price >= 10000 && price < 50000)
-            {
-                rest = price % 50;
-                if (rest == 0)
-                {
-                    return price + (hoga_unit_jump * 50);
-                }
-                else if (rest < 25)
-                {
-                    return (price - rest) + (hoga_unit_jump * 50);
-                }
-                else
-                {
-                    return (price + (50 - rest)) + (hoga_unit_jump * 50);
-                }
-            }
-            // 오만원 이상 십만원 미만
-            else if (price >= 50000 && price < 100000)
-            {
-                rest = price % 100;
-                if (rest == 0)
-                {
-                    return price + (hoga_unit_jump * 100);
-                }
-                else if (rest < 50)
-                {
-                    return (price - rest) + (hoga_unit_jump * 100);
-                }
-                else
-                {
-                    return (price + (100 - rest)) + (hoga_unit_jump * 100);
-                }
-            }
-            // 십만원 이상 오십만원 미만 (장 구분)
-            else if (price >= 100000 && price < 500000)
-            {
-                if (market_type == 10)
-                {
-                    rest = price % 100;
-                    if (rest == 0)
-                    {
-                        return price + (hoga_unit_jump * 100);
-                    }
-                    else if (rest < 50)
-                    {
-                        return (price - rest) + (hoga_unit_jump * 100);
-                    }
-                    else
-                    {
-                        return (price + (100 - rest)) + (hoga_unit_jump * 100);
-                    }
-                }
-                else
-                {
-                    rest = price % 500;
-                    if (rest == 0)
-                    {
-                        return price + (hoga_unit_jump * 500);
-                    }
-                    else if (rest < 250)
-                    {
-                        return (price - rest) + (hoga_unit_jump * 500);
-                    }
-                    else
-                    {
-                        return (price + (500 - rest)) + (hoga_unit_jump * 500);
-                    }
-                }
-            }
-            // 50만원 이상
-            else if (price >= 500000)
-            {
-                if (market_type == 10)
-                {
-                    rest = price % 100;
-                    if (rest == 0)
-                    {
-                        return price + (hoga_unit_jump * 100);
-                    }
-                    else if (rest < 50)
-                    {
-                        return (price - rest) + (hoga_unit_jump * 100);
-                    }
-                    else
-                    {
-                        return (price + (100 - rest)) + (hoga_unit_jump * 100);
-                    }
-                }
-                else
-                {
-                    rest = price % 1000;
-                    if (rest == 0)
-                    {
-                        return price + (hoga_unit_jump * 1000);
-                    }
-                    else if (rest < 500)
-                    {
-                        return (price - rest) + (hoga_unit_jump * 1000);
-                    }
-                    else
-                    {
-                        return (price + (1000 - rest)) + (hoga_unit_jump * 1000);
-                    }
-                }
-            }
-
-            return 0;
-        }
-
-
-        // TargetDict 의 종목 리스트에 대해 실시간 데이터 요청
-        public void ReqRealData(string codes, string scr_no)
-        {
-            int repeatCnt = 0;
-            int loopCnt = 0;
-            bool ExitFunc = false;
-
-            // Dictionary 에 조건검색 종목, 화면번호 저장
-            // 중복 방지
-            botParams.targetDict.Add(codes, scr_no);
-
-
-            while (true)
-            {
-                botParams.RqName = "";
-                botParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
-                API.SetInputValue("종목코드", codes);
-
-                // 실시간 현재가 받아오기
-                int res = API.CommRqData(botParams.RqName, "OPT10001", 0, scr_no);
-
-                if (res == 0)
-                {
-                    write_sys_log("Reqeust 'OPT10001' ReqRealData", 0);
-                    break;
-                }
-                //delay(2000);
-            }
-
-            for (; ; )
-            {
-                if (repeatCnt == 5)
-                {
-                    write_sys_log("[ " + GetKrName(codes) + " ]의 시세 받기 실패.", 0);
-                    break;
-                }
-
-                if (ExitFunc is true)
-                {
-                    break;
-                }
-
-                try
-                {
-                    loopCnt = 0;
-                    for (; ; )
-                    {
-                        delay(1000);
-                        //write_sys_log(TargetCodes.ToString(), 0);
-                        // 데이터 조회 성공
-                        
-                        if (botParams.TargetCodes.Contains(codes))
-                        {
-                            delay(200);
-                            string msg = $"{codes}'s price is {botParams.StockPriceDict[codes]}" ;
-                            write_sys_log(msg, 0);
-                            write_sys_log("종목 [ " + GetKrName(codes) + " ] 데이터 조회 완료", 0);
-                            ExitFunc = true;
-                            break;
-                        }
-                        else
-                        {
-                            write_sys_log("[ " + GetKrName(codes) + " ] / 데이터 조회 요청중...", 0);
-                            delay(200);
-                            loopCnt++;
-                            if (loopCnt == 5)
-                            {
-                                repeatCnt++;
-                                loopCnt = 0;
-                                break;
-                            }
-
-                            else
-                            {
-                                continue;
-                            }
-                        }
-                    }
-                }
-
-                catch (Exception ex)
-                {
-                    write_sys_log("거래량 조회중 다음 에러 발생 : [ " + ex.Message + " ]", 0);
-                }
-
-                delay(200);
-
-            }  // end of 거래량 조회
-
-        }
+      
 
         public void DisplayTargetStocks(string Type, string StockCode, string StockName, string Price, string Change, string TickSpeed)
         {
@@ -585,132 +274,7 @@ namespace TaewooBot_v2
 
         }
 
-        public void GetAccountInformation()
-        {
-            string scr_no = get_scr_no();
-            API.SetInputValue("계좌번호", botParams.AccountNumber);
-            // 비밀번호는 숨기자 나중에
-            API.SetInputValue("비밀번호", "");
-            API.SetInputValue("상장폐지조회구분", "0");
-            API.SetInputValue("비밀번호입력매체구분", "00");
 
-
-            botParams.RqName = "계좌평가현황요청";
-            API.CommRqData(botParams.RqName, "OPW00004", 0, scr_no);
-
-        }
-
-        // 전종목 주식데이터 요청
-        public void RequestAllStocks()
-        {
-            string Market = "Kosdaq";
-
-            if (Market == "Kosdaq")
-            {
-                string res = API.GetCodeListByMarket("10");
-                botParams.Codes = res.Split(new char[] { ';' });
-
-            }
-            else if (Market == "Kospi")
-            {
-                string res = API.GetCodeListByMarket("0");
-                botParams.Codes = res.Split(new char[] { ';' });
-            }
-
-            else
-            {
-                string kospi = API.GetCodeListByMarket("0");
-                string kosdaq = API.GetCodeListByMarket("10");
-                string res = kospi + kosdaq;
-                botParams.Codes = res.Split(new char[] { ';' });
-            }
-
-            // 종목개수 제한...
-            for (int i = 0; i < 50; i++)
-            {
-                botParams.StockCnt = i + 1;
-                string scr_no = get_scr_no();
-                // 주가 데이터 요청.
-                botParams.RqName = "";
-                botParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
-                API.SetInputValue("종목코드", botParams.Codes[i]);
-
-                // 실시간 현재가 받아오기
-                int res = API.CommRqData(botParams.RqName, "OPT10001", 0, scr_no);
-
-                delay(300);
-            }
-
-        }
-
-
-        public void MonitoringSellStocks()
-        {
-            /*
-             Accnt_StockName
-             Accnt_StockLots
-             Accnt_StockPnL
-             Accnt_StockPnL_Won
-             */
-
-            foreach(KeyValuePair<string, string> pair in botParams.Accnt_StockPnL)
-            {
-                if (Double.Parse(pair.Value) > 3.0)
-                {
-                    GetAccountInformation();
-                    // SendSellOrder(pair.Key);
-                    string scr_no = get_scr_no();
-                    // 1: 신규매수, 2: 신규매도, 3: 매수취소, 4: 매도취소, 5: 매수정정, 6:매도정정
-                    API.SendOrder("주식매도요청", scr_no, botParams.AccountNumber, 2, pair.Key, 10, 0, "03", ""); 
-
-                }
-            }
-        }
-
-        public void MonitoringBuyStocks()
-        {
-            /*
-            targetDict
-            StockKrNameDict
-            StockPriceDict
-            TickSpeedDict
-            */
-            int StockCnt = botParams.TickSpeedDict.Count;
-
-            foreach(KeyValuePair<string, string> pair in botParams.TickSpeedDict)
-            {
-                // TODO : 100이 아니라 Indicator 개발하기.
-                if(Int32.Parse(pair.Value) > 100)
-                {
-                    GetAccountInformation();
-                    string scr_no = get_scr_no();
-                    
-                    // 1: 신규매수, 2: 신규매도, 3: 매수취소, 4: 매도취소, 5: 매수정정, 6:매도정정
-                    API.SendOrder("주식매수요청", scr_no, botParams.AccountNumber, 1, pair.Key, 10, 0, "03", "");
-
-                    // SendBuyOrder(pair.Key);
-                }
-            }
-        }
-
-        // Thread간 winform 객체에 접근 
-        public void setText_Control(Control ctr, string txtValue)
-        {
-            if (ctr.InvokeRequired)
-            {
-                Ctr_Involk CI = new Ctr_Involk(setText_Control);
-                ctr.Invoke(CI, ctr, txtValue);
-            }
-            else
-            {
-                ctr.Text = txtValue;
-            }
-        }
-
-        private void ParamsBtn_Click(object sender, EventArgs e)
-        {
-            Params.Show();
-        }
 
 
     }

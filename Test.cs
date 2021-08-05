@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaewooBot_v2
 {
+ 
     public partial class Main
     {
         private void TestBtn_Click(object sender, EventArgs e)
@@ -17,13 +18,13 @@ namespace TaewooBot_v2
         {
             string code = TestText.Text;
 
-            DisplayTargetStocks("Insert", code, GetKrName(code), botParams.StockPriceDict[TestText.Text], "0", "0");
+            utils.DisplayTargetStocks("Insert", code, GetKrName(code), botParams.StockPriceDict[TestText.Text], "0", "0");
         }
 
         private void DelBtn_Click(object sender, EventArgs e)
         {
             string code = TestText.Text;
-            DeleteTargetStocks(code);
+            utils.DeleteTargetStocks(code);
         }
 
         private void GetDeposit_Click(object sender, EventArgs e)

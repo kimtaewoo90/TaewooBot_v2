@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.TargetStocks = new System.Windows.Forms.DataGridView();
-            this.Confirm = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TickSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StockChange = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StockKrName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StockKrName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StockChange = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TickSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Confirm = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.TargetStocks)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,35 +54,35 @@
             this.TargetStocks.Size = new System.Drawing.Size(643, 359);
             this.TargetStocks.TabIndex = 0;
             // 
-            // Confirm
+            // StockCode
             // 
-            this.Confirm.HeaderText = "Confirm";
-            this.Confirm.Name = "Confirm";
-            // 
-            // TickSpeed
-            // 
-            this.TickSpeed.HeaderText = "틱속도";
-            this.TickSpeed.Name = "TickSpeed";
-            // 
-            // StockChange
-            // 
-            this.StockChange.HeaderText = "Change(%)";
-            this.StockChange.Name = "StockChange";
-            // 
-            // Price
-            // 
-            this.Price.HeaderText = "현재가";
-            this.Price.Name = "Price";
+            this.StockCode.HeaderText = "종목코드";
+            this.StockCode.Name = "StockCode";
             // 
             // StockKrName
             // 
             this.StockKrName.HeaderText = "종목명";
             this.StockKrName.Name = "StockKrName";
             // 
-            // StockCode
+            // Price
             // 
-            this.StockCode.HeaderText = "종목코드";
-            this.StockCode.Name = "StockCode";
+            this.Price.HeaderText = "현재가";
+            this.Price.Name = "Price";
+            // 
+            // StockChange
+            // 
+            this.StockChange.HeaderText = "Change(%)";
+            this.StockChange.Name = "StockChange";
+            // 
+            // TickSpeed
+            // 
+            this.TickSpeed.HeaderText = "틱속도";
+            this.TickSpeed.Name = "TickSpeed";
+            // 
+            // Confirm
+            // 
+            this.Confirm.HeaderText = "Confirm";
+            this.Confirm.Name = "Confirm";
             // 
             // Universe
             // 

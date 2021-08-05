@@ -41,6 +41,7 @@
             this.DelBtn = new System.Windows.Forms.Button();
             this.GetDeposit = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.signalCnt = new System.Windows.Forms.TextBox();
             this.TotalPnLTextBox = new System.Windows.Forms.TextBox();
             this.DepositTextBox = new System.Windows.Forms.TextBox();
             this.AccountTextBox = new System.Windows.Forms.TextBox();
@@ -89,10 +90,10 @@
             // API
             // 
             this.API.Enabled = true;
-            this.API.Location = new System.Drawing.Point(388, -20);
+            this.API.Location = new System.Drawing.Point(289, 85);
             this.API.Name = "API";
             this.API.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("API.OcxState")));
-            this.API.Size = new System.Drawing.Size(100, 50);
+            this.API.Size = new System.Drawing.Size(97, 48);
             this.API.TabIndex = 7;
             this.API.Visible = false;
             // 
@@ -101,9 +102,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Status,
             this.CurrentTime});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 338);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 326);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(446, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(441, 22);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "time";
             // 
@@ -174,13 +175,19 @@
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.API);
             this.groupBox3.Location = new System.Drawing.Point(24, 57);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(386, 122);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "계좌현황";
+            // 
+            // signalCnt
+            // 
+            this.signalCnt.Location = new System.Drawing.Point(280, 45);
+            this.signalCnt.Name = "signalCnt";
+            this.signalCnt.Size = new System.Drawing.Size(100, 21);
+            this.signalCnt.TabIndex = 6;
             // 
             // TotalPnLTextBox
             // 
@@ -251,11 +258,13 @@
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.label6);
+            this.groupBox4.Controls.Add(this.signalCnt);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Controls.Add(this.label4);
             this.groupBox4.Controls.Add(this.OrderTextBox);
             this.groupBox4.Controls.Add(this.MonitoringTextBox);
             this.groupBox4.Controls.Add(this.GetDataTextBox);
+            this.groupBox4.Controls.Add(this.API);
             this.groupBox4.Location = new System.Drawing.Point(24, 185);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(386, 133);
@@ -316,7 +325,7 @@
             // 
             // ParamsBtn
             // 
-            this.ParamsBtn.Location = new System.Drawing.Point(335, 12);
+            this.ParamsBtn.Location = new System.Drawing.Point(300, 13);
             this.ParamsBtn.Name = "ParamsBtn";
             this.ParamsBtn.Size = new System.Drawing.Size(75, 23);
             this.ParamsBtn.TabIndex = 20;
@@ -328,7 +337,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(446, 360);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(441, 348);
             this.Controls.Add(this.ParamsBtn);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.TestCheck);
@@ -385,6 +395,7 @@
         private System.Windows.Forms.TextBox MonitoringTextBox;
         private System.Diagnostics.Process process1;
         private System.Windows.Forms.Button ParamsBtn;
+        private System.Windows.Forms.TextBox signalCnt;
     }
 }
 

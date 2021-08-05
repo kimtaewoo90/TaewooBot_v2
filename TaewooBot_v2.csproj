@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blotter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Blotter.Designer.cs">
+      <DependentUpon>Blotter.cs</DependentUpon>
+    </Compile>
     <Compile Include="BotParams.cs" />
     <Compile Include="KiwoomEvents.cs">
       <SubType>Form</SubType>
@@ -63,6 +69,9 @@
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main_Utils.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Params.cs">
       <SubType>Form</SubType>
@@ -87,9 +96,10 @@
     <Compile Include="Universe.Designer.cs">
       <DependentUpon>Universe.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Utils.cs" />
+    <EmbeddedResource Include="Blotter.resx">
+      <DependentUpon>Blotter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Logs.resx">
       <DependentUpon>Logs.cs</DependentUpon>
     </EmbeddedResource>

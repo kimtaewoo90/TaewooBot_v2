@@ -39,7 +39,7 @@ namespace TaewooBot_v2
                 }
             }
 
-            API.SendCondition(get_scr_no(), conditionList[0].ConditionNm, conditionList[0].ConditionNum, 1);
+            API.SendCondition(utils.get_scr_no(), conditionList[0].ConditionNm, conditionList[0].ConditionNum, 1);
 
 
         }
@@ -60,7 +60,7 @@ namespace TaewooBot_v2
             }
             else if (e.strCodeList.Length == 0)
             {
-                write_sys_log("검색된 조건목록에 대한 종목이 없습니다.\n", 0);
+                utils.write_sys_log("검색된 조건목록에 대한 종목이 없습니다.\n", 0);
             }
         }
         private void OnReceiveRealCondition(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealConditionEvent e)
@@ -71,15 +71,15 @@ namespace TaewooBot_v2
             if (e.strType.Equals("I"))
             {
                 string stockName = API.GetMasterCodeName(e.sTrCode);
-                write_sys_log("편입종목 : " + "[" + stockName + " ].\n", 0);
+                utils.write_sys_log("편입종목 : " + "[" + stockName + " ].\n", 0);
 
                 string scr_no = null;
                 scr_no = "";
-                scr_no = get_scr_no();
+                scr_no = utils.get_scr_no();
 
                 string msg = "편입종목 : " + stockName;
 
-                write_sys_log(msg, 0);
+                utils.write_sys_log(msg, 0);
 
                 bool DataGrid = false;
                 for(int i=0; i < universe.TargetStocks.Rows.Count-1; i++)
@@ -95,12 +95,12 @@ namespace TaewooBot_v2
                 // 기존 TargetStocks Dict에 지금 들어온 종목이 없을 때만 TargetStocks DataGridView 추가
                 if (DataGrid == false)
                 {
-                    DisplayTargetStocks("Insert", e.sTrCode.ToString(), stockName, "0", "0", "0");
+                    utils.DisplayTargetStocks("Insert", e.sTrCode.ToString(), stockName, "0", "0", "0");
                 }
-                
 
 
-                delay(1000);
+
+                utils.delay(1000);
 
 
                 // 추가된 종목만 따로 실시간 요청
@@ -120,7 +120,7 @@ namespace TaewooBot_v2
             else if (e.strType.Equals("D"))
             {
                 string stockName = API.GetMasterCodeName(e.sTrCode);
-                write_sys_log("이탈종목 : " + "[" + stockName + " ].\n", 0);
+                utils.write_sys_log("이탈종목 : " + "[" + stockName + " ].\n", 0);
 
                 //string scr_no = targetDict[e.sTrCode];
                 //API.DisconnectRealData(scr_no);
@@ -138,14 +138,14 @@ namespace TaewooBot_v2
                 botParams.TargetCodes.Remove(e.sTrCode);
 
                 // Remove 이탈Stock in Dictionary
-                RemoveDict(e.sTrCode);
+                utils.RemoveDict(e.sTrCode);
 
-                write_sys_log("이탈종목 : " + stockName, 0);
+                utils.write_sys_log("이탈종목 : " + stockName, 0);
 
                 //DeleteTargetStocks(e.sTrCode.ToString());
             }
 
-            write_sys_log(botParams.TargetCodes.ToString(), 0);
+            utils.write_sys_log(botParams.TargetCodes.ToString(), 0);
 
         }
 
@@ -154,7 +154,7 @@ namespace TaewooBot_v2
         {
             if (botParams.RqName.CompareTo(e.sRQName) != 0)
             {
-                write_sys_log("Should check the TRCode", 0);
+                utils.write_sys_log("Should check the TRCode", 0);
             }
             else
             {
@@ -162,29 +162,29 @@ namespace TaewooBot_v2
                 {
                     // OPW00001
                     case "예수금상세현황요청":
-                        write_sys_log("예수금상세현황 요청", 0);
+                        utils.write_sys_log("예수금상세현황 요청", 0);
                         break;
 
                     // OPW00004
                     case "계좌평가현황요청":
-                        write_sys_log("계좌평가현황 요청", 0);
+                        utils.write_sys_log("계좌평가현황 요청", 0);
                         break;
 
                     case "호가조회":
-                        write_sys_log("호가조회 요청", 0);
+                        utils.write_sys_log("호가조회 요청", 0);
                         break;
 
                     case "현재가조회":
-                        write_sys_log("현재가조회 요청", 0);
+                        utils.write_sys_log("현재가조회 요청", 0);
                         break;
 
                     case "주식시세":  // for 거래량 조회
-                        write_sys_log("주식시세 요청", 0);
+                        utils.write_sys_log("주식시세 요청", 0);
                         
                         break;
 
                     case "주식기본정보":  // for 주식기본정보
-                        write_sys_log("주식기본정보 요청", 0);
+                        utils.write_sys_log("주식기본정보 요청", 0);
                         break;
 
 
@@ -204,8 +204,8 @@ namespace TaewooBot_v2
                 string KrName = API.GetCommData(e.sTrCode, e.sRQName, 0, "종목명").Trim().ToString();
                 string Price = API.GetCommData(e.sTrCode, e.sRQName, 0, "현재가").Trim().ToString();
 
-                DisplayTargetStocks("Insert", Code, KrName, Price, "0", "0");
-                write_sys_log($"[{botParams.StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
+                utils.DisplayTargetStocks("Insert", Code, KrName, Price, "0", "0");
+                utils.write_sys_log($"[{botParams.StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
 
                 // Update Dict
                 try
@@ -216,7 +216,7 @@ namespace TaewooBot_v2
                 }
                 catch (Exception err)
                 {
-                    write_sys_log(err.ToString(), 0);
+                    utils.write_sys_log(err.ToString(), 0);
                 }
 
 
@@ -224,15 +224,15 @@ namespace TaewooBot_v2
                 // StockInfo class의 instance가 동적으로 안되면 각 항목마다 DIct를 줘서 비교.
 
                 // TODO : Save the Stock Data at Dictionary in here.
-             
-                write_sys_log("주식기본정보 받기 성공", 0);
+
+                utils.write_sys_log("주식기본정보 받기 성공", 0);
                 
             }
 
             if (e.sRQName == "조건검색종목")
             {
                 int count = API.GetRepeatCnt(e.sTrCode, e.sRQName); //요청의 반복 횟수를 요청합니다.
-                write_sys_log("조건검색종목 요청", 0);
+                utils.write_sys_log("조건검색종목 요청", 0);
 
                 for (int i = 0; i < count; i++)
                 {
@@ -248,7 +248,7 @@ namespace TaewooBot_v2
             if (e.sRQName == "예수금상세현황요청")
             {
                 botParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
-                write_sys_log(botParams.Deposit.ToString(), 0);
+                utils.write_sys_log(botParams.Deposit.ToString(), 0);
             }
 
             if (e.sRQName == "계좌평가현황요청")
@@ -272,12 +272,12 @@ namespace TaewooBot_v2
 
                     string msg = $"종목명 : {botParams.Accnt_StockName[code]}, 보유수량 : {botParams.Accnt_StockLots[code]}, 손익율 : {botParams.Accnt_StockLots[code]}, 손익금액 : {botParams.Accnt_StockPnL_Won}";
 
-                    write_sys_log(msg, 0);
+                    utils.write_sys_log(msg, 0);
                 }
 
                 if (botParams.AccountStockLots == 0)
                 {
-                    write_sys_log("보유종목이 없습니다.", 0);
+                    utils.write_sys_log("보유종목이 없습니다.", 0);
                 }
             }
         }
@@ -317,8 +317,8 @@ namespace TaewooBot_v2
                 // 분당 거래대금
 
                 // TODO : How To Calculate average Tick Speed in 1 Minute
+                
                 // 틱 속도
-
                 string TickAvgBefore;
                 string TickAvgNow;
                 if (botParams.StockDict.Keys.Contains(Code))
@@ -352,7 +352,7 @@ namespace TaewooBot_v2
                 // GetTickSpeed(Code, ContractLots);
 
                 // Display the RTD data on TargetStocks DataGridView
-                DisplayTargetStocks("Update", Code, "", Price.ToString(), botParams.TickSpeedDict[Code], UpDownRate.ToString());
+                utils.DisplayTargetStocks("Update", Code, "", Price.ToString(), botParams.TickSpeedDict[Code], UpDownRate.ToString());
 
 
                 // signal True Conditions
@@ -363,6 +363,8 @@ namespace TaewooBot_v2
                     botParams.SignalPrice = Price.ToString();
 
                     botParams.signal = true;
+ 
+
                     // TODO : 여기서 GetDataThread를 중지시켜야하나?
                 }
             }

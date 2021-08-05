@@ -17,3 +17,4 @@ C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Logs.resources
 C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Params.resources
 C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Universe.resources
 C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Position.resources
+C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Blotter.resources

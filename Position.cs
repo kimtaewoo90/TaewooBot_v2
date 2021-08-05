@@ -17,7 +17,21 @@ namespace TaewooBot_v2
             InitializeComponent();
         }
 
-
+        public void DisplayAccount(string todayPnL, string todayChange, string todayDeposit)
+        {
+            if (TodayDataGrid.InvokeRequired)
+            {
+                TodayDataGrid.Invoke(new MethodInvoker(delegate ()
+                {
+                    TodayDataGrid.Rows.Add(todayPnL, todayChange, todayDeposit);
+                }));
+            }
+            else
+            {
+                TodayDataGrid.Rows.Add(todayPnL, todayChange, todayDeposit);
+            }
+        }
+    
 
         public void DisplayPosition(string ShortCode, string KrName, string BalanceQty, string BuyPrice, string CurPrice, string Change, string TradingPnL)
         {
