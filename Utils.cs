@@ -37,8 +37,6 @@ namespace TaewooBot_v2
         // 시스템 로그 함수 구현
         public void write_sys_log(String text, int is_Clear)
         {
-
-            
             DateTime cur_time;
             String cur_dt;
             String cur_tm;
@@ -162,9 +160,6 @@ namespace TaewooBot_v2
             botParams.LossCut = 0.03;
             botParams.ScrNo = 1000;
 
-            //GetDataTextBox.Text = "Not yet";
-            //MonitoringTextBox.Text = "Not yet";
-            //OrderTextBox.Text = "Not yet";
         }
 
         public void RemoveDict(string StockCode)
@@ -243,39 +238,5 @@ namespace TaewooBot_v2
             }
 
         }
-
-        public void GetTickSpeed(string StockCode, string ContractLots)
-        {
-            int TickSpeed = 0;
-
-            try
-            {
-                if (botParams.TickSpeedDict[StockCode] != null)
-                {
-                    TickSpeed = Int32.Parse(botParams.TickSpeedDict[StockCode]) + Int32.Parse(ContractLots);
-                }
-
-                else
-                {
-                    TickSpeed = Int32.Parse(ContractLots);
-                }
-
-                botParams.TickSpeedDict[StockCode] = TickSpeed.ToString();
-                write_sys_log("ContractLots of [ " + StockCode + " ] is " + ContractLots, 0);
-
-            }
-
-            catch (Exception err)
-            {
-                write_sys_log(err.ToString(), 0);
-            }
-
-
-
-        }
-
-
-
-
     }
 }
