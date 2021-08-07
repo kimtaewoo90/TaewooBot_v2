@@ -29,21 +29,17 @@ namespace TaewooBot_v2
 
             botParams.RqName = "계좌평가현황요청";
             API.CommRqData(botParams.RqName, "OPW00004", 0, scr_no);
-
         }
 
-        // 전종목 주식데이터 요청
-        public void RequestAllStocks()
+        public void GetShortCodes(string market)
         {
-            string Market = "Kosdaq";
-
-            if (Market == "Kosdaq")
+            if (market == "Kosdaq")
             {
                 string res = API.GetCodeListByMarket("10");
                 botParams.Codes = res.Split(new char[] { ';' });
 
             }
-            else if (Market == "Kospi")
+            else if (market == "Kospi")
             {
                 string res = API.GetCodeListByMarket("0");
                 botParams.Codes = res.Split(new char[] { ';' });
@@ -56,7 +52,11 @@ namespace TaewooBot_v2
                 string res = kospi + kosdaq;
                 botParams.Codes = res.Split(new char[] { ';' });
             }
+        }
 
+        // 전종목 주식데이터 요청
+        public void RequestStocksData()
+        {
             // 종목개수 제한...
             for (int i = 0; i < 50; i++)
             {
@@ -73,55 +73,6 @@ namespace TaewooBot_v2
                 utils.delay(300);
             }
 
-        }
-
-        public void MonitoringSellStocks()
-        {
-            /*
-             Accnt_StockName
-             Accnt_StockLots
-             Accnt_StockPnL
-             Accnt_StockPnL_Won
-             */
-
-            foreach (KeyValuePair<string, string> pair in botParams.Accnt_StockPnL)
-            {
-                if (Double.Parse(pair.Value) > 3.0)
-                {
-                    GetAccountInformation();
-                    // SendSellOrder(pair.Key);
-                    string scr_no = utils.get_scr_no();
-                    // 1: 신규매수, 2: 신규매도, 3: 매수취소, 4: 매도취소, 5: 매수정정, 6:매도정정
-                    API.SendOrder("주식매도요청", scr_no, botParams.AccountNumber, 2, pair.Key, 10, 0, "03", "");
-
-                }
-            }
-        }
-
-        public void MonitoringBuyStocks()
-        {
-            /*
-            targetDict
-            StockKrNameDict
-            StockPriceDict
-            TickSpeedDict
-            */
-            int StockCnt = botParams.TickSpeedDict.Count;
-
-            foreach (KeyValuePair<string, string> pair in botParams.TickSpeedDict)
-            {
-                // TODO : 100이 아니라 Indicator 개발하기.
-                if (Int32.Parse(pair.Value) > 100)
-                {
-                    GetAccountInformation();
-                    string scr_no = utils.get_scr_no();
-
-                    // 1: 신규매수, 2: 신규매도, 3: 매수취소, 4: 매도취소, 5: 매수정정, 6:매도정정
-                    API.SendOrder("주식매수요청", scr_no, botParams.AccountNumber, 1, pair.Key, 10, 0, "03", "");
-
-                    // SendBuyOrder(pair.Key);
-                }
-            }
         }
 
         // Thread간 winform 객체에 접근 
@@ -168,7 +119,7 @@ namespace TaewooBot_v2
 
             catch (Exception ex)
             {
-                utils.write_sys_log("호가단위 가져오는 중 다음 에러 발생 : [ " + ex.Message + "]\n", 0);
+                logs.write_sys_log("호가단위 가져오는 중 다음 에러 발생 : [ " + ex.Message + "]\n", 0);
             }
 
             // 천원 미만
@@ -319,97 +270,6 @@ namespace TaewooBot_v2
 
             return 0;
         }
-
-
-        // TargetDict 의 종목 리스트에 대해 실시간 데이터 요청
-        public void ReqRealData(string codes, string scr_no)
-        {
-            int repeatCnt = 0;
-            int loopCnt = 0;
-            bool ExitFunc = false;
-
-            // Dictionary 에 조건검색 종목, 화면번호 저장
-            // 중복 방지
-            botParams.targetDict.Add(codes, scr_no);
-
-
-            while (true)
-            {
-                botParams.RqName = "";
-                botParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
-                API.SetInputValue("종목코드", codes);
-
-                // 실시간 현재가 받아오기
-                int res = API.CommRqData(botParams.RqName, "OPT10001", 0, scr_no);
-
-                if (res == 0)
-                {
-                    utils.write_sys_log("Reqeust 'OPT10001' ReqRealData", 0);
-                    break;
-                }
-                //delay(2000);
-            }
-
-            for (; ; )
-            {
-                if (repeatCnt == 5)
-                {
-                    utils.write_sys_log("[ " + GetKrName(codes) + " ]의 시세 받기 실패.", 0);
-                    break;
-                }
-
-                if (ExitFunc is true)
-                {
-                    break;
-                }
-
-                try
-                {
-                    loopCnt = 0;
-                    for (; ; )
-                    {
-                        utils.delay(1000);
-                        //write_sys_log(TargetCodes.ToString(), 0);
-                        // 데이터 조회 성공
-
-                        if (botParams.TargetCodes.Contains(codes))
-                        {
-                            utils.delay(200);
-                            string msg = $"{codes}'s price is {botParams.StockPriceDict[codes]}";
-                            utils.write_sys_log(msg, 0);
-                            utils.write_sys_log("종목 [ " + GetKrName(codes) + " ] 데이터 조회 완료", 0);
-                            ExitFunc = true;
-                            break;
-                        }
-                        else
-                        {
-                            utils.write_sys_log("[ " + GetKrName(codes) + " ] / 데이터 조회 요청중...", 0);
-                            utils.delay(200);
-                            loopCnt++;
-                            if (loopCnt == 5)
-                            {
-                                repeatCnt++;
-                                loopCnt = 0;
-                                break;
-                            }
-
-                            else
-                            {
-                                continue;
-                            }
-                        }
-                    }
-                }
-
-                catch (Exception ex)
-                {
-                    utils.write_sys_log("거래량 조회중 다음 에러 발생 : [ " + ex.Message + " ]", 0);
-                }
-
-                utils.delay(200);
-
-            }  // end of 거래량 조회
-
-        }
+        
     }
 }

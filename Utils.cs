@@ -34,80 +34,6 @@ namespace TaewooBot_v2
             return cur_tm;
         }
 
-        // 시스템 로그 함수 구현
-        public void write_sys_log(String text, int is_Clear)
-        {
-            DateTime cur_time;
-            String cur_dt;
-            String cur_tm;
-            String cur_dtm;
-
-            cur_dt = "";
-            cur_tm = "";
-
-            cur_time = DateTime.Now;
-            cur_dt = cur_time.ToString("yyyy-") + cur_time.ToString("MM-") + cur_time.ToString("dd");
-            cur_tm = get_cur_tm();
-
-            cur_dtm = "[" + cur_dt + " " + cur_tm + "]";
-
-            if (is_Clear == 1)
-            {
-                if (logs.LogBox.InvokeRequired)
-                {
-                    logs.LogBox.BeginInvoke(new Action(() => logs.LogBox.Clear()));
-                }
-                else
-                {
-                    this.logs.LogBox.Clear();
-                }
-            }
-
-            else
-            {
-                if (this.logs.LogBox.InvokeRequired)
-                {
-                    logs.LogBox.BeginInvoke(new Action(() => logs.LogBox.AppendText("\n" + cur_dtm + text + Environment.NewLine)));
-                }
-
-                else
-                {
-                    this.logs.LogBox.AppendText("\n" + cur_dtm + text + Environment.NewLine);
-                    // log 기록
-
-                    File.AppendAllText(botParams.Path + botParams.LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
-                }
-            }
-        }
-
-        public void MakeLogFile()
-        {
-
-            FileInfo fileInfo = new FileInfo(botParams.Path + botParams.LogFileName);
-
-            if (fileInfo.Exists)
-            {}
-            else
-            {
-                File.WriteAllText(botParams.Path + botParams.LogFileName, botParams.date + "의 로그기록을 시작합니다.\n", Encoding.Default);
-                write_sys_log("로그파일 생성 완료", 0);
-            }
-
-        }
-
-        public void MakeTickDataFile()
-        {
-            FileInfo fileInfo = new FileInfo(botParams.TickPath + botParams.TickLogFileName);
-
-            if (fileInfo.Exists)
-            { }
-            else
-            {
-                File.WriteAllText(botParams.TickPath + botParams.TickLogFileName, botParams.date + "틱데이터의 기록을 시작합니다\n.", Encoding.Default);
-                write_sys_log("틱데이터파일 생성 완료", 0);
-            }
-        }
-
 
         // 지연함수 구현
         [HandleProcessCorruptedStateExceptions]
@@ -129,7 +55,7 @@ namespace TaewooBot_v2
                 }
                 catch (AccessViolationException ex)
                 {
-                    write_sys_log("delay() ex.Message : [" + ex.Message + "]\r\n", 0);
+                    logs.write_sys_log("delay() ex.Message : [" + ex.Message + "]\r\n", 0);
                 }
 
                 ThisMoment = DateTime.Now;
@@ -174,69 +100,5 @@ namespace TaewooBot_v2
 
         }
 
-      
-
-        public void DisplayTargetStocks(string Type, string StockCode, string StockName, string Price, string Change, string TickSpeed)
-        {
-            if (Type == "Insert")
-            {
-                int AddCnt = universe.TargetStocks.Rows.Count;
-                // StockCode, StockKrName, Price, TickSpeed, PnL
-
-                universe.TargetStocks.Rows.Add(StockCode, StockName, Price, TickSpeed, Change);
-
-                
-                write_sys_log(StockCode + "종목이 추가 되었습니다.", 0);
-            }
-
-            else if (Type == "Update")
-            {
-                int UpdateCnt = universe.TargetStocks.Rows.Count;
-                for (int i = 0; i < UpdateCnt-1; i++)
-                {
-                    if (universe.TargetStocks["StockCode", i].Value.ToString() == StockCode)
-                    {
-                        universe.TargetStocks.Rows[i].Cells[2].Value = Price;
-                        universe.TargetStocks.Rows[i].Cells[3].Value = Change;
-                        universe.TargetStocks.Rows[i].Cells[4].Value = TickSpeed;
-
-                    }
-                }
-            }
-        }
-
-        public void DeleteTargetStocks(string StockCode)
-        {
-            try
-            {
-                int DelCnt = universe.TargetStocks.Rows.Count;
-                for (int i = 0; i < DelCnt; i++)
-                {
-                    try
-                    {
-                        if (universe.TargetStocks["StockCode", i].Value.ToString() == StockCode && universe.TargetStocks != null)
-                        {
-                            // 해당 데이터 삭제
-                            universe.TargetStocks.Rows.Remove(universe.TargetStocks.Rows[i]);
-
-                            write_sys_log(StockCode + "종목이 삭제 되었습니다.", 0);
-                            break;
-
-                        }
-                    }
-                    catch(Exception err)
-                    {
-                        write_sys_log(err.ToString(), 0);
-                    }
-
-                }
-            }
-
-            catch (Exception err)
-            {
-                write_sys_log(err.ToString(), 0);
-            }
-
-        }
     }
 }

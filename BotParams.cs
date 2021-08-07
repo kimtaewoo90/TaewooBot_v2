@@ -8,6 +8,7 @@ namespace TaewooBot_v2
 {
     class BotParams
     {
+
         // Initialize global params
         public string Market { get; set; }
         public string UserID { get; set; }

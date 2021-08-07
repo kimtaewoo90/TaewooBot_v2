@@ -12,9 +12,11 @@ namespace TaewooBot_v2
 {
     public partial class Blotter : Form
     {
-        Utils utils = new Utils();
         Position position = new Position();
         BotParams botParams = new BotParams();
+
+        // PositionState DIctionary 정의
+        Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
 
         public Blotter()
         {
@@ -22,15 +24,13 @@ namespace TaewooBot_v2
 
             // Tr code 검색
             this.BLT_API.OnReceiveChejanData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEventHandler(this.OnReceiveChejanData);
-         
-
         }
 
         private void OnReceiveChejanData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEvent e)
         {
             /*
-            sGubun 0 : 체결
-
+            sGubun 0 : 접수와 체결
+            sGubun 1 : 국내주식 잔고변경
 
             9001 : 종목코드  ShortCode
             913 : 주문상태   
@@ -59,7 +59,8 @@ namespace TaewooBot_v2
 
                     DisplayBLT(OrderTime, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice);
                     break;
-
+                
+                // 국내주식 잔고변경
                 case "1":
 
                     botParams.Deposit = double.Parse(BLT_API.GetChejanData(951).Trim().ToString());
@@ -72,17 +73,30 @@ namespace TaewooBot_v2
                     var Change = BLT_API.GetChejanData(8019).Trim().ToString();
                     var TradingPnL = (double.Parse(CurPrice) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
 
+                    var state = new PositionState(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString());
+                    State[ShortCode1] = state;
+
+                    position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString());
+
+
                     var todayPnL = BLT_API.GetChejanData(990).Trim().ToString();
                     var todayChange = BLT_API.GetChejanData(991).Trim().ToString();
 
                     position.DisplayAccount(todayPnL, todayChange, botParams.Deposit.ToString());
 
-                    position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString());
+                    // 매도 주문
+                    if(double.Parse(Change) > 3.0 || double.Parse(Change) < -0.9)
+                    {
+                        // 시장가 매도 주문
+                        state.SendSellOrder();
+                    }
+
                     break;
                     
             }
         }
 
+        // TODO : 신규주문(접수) 일 때 말고 정정 및 취소 일때 Action 추가
         private void DisplayBLT(string OrderTime, string ShortCode, string KrName, string OrderType, string Type, string OrderQty, string FilledQty, string OrderPrice, string FilledPrice)
         {
             if (OrderType == "접수")
@@ -90,7 +104,7 @@ namespace TaewooBot_v2
                 if (BltDataGrid.InvokeRequired)
                 {
                     BltDataGrid.Invoke(new MethodInvoker(delegate ()
-                    {
+                    {                     
                         BltDataGrid.Rows.Add(OrderTime, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice);
                     }));
                 }
@@ -99,27 +113,21 @@ namespace TaewooBot_v2
                     BltDataGrid.Rows.Add(OrderTime, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice);
                 }
             }
-
             else
             {
 
             }
         }
 
-        public void SendOrder()
+        public void SendBuyOrder(string RqName, string scr_no, string ShortCode, string curPrice, int ordQty, int ordPrice, string hogaGB)
         {
-            botParams.RqName = "주식주문";
-            var scr_no = utils.get_scr_no();
-            var ShortCode = botParams.SignalStockCode;
-            var curPrice = botParams.SignalPrice;
-            int ordQty = Int32.Parse(Math.Truncate(1000000.0 / double.Parse(curPrice)).ToString());
-            var ordPrice = 0;
-            var hogaGb = "03";
+            // TODO : 매수잔량 취소 기능 추가
+            BLT_API.SendOrder(botParams.RqName, scr_no, botParams.AccountNumber, 1, ShortCode, ordQty, ordPrice , hogaGB, "");
+        }
 
-            BLT_API.SendOrder(botParams.RqName, scr_no, botParams.AccountNumber, 1, ShortCode, ordQty, ordPrice ,hogaGb, "");
-
-            //main.write_sys_log($"Order ShrotCode : {ShortCode}  lots : {ordQty.ToString()} Order Price : 시장가", 0);
-
+        public void SendSellOrder(string RqName, string scr_no, string ShortCode, string curPrice, int ordQty, int ordPrice, string hogaGB)
+        {
+            BLT_API.SendOrder(botParams.RqName, scr_no, botParams.AccountNumber, 3, ShortCode, ordQty, ordPrice, hogaGB, "");
         }
     }
 }

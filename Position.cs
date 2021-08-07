@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace TaewooBot_v2
 {
     public partial class Position : Form
-    {
+    { 
         public Position()
         {
             InitializeComponent();
@@ -23,28 +23,86 @@ namespace TaewooBot_v2
             {
                 TodayDataGrid.Invoke(new MethodInvoker(delegate ()
                 {
-                    TodayDataGrid.Rows.Add(todayPnL, todayChange, todayDeposit);
+                    TodayDataGrid.Rows[0].Cells[0].Value = todayPnL;
+                    TodayDataGrid.Rows[0].Cells[1].Value = todayChange;
+                    TodayDataGrid.Rows[0].Cells[2].Value = todayDeposit;
                 }));
             }
             else
             {
-                TodayDataGrid.Rows.Add(todayPnL, todayChange, todayDeposit);
+                TodayDataGrid.Rows[0].Cells[0].Value = todayPnL;
+                TodayDataGrid.Rows[0].Cells[1].Value = todayChange;
+                TodayDataGrid.Rows[0].Cells[2].Value = todayDeposit;
             }
         }
-    
 
         public void DisplayPosition(string ShortCode, string KrName, string BalanceQty, string BuyPrice, string CurPrice, string Change, string TradingPnL)
         {
+
+
             if(PositionDataGrid.InvokeRequired)
             {
                 PositionDataGrid.Invoke(new MethodInvoker(delegate ()
                 {
-                    PositionDataGrid.Rows.Add(ShortCode, KrName, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL);
+
+                    int UpdateCnt = PositionDataGrid.Rows.Count;
+
+                    if (UpdateCnt > 0)
+                    {
+                        for (int i = 0; i < UpdateCnt - 1; i++)
+                        {
+                            if (PositionDataGrid["StockCode", i].Value.ToString() == ShortCode)
+                            {
+                                PositionDataGrid.Rows[i].Cells[0].Value = ShortCode;
+                                PositionDataGrid.Rows[i].Cells[1].Value = KrName;
+                                PositionDataGrid.Rows[i].Cells[2].Value = BalanceQty;
+                                PositionDataGrid.Rows[i].Cells[3].Value = BuyPrice;
+                                PositionDataGrid.Rows[i].Cells[4].Value = CurPrice;
+                                PositionDataGrid.Rows[i].Cells[5].Value = Change + "%";
+                                PositionDataGrid.Rows[i].Cells[6].Value = TradingPnL;
+                                break;
+                            }
+                            else
+                            {
+                                PositionDataGrid.Rows.Add(ShortCode, KrName, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        PositionDataGrid.Rows.Add(ShortCode, KrName, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL);
+                    }
                 }));
             }
             else
             {
-                PositionDataGrid.Rows.Add(ShortCode, KrName, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL);
+                int UpdateCnt = PositionDataGrid.Rows.Count;
+
+                if (UpdateCnt > 0)
+                {
+                    for (int i = 0; i < UpdateCnt - 1; i++)
+                    {
+                        if (PositionDataGrid["StockCode", i].Value.ToString() == ShortCode)
+                        {
+                            PositionDataGrid.Rows[i].Cells[0].Value = ShortCode;
+                            PositionDataGrid.Rows[i].Cells[1].Value = KrName;
+                            PositionDataGrid.Rows[i].Cells[2].Value = BalanceQty;
+                            PositionDataGrid.Rows[i].Cells[3].Value = BuyPrice;
+                            PositionDataGrid.Rows[i].Cells[4].Value = CurPrice;
+                            PositionDataGrid.Rows[i].Cells[5].Value = Change + "%";
+                            PositionDataGrid.Rows[i].Cells[6].Value = TradingPnL;
+                            break;
+                        }
+                        else
+                        {
+                            PositionDataGrid.Rows.Add(ShortCode, KrName, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL);
+                        }
+                    }
+                }
+                else
+                {
+                    PositionDataGrid.Rows.Add(ShortCode, KrName, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL);
+                }
             }
         }
     }

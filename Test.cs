@@ -11,20 +11,20 @@ namespace TaewooBot_v2
     {
         private void TestBtn_Click(object sender, EventArgs e)
         {
-            ReqRealData(TestText.Text, "1111");
+            //ReqRealData(TestText.Text, "1111");
         }
 
         private void DisplayBtn_Click(object sender, EventArgs e)
         {
             string code = TestText.Text;
 
-            utils.DisplayTargetStocks("Insert", code, GetKrName(code), botParams.StockPriceDict[TestText.Text], "0", "0");
+            universe.DisplayTargetStocks("Insert", code, GetKrName(code), botParams.StockPriceDict[TestText.Text], "0", "0");
         }
 
         private void DelBtn_Click(object sender, EventArgs e)
         {
             string code = TestText.Text;
-            utils.DeleteTargetStocks(code);
+            universe.DeleteTargetStocks(code);
         }
 
         private void GetDeposit_Click(object sender, EventArgs e)

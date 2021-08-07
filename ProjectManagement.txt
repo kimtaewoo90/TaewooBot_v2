@@ -1,0 +1,4 @@
+﻿2021/08/08
+1.  Blotter.cs -> SendBUyOrder 에서 매수잔량 취소 기능 추가
+2.  Blotter.cs -> SendSellOrder 에서 매도 정정 및 취소 기능 추가
+3.  Blotter.cs -> DisplayBLT 에서 신규주문(접수) 일 떄 말고 정정 및 취소 일때에도 action 기능 추가

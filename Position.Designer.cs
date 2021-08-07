@@ -47,6 +47,7 @@
             // PositionDataGrid
             // 
             this.PositionDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.PositionDataGrid.CurrentCell = null;
             this.PositionDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Order_StockCode,
             this.Order_StockName,
