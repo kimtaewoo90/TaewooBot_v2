@@ -45,7 +45,7 @@ namespace TaewooBot_v2
             var ordPrice = 0;
             var hogaGb = "03";
 
-            blt.SendSellOrder(scr_no, botParams.AccountNumber, 2, ShortCode, ordQty, ordPrice, hogaGb);
+            blt.SendSellOrder(scr_no, ShortCode, curPrice, ordQty, ordPrice, hogaGb);
 
 
             // 매도 되면 PositionDataGrid 에서 삭제하는게 좋을까 BalanceQty를 0으로 유지하는게 좋을까

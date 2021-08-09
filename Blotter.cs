@@ -125,7 +125,7 @@ namespace TaewooBot_v2
             BLT_API.SendOrder(botParams.RqName, scr_no, botParams.AccountNumber, 1, ShortCode, ordQty, ordPrice , hogaGB, "");
         }
 
-        public void SendSellOrder(string RqName, string scr_no, string ShortCode, string curPrice, int ordQty, int ordPrice, string hogaGB)
+        public void SendSellOrder(string scr_no, string ShortCode, double curPrice, int ordQty, int ordPrice, string hogaGB)
         {
             BLT_API.SendOrder(botParams.RqName, scr_no, botParams.AccountNumber, 3, ShortCode, ordQty, ordPrice, hogaGB, "");
         }

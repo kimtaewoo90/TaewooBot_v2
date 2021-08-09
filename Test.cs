@@ -12,6 +12,7 @@ namespace TaewooBot_v2
         private void TestBtn_Click(object sender, EventArgs e)
         {
             //ReqRealData(TestText.Text, "1111");
+
         }
 
         private void DisplayBtn_Click(object sender, EventArgs e)
@@ -31,5 +32,7 @@ namespace TaewooBot_v2
         {
             GetAccountInformation();
         }
+
+        
     }
 }

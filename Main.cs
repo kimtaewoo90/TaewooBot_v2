@@ -175,24 +175,34 @@ namespace TaewooBot_v2
             // while 문으로 무한루프 & 시간계산
             while(true)
             {
-                if (botParams.CurTime.CompareTo("08:30:01") >= 0 && botParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
+                try
                 {
-                    batchData = true;
+                    if (botParams.CurTime.CompareTo("08:30:01") >= 0 && botParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
+                    {
+                        batchData = true;
 
-                    GetAccountInformation();
-                    GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
-                    RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
+                        GetAccountInformation();
+                        GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
+                        RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
+                    }
+
+                    else if (TestCheck.Checked && batchData == false)
+                    {
+                        batchData = true;
+
+                        GetAccountInformation();
+                        GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
+                        RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
+
+                    }
                 }
 
-                else if (TestCheck.Checked && batchData == false)
+                catch(Exception e)
                 {
-                    batchData = true;
-
-                    GetAccountInformation();
-                    GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
-                    RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
-
+                    logs.write_sys_log(e.ToString(), 0);
+                    continue;
                 }
+
             }
 
         }

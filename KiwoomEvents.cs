@@ -15,6 +15,8 @@ namespace TaewooBot_v2
     public partial class Main
     {
 
+        private Dictionary<string, List<int>> TickList = new Dictionary<string, List<int>>();
+
         // KiwoomEvents
         List<ConditionInfo> conditionList;
 
@@ -210,7 +212,8 @@ namespace TaewooBot_v2
                 // Update Dict
                 try
                 {
-                    var state = new StockState(Code, KrName, Price, "0", "0", "0", DateTime.Parse(botParams.CurTime));
+                    List<int> arr = new List<int>();
+                    var state = new StockState(Code, KrName, Price, "0", "0", "0", arr, 0.0, DateTime.Parse(botParams.CurTime));
                     stockState[Code] = state;
 
                 }
@@ -291,9 +294,20 @@ namespace TaewooBot_v2
                 double highPrice = double.Parse(API.GetCommRealData(e.sRealType, 17).Trim());
                 string TickTime = API.GetCommRealData(e.sRealType, 20).Trim().ToString();
 
+                double beforeAvg = 0;
+
+                if (!TickList.ContainsKey(Code))
+                    beforeAvg = 0;
+                else
+                    beforeAvg = TickList[Code].Average();
+
+                TickList[Code].Add(Convert.ToInt32(ContractLots));
+
+                // 이때의 시간 pick.
+
                 // Update stockState Dictionary
-                var state = new StockState(Code, KrName, Price.ToString(), highPrice.ToString(), Change.ToString(), ContractLots, DateTime.Parse(botParams.CurTime));
-                stockState[Code] = state;
+                var state = new StockState(Code, KrName, Price.ToString(), highPrice.ToString(), Change.ToString(), ContractLots, TickList[Code], beforeAvg, DateTime.Parse(botParams.CurTime));
+                stockState[Code] = state;                
 
                 File.AppendAllText(botParams.TickPath + botParams.TickLogFileName, $"[{botParams.CurTime}] : {Code} / {Price.ToString()} / {Change.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
 
@@ -310,7 +324,7 @@ namespace TaewooBot_v2
 
                     if (botParams.Deposit > 1000000 && botParams.Accnt_StockName.ContainsKey(Code) is false)
                     {
-                        logs.write_sys_log($"[{Code}] try to send Buy order", 0);
+                        logs.write_sys_log($"[{Code}/{KrName}] try to send Buy order", 0);
                         state.SendBuyOrder();
                     }
                 }
