@@ -41,13 +41,13 @@
             this.DelBtn = new System.Windows.Forms.Button();
             this.GetDeposit = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.signalCnt = new System.Windows.Forms.TextBox();
             this.TotalPnLTextBox = new System.Windows.Forms.TextBox();
             this.DepositTextBox = new System.Windows.Forms.TextBox();
             this.AccountTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.signalCnt = new System.Windows.Forms.TextBox();
             this.TestCheck = new System.Windows.Forms.CheckBox();
             this.GetDataTextBox = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -71,7 +71,7 @@
             this.MarketType.Items.AddRange(new object[] {
             "Stock",
             "Coin"});
-            this.MarketType.Location = new System.Drawing.Point(24, 12);
+            this.MarketType.Location = new System.Drawing.Point(9, 12);
             this.MarketType.Name = "MarketType";
             this.MarketType.Size = new System.Drawing.Size(121, 20);
             this.MarketType.TabIndex = 3;
@@ -79,7 +79,7 @@
             // 
             // Start_Btn
             // 
-            this.Start_Btn.Location = new System.Drawing.Point(163, 9);
+            this.Start_Btn.Location = new System.Drawing.Point(148, 9);
             this.Start_Btn.Name = "Start_Btn";
             this.Start_Btn.Size = new System.Drawing.Size(75, 23);
             this.Start_Btn.TabIndex = 4;
@@ -104,7 +104,7 @@
             this.CurrentTime});
             this.statusStrip1.Location = new System.Drawing.Point(0, 326);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(441, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(406, 22);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "time";
             // 
@@ -175,19 +175,12 @@
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(24, 57);
+            this.groupBox3.Location = new System.Drawing.Point(9, 57);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(386, 122);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "계좌현황";
-            // 
-            // signalCnt
-            // 
-            this.signalCnt.Location = new System.Drawing.Point(280, 45);
-            this.signalCnt.Name = "signalCnt";
-            this.signalCnt.Size = new System.Drawing.Size(100, 21);
-            this.signalCnt.TabIndex = 6;
             // 
             // TotalPnLTextBox
             // 
@@ -237,10 +230,17 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "계좌번호";
             // 
+            // signalCnt
+            // 
+            this.signalCnt.Location = new System.Drawing.Point(280, 45);
+            this.signalCnt.Name = "signalCnt";
+            this.signalCnt.Size = new System.Drawing.Size(100, 21);
+            this.signalCnt.TabIndex = 6;
+            // 
             // TestCheck
             // 
             this.TestCheck.AutoSize = true;
-            this.TestCheck.Location = new System.Drawing.Point(245, 13);
+            this.TestCheck.Location = new System.Drawing.Point(230, 13);
             this.TestCheck.Name = "TestCheck";
             this.TestCheck.Size = new System.Drawing.Size(49, 16);
             this.TestCheck.TabIndex = 17;
@@ -265,7 +265,7 @@
             this.groupBox4.Controls.Add(this.MonitoringTextBox);
             this.groupBox4.Controls.Add(this.GetDataTextBox);
             this.groupBox4.Controls.Add(this.API);
-            this.groupBox4.Location = new System.Drawing.Point(24, 185);
+            this.groupBox4.Location = new System.Drawing.Point(9, 185);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(386, 133);
             this.groupBox4.TabIndex = 19;
@@ -325,7 +325,7 @@
             // 
             // ParamsBtn
             // 
-            this.ParamsBtn.Location = new System.Drawing.Point(300, 13);
+            this.ParamsBtn.Location = new System.Drawing.Point(285, 13);
             this.ParamsBtn.Name = "ParamsBtn";
             this.ParamsBtn.Size = new System.Drawing.Size(75, 23);
             this.ParamsBtn.TabIndex = 20;
@@ -338,7 +338,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(441, 348);
+            this.ClientSize = new System.Drawing.Size(406, 348);
             this.Controls.Add(this.ParamsBtn);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.TestCheck);
@@ -351,7 +351,9 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.Start_Btn);
             this.Controls.Add(this.MarketType);
+            this.Location = new System.Drawing.Point(1460, 520);
             this.Name = "Main";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "TaewooBot";
             ((System.ComponentModel.ISupportInitialize)(this.API)).EndInit();
             this.statusStrip1.ResumeLayout(false);

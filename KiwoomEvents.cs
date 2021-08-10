@@ -16,6 +16,8 @@ namespace TaewooBot_v2
     {
 
         private Dictionary<string, List<int>> TickList = new Dictionary<string, List<int>>();
+        private Dictionary<string, List<int>> TickOneMinsList = new Dictionary<string, List<int>>();
+
 
         // KiwoomEvents
         List<ConditionInfo> conditionList;
@@ -209,11 +211,13 @@ namespace TaewooBot_v2
                 universe.DisplayTargetStocks("Insert", Code, KrName, Price, "0", "0");
                 logs.write_sys_log($"[{botParams.StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
 
+                Console.WriteLine(compareTime);
+
                 // Update Dict
                 try
                 {
                     List<int> arr = new List<int>();
-                    var state = new StockState(Code, KrName, Price, "0", "0", "0", arr, 0.0, DateTime.Parse(botParams.CurTime));
+                    var state = new StockState(Code, KrName, Price, "0", "0", "0", arr, arr, 0.0, DateTime.Parse(botParams.CurTime));
                     stockState[Code] = state;
 
                 }
@@ -297,16 +301,36 @@ namespace TaewooBot_v2
                 double beforeAvg = 0;
 
                 if (!TickList.ContainsKey(Code))
+                { 
                     beforeAvg = 0;
+                    List<int> tempTickList = new List<int>() { Convert.ToInt32(ContractLots) };
+                    TickList[Code] = tempTickList;
+                }
+
                 else
+                { 
                     beforeAvg = TickList[Code].Average();
+                    TickList[Code].Add(Convert.ToInt32(ContractLots));
+                }
 
-                TickList[Code].Add(Convert.ToInt32(ContractLots));
 
-                // 이때의 시간 pick.
+                if (TickOneMinsList.ContainsKey(Code))
+                    TickOneMinsList[Code].Add(Convert.ToInt32(ContractLots));
+                else
+                {
+                    List<int> tempList = new List<int>() {Convert.ToInt32(ContractLots)};
+                    TickOneMinsList[Code] = tempList;
+                }
+
+                if(DateTime.Parse(botParams.CurTime) < compareTime.AddMinutes(1))
+                {
+                    compareTime = DateTime.Parse(botParams.CurTime);
+                    if(TickOneMinsList.ContainsKey(Code))
+                        TickOneMinsList.Remove(Code);
+                }
 
                 // Update stockState Dictionary
-                var state = new StockState(Code, KrName, Price.ToString(), highPrice.ToString(), Change.ToString(), ContractLots, TickList[Code], beforeAvg, DateTime.Parse(botParams.CurTime));
+                var state = new StockState(Code, KrName, Price.ToString(), highPrice.ToString(), Change.ToString(), ContractLots, TickList[Code], TickOneMinsList[Code], beforeAvg, DateTime.Parse(botParams.CurTime));
                 stockState[Code] = state;                
 
                 File.AppendAllText(botParams.TickPath + botParams.TickLogFileName, $"[{botParams.CurTime}] : {Code} / {Price.ToString()} / {Change.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);

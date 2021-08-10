@@ -35,6 +35,9 @@ namespace TaewooBot_v2
 
         Dictionary<string, StockState> stockState = new Dictionary<string, StockState>();
 
+        private DateTime compareTime { get; set; }
+
+
         delegate void Ctr_Involk(Control ctr, string text);
 
 
@@ -43,9 +46,20 @@ namespace TaewooBot_v2
             InitializeComponent();
 
             // Open Windows
+            logs.StartPosition = FormStartPosition.Manual;
+            logs.Location = new Point(755, 520);
             logs.Show();
+
+            universe.StartPosition = FormStartPosition.Manual;
+            universe.Location = new Point(100, 520);
             universe.Show();
+
+            blt.StartPosition = FormStartPosition.Manual;
+            blt.Location = new Point(860, 100);
             blt.Show();
+
+            position.StartPosition = FormStartPosition.Manual;
+            position.Location = new Point(100, 100);
             position.Show();
 
             // Initialize Parameters
@@ -179,6 +193,7 @@ namespace TaewooBot_v2
                 {
                     if (botParams.CurTime.CompareTo("08:30:01") >= 0 && botParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
                     {
+                        compareTime = DateTime.Parse(botParams.CurTime);
                         batchData = true;
 
                         GetAccountInformation();
@@ -189,11 +204,11 @@ namespace TaewooBot_v2
                     else if (TestCheck.Checked && batchData == false)
                     {
                         batchData = true;
+                        compareTime = DateTime.Parse(botParams.CurTime);
 
                         GetAccountInformation();
                         GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
-
                     }
                 }
 
