@@ -314,19 +314,26 @@ namespace TaewooBot_v2
                 }
 
 
-                if (TickOneMinsList.ContainsKey(Code))
-                    TickOneMinsList[Code].Add(Convert.ToInt32(ContractLots));
-                else
+                if (!TickOneMinsList.ContainsKey(Code))
                 {
                     List<int> tempList = new List<int>() {Convert.ToInt32(ContractLots)};
-                    TickOneMinsList[Code] = tempList;
+                    TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
+                }
+                else
+                {
+                    TickOneMinsList[Code].Add(Convert.ToInt32(ContractLots));
                 }
 
-                if(DateTime.Parse(botParams.CurTime) < compareTime.AddMinutes(1))
+                if (DateTime.Parse(botParams.CurTime) > compareTime.AddMinutes(1))
                 {
                     compareTime = DateTime.Parse(botParams.CurTime);
                     if(TickOneMinsList.ContainsKey(Code))
+                    {
                         TickOneMinsList.Remove(Code);
+                        TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
+                    }
+                        
+
                 }
 
                 // Update stockState Dictionary

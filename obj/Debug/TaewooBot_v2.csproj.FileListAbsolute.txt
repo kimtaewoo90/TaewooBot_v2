@@ -18,3 +18,12 @@ C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Params.resources
 C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Universe.resources
 C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Position.resources
 C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.Blotter.resources
+C:\Users\tangb\source\repos\TaewooBot_v2\bin\Debug\Newtonsoft.Json.dll
+C:\Users\tangb\source\repos\TaewooBot_v2\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\tangb\source\repos\TaewooBot_v2\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\tangb\source\repos\TaewooBot_v2\bin\Debug\Telegram.Bot.dll
+C:\Users\tangb\source\repos\TaewooBot_v2\bin\Debug\Newtonsoft.Json.xml
+C:\Users\tangb\source\repos\TaewooBot_v2\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\tangb\source\repos\TaewooBot_v2\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\tangb\source\repos\TaewooBot_v2\bin\Debug\Telegram.Bot.xml
+C:\Users\tangb\source\repos\TaewooBot_v2\obj\Debug\TaewooBot_v2.csproj.CopyComplete

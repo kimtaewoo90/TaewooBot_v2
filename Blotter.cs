@@ -15,6 +15,8 @@ namespace TaewooBot_v2
         Position position = new Position();
         BotParams botParams = new BotParams();
 
+        TelegramClass telegram = new TelegramClass();
+
         // PositionState DIctionary 정의
         Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
 
@@ -87,6 +89,7 @@ namespace TaewooBot_v2
                     // 매도 주문
                     if(double.Parse(Change) > 3.0 || double.Parse(Change) < -0.9)
                     {
+                        telegram.SendTelegramMsg($"{KrName1}의 수익률 {Change.ToString()} % / TradingPnL : {TradingPnL.ToString()}")
                         // 시장가 매도 주문
                         state.SendSellOrder();
                     }

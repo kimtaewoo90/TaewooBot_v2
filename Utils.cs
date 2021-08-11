@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+
 using System.IO;
 
 
@@ -96,9 +98,6 @@ namespace TaewooBot_v2
             botParams.StockPriceDict.Remove(StockCode);
             botParams.TickSpeedDict.Remove(StockCode);
             botParams.StockPnLDict.Remove(StockCode);
-
-
         }
-
     }
 }

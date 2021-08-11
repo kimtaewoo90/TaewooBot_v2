@@ -44,6 +44,7 @@ namespace TaewooBot_v2
         public Main()
         {
             InitializeComponent();
+      
 
             // Open Windows
             logs.StartPosition = FormStartPosition.Manual;
@@ -185,6 +186,10 @@ namespace TaewooBot_v2
         // Thread1 (GetData Thread)
         public void GetData()
         {
+            TelegramClass telegram = new TelegramClass();
+
+            telegram.SendTelegramMsg("GetData Thread is started");
+
             var batchData = false;
             // while 문으로 무한루프 & 시간계산
             while(true)
