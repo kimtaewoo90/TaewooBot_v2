@@ -33,8 +33,8 @@ namespace TaewooBot_v2
 
         // Logs File
         public string date { get; set; } = DateTime.Now.ToString("yyyyMMdd");
-        public string Path { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/";
-        public string TickPath { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/TickLog/";
+        public string Path { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/LogFile/";
+        public string TickPath { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/LogFile/TickLog/";
         public string LogFileName { get; set; } = DateTime.Now.ToString("yyyyMMdd") + "_Log.txt";
         public string TickLogFileName { get; set; } = DateTime.Now.ToString("yyyyMMdd") + "_TickLog.txt";
 

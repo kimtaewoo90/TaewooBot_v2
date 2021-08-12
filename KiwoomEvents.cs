@@ -332,8 +332,6 @@ namespace TaewooBot_v2
                         TickOneMinsList.Remove(Code);
                         TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
                     }
-                        
-
                 }
 
                 // Update stockState Dictionary
@@ -343,7 +341,7 @@ namespace TaewooBot_v2
                 File.AppendAllText(botParams.TickPath + botParams.TickLogFileName, $"[{botParams.CurTime}] : {Code} / {Price.ToString()} / {Change.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
 
                 // Display the RTD data on TargetStocks DataGridView
-                universe.DisplayTargetStocks("Update", Code, "", Price.ToString(), botParams.TickSpeedDict[Code], Change.ToString());
+                universe.DisplayTargetStocks("Update", Code, "", Price.ToString(), TickOneMinsList[Code].Average().ToString(), Change.ToString());
 
                 bool orderStocks = state.MonitoringSignals();
                 
@@ -355,6 +353,7 @@ namespace TaewooBot_v2
 
                     if (botParams.Deposit > 1000000 && botParams.Accnt_StockName.ContainsKey(Code) is false)
                     {
+                        telegram.SendTelegramMsg($"[{Code}/{KrName}] try to send Buy order");
                         logs.write_sys_log($"[{Code}/{KrName}] try to send Buy order", 0);
                         state.SendBuyOrder();
                     }

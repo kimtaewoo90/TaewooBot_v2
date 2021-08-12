@@ -32,7 +32,6 @@ namespace TaewooBot_v2
         private bool signal_2 { get; set; } = false;
         private bool signal_3 { get; set; } = false;
 
-        private bool buyOnce { get; set; } = false;
 
         public StockState(string ShortCode, string KrName, string curPrice, string highPrice, string change, string contactLots, List<int> tickList, List<int> tickOneList, double beforeAvg, DateTime updateTime)
         {
@@ -63,10 +62,9 @@ namespace TaewooBot_v2
             if (states_TickOneMinList.Sum() * double.Parse(states_CurPrice) > 1000000000)
                 signal_3 = true;
 
-            if (signal_1 && signal_2 && signal_3 && !buyOnce)
+            if (signal_1 && signal_2 && signal_3)
             {
                 Signals = true;
-                buyOnce = true;
             }
   
             return Signals;

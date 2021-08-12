@@ -33,6 +33,9 @@ namespace TaewooBot_v2
         Utils utils = new Utils();
         BotParams botParams = new BotParams();
 
+        TelegramClass telegram = new TelegramClass();
+
+
         Dictionary<string, StockState> stockState = new Dictionary<string, StockState>();
 
         private DateTime compareTime { get; set; }
@@ -186,7 +189,6 @@ namespace TaewooBot_v2
         // Thread1 (GetData Thread)
         public void GetData()
         {
-            TelegramClass telegram = new TelegramClass();
 
             telegram.SendTelegramMsg("GetData Thread is started");
 
