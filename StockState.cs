@@ -8,13 +8,9 @@ namespace TaewooBot_v2
 {
     class StockState
     {
-        Logs logs = new Logs();
-        Params Params = new Params();
-        Universe universe = new Universe();
-        Position position = new Position();
-        Blotter blt = new Blotter();
+        //Blotter blt = new Blotter();
+        BlotterClass blt = new BlotterClass();
         Utils utils = new Utils();
-        BotParams botParams = new BotParams();
 
         private string states_ShortCode { get; set; }
         private string states_KrName { get; set; }
@@ -73,7 +69,7 @@ namespace TaewooBot_v2
         // TODO : 매수주문
         public void SendBuyOrder()
         {
-            botParams.RqName = "주식주문";
+            BotParams.RqName = "주식주문";
             var scr_no = utils.get_scr_no();
             var ShortCode = states_ShortCode;
             var curPrice = states_CurPrice;
@@ -82,7 +78,7 @@ namespace TaewooBot_v2
             var hogaGb = "03";
 
             // TODO : 파라미터 다시 확인
-            blt.SendBuyOrder(botParams.RqName, scr_no, ShortCode, curPrice, ordQty, ordPrice, hogaGb);
+            blt.SendBuyOrder(BotParams.RqName, scr_no, ShortCode, curPrice, ordQty, ordPrice, hogaGb);
         }
     }
 }

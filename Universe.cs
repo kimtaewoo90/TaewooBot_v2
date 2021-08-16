@@ -12,7 +12,6 @@ namespace TaewooBot_v2
 {
     public partial class Universe : Form
     {
-        BotParams botParams = new BotParams();
         Logs logs = new Logs();
 
         public Universe()

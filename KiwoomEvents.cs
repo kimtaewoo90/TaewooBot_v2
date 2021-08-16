@@ -15,8 +15,8 @@ namespace TaewooBot_v2
     public partial class Main
     {
 
-        private Dictionary<string, List<int>> TickList = new Dictionary<string, List<int>>();
-        private Dictionary<string, List<int>> TickOneMinsList = new Dictionary<string, List<int>>();
+        //private Dictionary<string, List<int>> TickList = new Dictionary<string, List<int>>();
+        //private Dictionary<string, List<int>> TickOneMinsList = new Dictionary<string, List<int>>();
 
 
         // KiwoomEvents
@@ -112,12 +112,12 @@ namespace TaewooBot_v2
 
 
                 // 주가 데이터 요청.
-                botParams.RqName = "";
-                botParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
+                BotParams.RqName = "";
+                BotParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
                 API.SetInputValue("종목코드", e.sTrCode);
 
                 // 실시간 현재가 받아오기
-                int res = API.CommRqData(botParams.RqName, "OPT10001", 0, scr_no);
+                int res = API.CommRqData(BotParams.RqName, "OPT10001", 0, scr_no);
             }
 
             //종목 이탈
@@ -130,16 +130,16 @@ namespace TaewooBot_v2
                 //API.DisconnectRealData(scr_no);
 
                 int i = 0;
-                for (i = 0; i < botParams.TargetCodes.Count; i++)
+                for (i = 0; i < BotParams.TargetCodes.Count; i++)
                 {
-                    if (botParams.TargetCodes[i].Equals(e.sTrCode))
+                    if (BotParams.TargetCodes[i].Equals(e.sTrCode))
                     {
-                        botParams.TargetCodes.RemoveAt(i);
+                        BotParams.TargetCodes.RemoveAt(i);
                         //break;
                     }
                 }
 
-                botParams.TargetCodes.Remove(e.sTrCode);
+                BotParams.TargetCodes.Remove(e.sTrCode);
 
                 // Remove 이탈Stock in Dictionary
                 utils.RemoveDict(e.sTrCode);
@@ -149,20 +149,20 @@ namespace TaewooBot_v2
                 //DeleteTargetStocks(e.sTrCode.ToString());
             }
 
-            logs.write_sys_log(botParams.TargetCodes.ToString(), 0);
+            logs.write_sys_log(BotParams.TargetCodes.ToString(), 0);
 
         }
 
         // Get TR Data
         private void OnReceiveTrData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent e)
         {
-            if (botParams.RqName.CompareTo(e.sRQName) != 0)
+            if (BotParams.RqName.CompareTo(e.sRQName) != 0)
             {
                 logs.write_sys_log("Should check the TRCode", 0);
             }
             else
             {
-                switch (botParams.RqName)
+                switch (BotParams.RqName)
                 {
                     // OPW00001
                     case "예수금상세현황요청":
@@ -209,7 +209,7 @@ namespace TaewooBot_v2
                 string Price = API.GetCommData(e.sTrCode, e.sRQName, 0, "현재가").Trim().ToString();
 
                 universe.DisplayTargetStocks("Insert", Code, KrName, Price, "0", "0");
-                logs.write_sys_log($"[{botParams.StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
+                logs.write_sys_log($"[{BotParams.StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
 
                 Console.WriteLine(compareTime);
 
@@ -217,7 +217,7 @@ namespace TaewooBot_v2
                 try
                 {
                     List<int> arr = new List<int>();
-                    var state = new StockState(Code, KrName, Price, "0", "0", "0", arr, arr, 0.0, DateTime.Parse(botParams.CurTime));
+                    var state = new StockState(Code, KrName, Price, "0", "0", "0", arr, arr, 0.0, DateTime.Parse(BotParams.CurTime));
                     stockState[Code] = state;
 
                 }
@@ -248,35 +248,35 @@ namespace TaewooBot_v2
 
             if (e.sRQName == "예수금상세현황요청")
             {
-                botParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
-                logs.write_sys_log(botParams.Deposit.ToString(), 0);
+                BotParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
+                logs.write_sys_log(BotParams.Deposit.ToString(), 0);
             }
 
             if (e.sRQName == "계좌평가현황요청")
             {
-                botParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
-                botParams.TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
+                BotParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
+                BotParams.TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
 
 
-                setText_Control(AccountTextBox, botParams.AccountNumber.ToString());
-                setText_Control(DepositTextBox, botParams.Deposit.ToString());
-                setText_Control(TotalPnLTextBox, botParams.TotalPnL.ToString());
+                setText_Control(AccountTextBox, BotParams.AccountNumber.ToString());
+                setText_Control(DepositTextBox, BotParams.Deposit.ToString());
+                setText_Control(TotalPnLTextBox, BotParams.TotalPnL.ToString());
 
-                botParams.AccountStockLots = API.GetRepeatCnt(e.sTrCode, e.sRQName);
-                for (int nIdx = 0; nIdx < botParams.AccountStockLots; nIdx++)
+                BotParams.AccountStockLots = API.GetRepeatCnt(e.sTrCode, e.sRQName);
+                for (int nIdx = 0; nIdx < BotParams.AccountStockLots; nIdx++)
                 {
-                    string code = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "종목코드").Trim();
-                    botParams.Accnt_StockName[code] = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "종목명").Trim();
-                    botParams.Accnt_StockLots[code] = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "보유수량").Trim();
-                    botParams.Accnt_StockPnL[code] = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "손익율").Trim();
-                    botParams.Accnt_StockPnL_Won[code] = API.GetCommData(e.sTrCode, e.sRQName, botParams.AccountStockLots, "손익금액").Trim();
+                    string code = API.GetCommData(e.sTrCode, e.sRQName, BotParams.AccountStockLots, "종목코드").Trim();
+                    BotParams.Accnt_StockName[code] = API.GetCommData(e.sTrCode, e.sRQName, BotParams.AccountStockLots, "종목명").Trim();
+                    BotParams.Accnt_StockLots[code] = API.GetCommData(e.sTrCode, e.sRQName, BotParams.AccountStockLots, "보유수량").Trim();
+                    BotParams.Accnt_StockPnL[code] = API.GetCommData(e.sTrCode, e.sRQName, BotParams.AccountStockLots, "손익율").Trim();
+                    BotParams.Accnt_StockPnL_Won[code] = API.GetCommData(e.sTrCode, e.sRQName, BotParams.AccountStockLots, "손익금액").Trim();
 
-                    string msg = $"종목명 : {botParams.Accnt_StockName[code]}, 보유수량 : {botParams.Accnt_StockLots[code]}, 손익율 : {botParams.Accnt_StockLots[code]}, 손익금액 : {botParams.Accnt_StockPnL_Won}";
+                    string msg = $"종목명 : {BotParams.Accnt_StockName[code]}, 보유수량 : {BotParams.Accnt_StockLots[code]}, 손익율 : {BotParams.Accnt_StockLots[code]}, 손익금액 : {BotParams.Accnt_StockPnL_Won}";
 
                     logs.write_sys_log(msg, 0);
                 }
 
-                if (botParams.AccountStockLots == 0)
+                if (BotParams.AccountStockLots == 0)
                 {
                     logs.write_sys_log("보유종목이 없습니다.", 0);
                 }
@@ -300,48 +300,48 @@ namespace TaewooBot_v2
 
                 double beforeAvg = 0;
 
-                if (!TickList.ContainsKey(Code))
+                if (!BotParams.TickList.ContainsKey(Code))
                 { 
                     beforeAvg = 0;
                     List<int> tempTickList = new List<int>() { Convert.ToInt32(ContractLots) };
-                    TickList[Code] = tempTickList;
+                    BotParams.TickList[Code] = tempTickList;
                 }
 
                 else
                 { 
-                    beforeAvg = TickList[Code].Average();
-                    TickList[Code].Add(Convert.ToInt32(ContractLots));
+                    beforeAvg = BotParams.TickList[Code].Average();
+                    BotParams.TickList[Code].Add(Convert.ToInt32(ContractLots));
                 }
 
 
-                if (!TickOneMinsList.ContainsKey(Code))
+                if (!BotParams.TickOneMinsList.ContainsKey(Code))
                 {
                     List<int> tempList = new List<int>() {Convert.ToInt32(ContractLots)};
-                    TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
+                    BotParams.TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
                 }
                 else
                 {
-                    TickOneMinsList[Code].Add(Convert.ToInt32(ContractLots));
+                    BotParams.TickOneMinsList[Code].Add(Convert.ToInt32(ContractLots));
                 }
 
-                if (DateTime.Parse(botParams.CurTime) > compareTime.AddMinutes(1))
+                if (DateTime.Parse(BotParams.CurTime) > compareTime.AddMinutes(1))
                 {
-                    compareTime = DateTime.Parse(botParams.CurTime);
-                    if(TickOneMinsList.ContainsKey(Code))
+                    compareTime = DateTime.Parse(BotParams.CurTime);
+                    if(BotParams.TickOneMinsList.ContainsKey(Code))
                     {
-                        TickOneMinsList.Remove(Code);
-                        TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
+                        BotParams.TickOneMinsList.Remove(Code);
+                        BotParams.TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
                     }
                 }
 
                 // Update stockState Dictionary
-                var state = new StockState(Code, KrName, Price.ToString(), highPrice.ToString(), Change.ToString(), ContractLots, TickList[Code], TickOneMinsList[Code], beforeAvg, DateTime.Parse(botParams.CurTime));
+                var state = new StockState(Code, KrName, Price.ToString(), highPrice.ToString(), Change.ToString(), ContractLots, BotParams.TickList[Code], BotParams.TickOneMinsList[Code], beforeAvg, DateTime.Parse(BotParams.CurTime));
                 stockState[Code] = state;                
 
-                File.AppendAllText(botParams.TickPath + botParams.TickLogFileName, $"[{botParams.CurTime}] : {Code} / {Price.ToString()} / {Change.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
+                File.AppendAllText(BotParams.TickPath + BotParams.TickLogFileName, $"[{BotParams.CurTime}] : {Code} / {Price.ToString()} / {Change.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
 
                 // Display the RTD data on TargetStocks DataGridView
-                universe.DisplayTargetStocks("Update", Code, "", Price.ToString(), TickOneMinsList[Code].Average().ToString(), Change.ToString());
+                universe.DisplayTargetStocks("Update", Code, "", Price.ToString(), BotParams.TickOneMinsList[Code].Average().ToString(), Change.ToString());
 
                 bool orderStocks = state.MonitoringSignals();
                 
@@ -351,10 +351,9 @@ namespace TaewooBot_v2
                     logs.write_sys_log("Update Account Information", 0);
                     GetAccountInformation();
 
-                    if (botParams.Deposit > 1000000 && botParams.Accnt_StockName.ContainsKey(Code) is false)
+                    if (BotParams.Deposit > 1000000 && BotParams.Accnt_StockName.ContainsKey(Code) is false)
                     {
                         telegram.SendTelegramMsg($"[{Code}/{KrName}] try to send Buy order");
-                        logs.write_sys_log($"[{Code}/{KrName}] try to send Buy order", 0);
                         state.SendBuyOrder();
                     }
                 }

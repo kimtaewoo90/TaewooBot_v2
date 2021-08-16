@@ -21,7 +21,6 @@ namespace TaewooBot_v2
     {
         Logs logs = new Logs();
         Universe universe = new Universe();
-        BotParams botParams = new BotParams();
 
         // Utils
         //  현재시간 불러오기
@@ -69,35 +68,35 @@ namespace TaewooBot_v2
         // 요청번호 부여 함수 구현
         public string get_scr_no()
         {
-            if (botParams.ScrNo < 9999)
+            if (BotParams.ScrNo < 9999)
             {
-                botParams.ScrNo++;
+                BotParams.ScrNo++;
             }
-            else botParams.ScrNo = 1000;
+            else BotParams.ScrNo = 1000;
 
-            return botParams.ScrNo.ToString();
+            return BotParams.ScrNo.ToString();
         }
 
         // Params 초기화
         public void InitialParams()
         {
-            botParams.IsThread = false;
-            botParams._SearchCondition = false;
-            botParams._GetTrData = false;
-            botParams._GetRTD = false;
-            botParams.LossCut = 0.03;
-            botParams.ScrNo = 1000;
+            BotParams.IsThread = false;
+            BotParams._SearchCondition = false;
+            BotParams._GetTrData = false;
+            BotParams._GetRTD = false;
+            BotParams.LossCut = 0.03;
+            BotParams.ScrNo = 1000;
 
         }
 
         public void RemoveDict(string StockCode)
         {
 
-            botParams.targetDict.Remove(StockCode);
-            botParams.StockKrNameDict.Remove(StockCode);
-            botParams.StockPriceDict.Remove(StockCode);
-            botParams.TickSpeedDict.Remove(StockCode);
-            botParams.StockPnLDict.Remove(StockCode);
+            BotParams.targetDict.Remove(StockCode);
+            BotParams.StockKrNameDict.Remove(StockCode);
+            BotParams.StockPriceDict.Remove(StockCode);
+            BotParams.TickSpeedDict.Remove(StockCode);
+            BotParams.StockPnLDict.Remove(StockCode);
         }
     }
 }

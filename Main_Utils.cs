@@ -21,14 +21,14 @@ namespace TaewooBot_v2
         public void GetAccountInformation()
         {
             string scr_no = utils.get_scr_no();
-            API.SetInputValue("계좌번호", botParams.AccountNumber);
+            API.SetInputValue("계좌번호", BotParams.AccountNumber);
             API.SetInputValue("비밀번호", "");
             API.SetInputValue("상장폐지조회구분", "0");
             API.SetInputValue("비밀번호입력매체구분", "00");
 
 
-            botParams.RqName = "계좌평가현황요청";
-            API.CommRqData(botParams.RqName, "OPW00004", 0, scr_no);
+            BotParams.RqName = "계좌평가현황요청";
+            API.CommRqData(BotParams.RqName, "OPW00004", 0, scr_no);
         }
 
         public void GetShortCodes(string market)
@@ -36,13 +36,13 @@ namespace TaewooBot_v2
             if (market == "Kosdaq")
             {
                 string res = API.GetCodeListByMarket("10");
-                botParams.Codes = res.Split(new char[] { ';' });
+                BotParams.Codes = res.Split(new char[] { ';' });
 
             }
             else if (market == "Kospi")
             {
                 string res = API.GetCodeListByMarket("0");
-                botParams.Codes = res.Split(new char[] { ';' });
+                BotParams.Codes = res.Split(new char[] { ';' });
             }
 
             else
@@ -50,7 +50,7 @@ namespace TaewooBot_v2
                 string kospi = API.GetCodeListByMarket("0");
                 string kosdaq = API.GetCodeListByMarket("10");
                 string res = kospi + kosdaq;
-                botParams.Codes = res.Split(new char[] { ';' });
+                BotParams.Codes = res.Split(new char[] { ';' });
             }
         }
 
@@ -60,15 +60,15 @@ namespace TaewooBot_v2
             // 종목개수 제한...
             for (int i = 0; i < 50; i++)
             {
-                botParams.StockCnt = i + 1;
+                BotParams.StockCnt = i + 1;
                 string scr_no = utils.get_scr_no();
                 // 주가 데이터 요청.
-                botParams.RqName = "";
-                botParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
-                API.SetInputValue("종목코드", botParams.Codes[i]);
+                BotParams.RqName = "";
+                BotParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
+                API.SetInputValue("종목코드", BotParams.Codes[i]);
 
                 // 실시간 현재가 받아오기
-                int res = API.CommRqData(botParams.RqName, "OPT10001", 0, scr_no);
+                int res = API.CommRqData(BotParams.RqName, "OPT10001", 0, scr_no);
 
                 utils.delay(300);
             }

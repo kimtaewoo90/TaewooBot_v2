@@ -17,7 +17,6 @@ namespace TaewooBot_v2
     public partial class Logs : Form
     {
 
-        BotParams botParams = new BotParams();
         public Logs()
         {
             InitializeComponent();
@@ -36,7 +35,7 @@ namespace TaewooBot_v2
 
             cur_time = DateTime.Now;
             cur_dt = cur_time.ToString("yyyy-") + cur_time.ToString("MM-") + cur_time.ToString("dd");
-            cur_tm = botParams.CurTime;
+            cur_tm = BotParams.CurTime;
 
             cur_dtm = "[" + cur_dt + " " + cur_tm + "]";
 
@@ -64,7 +63,7 @@ namespace TaewooBot_v2
                     this.LogBox.AppendText("\n" + cur_dtm + text + Environment.NewLine);
                     // log 기록
 
-                    //File.AppendAllText(botParams.Path + botParams.LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
+                    //File.AppendAllText(BotParams.Path + BotParams.LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
                 }
             }
         }
@@ -72,13 +71,13 @@ namespace TaewooBot_v2
         public void MakeLogFile()
         {
 
-            FileInfo fileInfo = new FileInfo(botParams.Path + botParams.LogFileName);
+            FileInfo fileInfo = new FileInfo(BotParams.Path + BotParams.LogFileName);
 
             if (fileInfo.Exists)
             { }
             else
             {
-                File.WriteAllText(botParams.Path + botParams.LogFileName, botParams.date + "의 로그기록을 시작합니다.\n", Encoding.Default);
+                File.WriteAllText(BotParams.Path + BotParams.LogFileName, BotParams.date + "의 로그기록을 시작합니다.\n", Encoding.Default);
                 write_sys_log("로그파일 생성 완료", 0);
             }
 
@@ -86,13 +85,13 @@ namespace TaewooBot_v2
 
         public void MakeTickDataFile()
         {
-            FileInfo fileInfo = new FileInfo(botParams.TickPath + botParams.TickLogFileName);
+            FileInfo fileInfo = new FileInfo(BotParams.TickPath + BotParams.TickLogFileName);
 
             if (fileInfo.Exists)
             { }
             else
             {
-                File.WriteAllText(botParams.TickPath + botParams.TickLogFileName, botParams.date + "틱데이터의 기록을 시작합니다\n.", Encoding.Default);
+                File.WriteAllText(BotParams.TickPath + BotParams.TickLogFileName, BotParams.date + "틱데이터의 기록을 시작합니다\n.", Encoding.Default);
                 write_sys_log("틱데이터파일 생성 완료", 0);
             }
         }

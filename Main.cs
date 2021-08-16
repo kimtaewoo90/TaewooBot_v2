@@ -22,7 +22,8 @@ namespace TaewooBot_v2
         Thread GetTime = null;
         Thread GetDataThread = null;
         Thread MonitoringSignalThread = null;
-        //Thread OrderThread = null;
+        Thread BlotterThread = null;
+        Thread PositionTread = null;
 
         // Instance Other WinForms
         Logs logs = new Logs();
@@ -31,7 +32,6 @@ namespace TaewooBot_v2
         Position position = new Position();
         Blotter blt = new Blotter();
         Utils utils = new Utils();
-        BotParams botParams = new BotParams();
 
         TelegramClass telegram = new TelegramClass();
 
@@ -47,7 +47,8 @@ namespace TaewooBot_v2
         public Main()
         {
             InitializeComponent();
-      
+
+            version.Text = "version : " + BotParams.version;
 
             // Open Windows
             logs.StartPosition = FormStartPosition.Manual;
@@ -92,7 +93,7 @@ namespace TaewooBot_v2
             }
             else
             {
-                botParams.Market = MarketType.Text;
+                BotParams.Market = MarketType.Text;
             }
         }
 
@@ -126,8 +127,8 @@ namespace TaewooBot_v2
 
             Status.Text = "로그인 완료"; // 화면 하단 상태란에 메시지 출력
 
-            botParams.UserID = "";
-            botParams.UserID = API.GetLoginInfo("USER_ID").Trim(); // 사용자 아이디를 가져와서 클래스 변수(전역변수)에 저장
+            BotParams.UserID = "";
+            BotParams.UserID = API.GetLoginInfo("USER_ID").Trim(); // 사용자 아이디를 가져와서 클래스 변수(전역변수)에 저장
             //textBox1.Text = g_user_id; // 전역변수에 저장한 아이디를 텍스트박스에 출력
 
             accno_cnt = "";
@@ -136,11 +137,11 @@ namespace TaewooBot_v2
             // TODO : Error
             accno_arr = new string[int.Parse(accno_cnt)];
 
-            botParams.AccountNumber = API.GetLoginInfo("ACCNO").Trim().Replace(";", "");
+            BotParams.AccountNumber = API.GetLoginInfo("ACCNO").Trim().Replace(";", "");
 
-            accno_arr = botParams.AccountNumber.Split(';');  // API에서 ';'를 구분자로 여러개의 계좌번호를 던져준다.
-            logs.write_sys_log("Account Number : " + botParams.AccountNumber, 0);
-            logs.write_sys_log("Welcome " + botParams.UserID, 0);
+            accno_arr = BotParams.AccountNumber.Split(';');  // API에서 ';'를 구분자로 여러개의 계좌번호를 던져준다.
+            logs.write_sys_log("Account Number : " + BotParams.AccountNumber, 0);
+            logs.write_sys_log("Welcome " + BotParams.UserID, 0);
 
 
         }
@@ -148,23 +149,25 @@ namespace TaewooBot_v2
         private void Start_Btn_Click(object sender, EventArgs e)
         {
 
-            if (botParams.Market == "Stock")
+            if (BotParams.Market == "Stock")
             {
-                logs.write_sys_log(botParams.Market, 0);
+                logs.write_sys_log(BotParams.Market, 0);
                 Login();
 
 
                 // 자동매매 Thread 시작
-                if (botParams.IsThread is true) // 스레드가 이미 생성된 상태라면
+                if (BotParams.IsThread is true) // 스레드가 이미 생성된 상태라면
                 {
                     logs.write_sys_log("AUTO TRADING SYSTEM is on already. \n", 0);
                     return;
                 }
 
                 logs.write_sys_log("AUTO TRADING SYSTEM is just started \r\n", 0);
-                botParams.IsThread = true;
+                BotParams.IsThread = true;
                 GetDataThread = new Thread(new ThreadStart(GetData));
                 MonitoringSignalThread = new Thread(new ThreadStart(MonitoringSignal));
+                BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
+                PositionTread = new Thread(new ThreadStart(PositionDisplay));
                 GetTime = new Thread(new ThreadStart(GetCurrentTime));
 
                 GetTime.Start();
@@ -179,9 +182,9 @@ namespace TaewooBot_v2
         {
             while (true)
             {
-                botParams.CurTime = utils.get_cur_tm();
+                BotParams.CurTime = utils.get_cur_tm();
                 // Display time
-                CurrentTime.Text = botParams.CurTime;
+                CurrentTime.Text = BotParams.CurTime;
             }
         }
 
@@ -198,9 +201,9 @@ namespace TaewooBot_v2
             {
                 try
                 {
-                    if (botParams.CurTime.CompareTo("08:30:01") >= 0 && botParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
+                    if (BotParams.CurTime.CompareTo("08:30:01") >= 0 && BotParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
                     {
-                        compareTime = DateTime.Parse(botParams.CurTime);
+                        compareTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
 
                         GetAccountInformation();
@@ -211,7 +214,7 @@ namespace TaewooBot_v2
                     else if (TestCheck.Checked && batchData == false)
                     {
                         batchData = true;
-                        compareTime = DateTime.Parse(botParams.CurTime);
+                        compareTime = DateTime.Parse(BotParams.CurTime);
 
                         GetAccountInformation();
                         GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
@@ -236,7 +239,41 @@ namespace TaewooBot_v2
             // PositionState에서 정의된 State Dictionary를 무한루프로 계속 모니터링.
         }
 
+        public void BlotterDisplay()
+        {
+            Blotter bltScreen = new Blotter();
+            int bltListCnt = 0;
+            int temp = 0;
 
+            while(true)
+            {
+                bltListCnt = BotParams.BltList.Count;
+               
+                if(bltListCnt > temp)
+                {      
+                    temp = bltListCnt;
+                    bltScreen.DisplayBLT(BotParams.BltList[temp - 1]);
+                }
+            }
+        }
+
+        public void PositionDisplay()
+        {
+            Position positionScreen = new Position();
+            int positionListCnt = 0;
+            int temp = 0;
+
+            while (true)
+            {
+                positionListCnt = BotParams.PositionList.Count;
+
+                if (positionListCnt > temp)
+                {
+                    temp = positionListCnt;
+                    positionScreen.DisplayAccount(BotParams.AccountList[temp - 1]);
+                }
+            }
+        }
 
         private void TestCheck_CheckedChanged(object sender, EventArgs e)
         {

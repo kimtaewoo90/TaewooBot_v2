@@ -58,6 +58,7 @@
             this.MonitoringTextBox = new System.Windows.Forms.TextBox();
             this.process1 = new System.Diagnostics.Process();
             this.ParamsBtn = new System.Windows.Forms.Button();
+            this.version = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.API)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -90,10 +91,10 @@
             // API
             // 
             this.API.Enabled = true;
-            this.API.Location = new System.Drawing.Point(289, 85);
+            this.API.Location = new System.Drawing.Point(280, 74);
             this.API.Name = "API";
             this.API.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("API.OcxState")));
-            this.API.Size = new System.Drawing.Size(97, 48);
+            this.API.Size = new System.Drawing.Size(100, 95);
             this.API.TabIndex = 7;
             this.API.Visible = false;
             // 
@@ -175,6 +176,7 @@
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.API);
             this.groupBox3.Location = new System.Drawing.Point(9, 57);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(386, 122);
@@ -257,6 +259,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.version);
             this.groupBox4.Controls.Add(this.label6);
             this.groupBox4.Controls.Add(this.signalCnt);
             this.groupBox4.Controls.Add(this.label5);
@@ -264,7 +267,6 @@
             this.groupBox4.Controls.Add(this.OrderTextBox);
             this.groupBox4.Controls.Add(this.MonitoringTextBox);
             this.groupBox4.Controls.Add(this.GetDataTextBox);
-            this.groupBox4.Controls.Add(this.API);
             this.groupBox4.Location = new System.Drawing.Point(9, 185);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(386, 133);
@@ -333,6 +335,15 @@
             this.ParamsBtn.UseVisualStyleBackColor = true;
             this.ParamsBtn.Click += new System.EventHandler(this.ParamsBtn_Click);
             // 
+            // version
+            // 
+            this.version.AutoSize = true;
+            this.version.Location = new System.Drawing.Point(300, 118);
+            this.version.Name = "version";
+            this.version.Size = new System.Drawing.Size(76, 12);
+            this.version.TabIndex = 24;
+            this.version.Text = "version view";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -398,6 +409,7 @@
         private System.Diagnostics.Process process1;
         private System.Windows.Forms.Button ParamsBtn;
         private System.Windows.Forms.TextBox signalCnt;
+        private System.Windows.Forms.Label version;
     }
 }
 

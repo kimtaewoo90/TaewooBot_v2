@@ -11,10 +11,9 @@ namespace TaewooBot_v2
     {
         // ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString()
 
-        Position position = new Position();
-        BotParams botParams = new BotParams();
+        //Position position = new Position();
         Utils utils = new Utils();
-        Blotter blt = new Blotter();
+        BlotterClass blt = new BlotterClass();
 
         string position_ShortCode { get; set; }
         string position_KrName { get; set; }
@@ -35,9 +34,11 @@ namespace TaewooBot_v2
             position_TradingPnL = TradingPnL;
         }
 
+
+
         public void SendSellOrder()
         {
-            botParams.RqName = "주식주문";
+            BotParams.RqName = "주식주문";
             var scr_no = utils.get_scr_no();
             var ShortCode = position_ShortCode;
             var curPrice = double.Parse(position_CurPrice) ;
@@ -46,7 +47,6 @@ namespace TaewooBot_v2
             var hogaGb = "03";
 
             blt.SendSellOrder(scr_no, ShortCode, curPrice, ordQty, ordPrice, hogaGb);
-
 
             // 매도 되면 PositionDataGrid 에서 삭제하는게 좋을까 BalanceQty를 0으로 유지하는게 좋을까
 
