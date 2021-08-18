@@ -20,7 +20,6 @@ namespace TaewooBot_v2
             this.BLT_API.OnReceiveChejanData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEventHandler(this.OnReceiveChejanData);
         }
 
-
         private void OnReceiveChejanData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEvent e)
         {
             /*
@@ -112,12 +111,15 @@ namespace TaewooBot_v2
 
         public void SendBuyOrder(string RqName, string scr_no, string ShortCode, string curPrice, int ordQty, int ordPrice, string hogaGB)
         {
+            telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty}");
+            Console.WriteLine($"RqName : {BotParams.RqName} screen_no : {scr_no} Account Number : {BotParams.AccountNumber} OrderType : 1 ShortCode : {ShortCode} ordQty : {ordQty} ordPrice : {ordPrice} hogaGB : {hogaGB}");
             // TODO : 매수잔량 취소 기능 추가
             BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 1, ShortCode, ordQty, ordPrice, hogaGB, "");
         }
 
         public void SendSellOrder(string scr_no, string ShortCode, double curPrice, int ordQty, int ordPrice, string hogaGB)
         {
+            telegram.SendTelegramMsg($"SellOrder {ShortCode}/{ordQty}");
             BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 3, ShortCode, ordQty, ordPrice, hogaGB, "");
         }
 

@@ -73,7 +73,7 @@ namespace TaewooBot_v2
             var scr_no = utils.get_scr_no();
             var ShortCode = states_ShortCode;
             var curPrice = states_CurPrice;
-            int ordQty = Int32.Parse(Math.Truncate(1000000.0 / double.Parse(curPrice)).ToString());
+            var ordQty = Int32.Parse(Math.Truncate(1000000.0 / double.Parse(curPrice)).ToString());
             var ordPrice = 0;
             var hogaGb = "03";
 

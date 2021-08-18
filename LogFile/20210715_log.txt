@@ -1,4 +1,0 @@
-20210715의 로그기록을 시작합니다.[2021-07-15 20:48:10]Stock
-[2021-07-15 20:48:21]Welcome kbm6406
-[2021-07-15 20:48:21]AUTO TRADING SYSTEM is just started 
-
