@@ -18,99 +18,65 @@ namespace TaewooBot_v2
 
     public partial class Main : Form
     {
-        // Initialize global params
-        public string Market { get; set; }
-        public string UserID { get; set; }
-        public int ScrNo { get; set; }
-        public bool IsThread { get; set; }
-        public bool _SearchCondition { get; set; }
-        public bool _GetTrData { get; set; }
-        public bool _GetRTD { get; set; }
-        public string RqName { get; set; }
-        public string CurTime { get; set; }
-
-        public bool Test { get; set; } = false;
-
-        // About Account
-        public string AccountNumber { get; set; } = null;
-        public double Deposit { get; set; } = 0.0;
-        public int AccountStockLots { get; set; }
-        public int TotalPnL { get; set; }
-
-        // Slow Params
-        public double LossCut { get; set; }
-
-        // Logs File
-        public string date { get; set; } = DateTime.Now.ToString("yyyyMMdd");
-        public string Path { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/";
-        public string TickPath { get; set; } = "C:/Users/tangb/source/repos/TaewooBot_v2/Log/TickLog/";
-        public string LogFileName { get; set; } = DateTime.Now.ToString("yyyyMMdd") + "_Log.txt";
-        public string TickLogFileName { get; set; } = DateTime.Now.ToString("yyyyMMdd") + "_TickLog.txt";
-
-        // Stocks
-        List<string> TargetCodes = new List<string>();
-        public string[] Codes;
-        public string Kospi { get; set; } = null;
-        public string Kosdaq { get; set; } = null;
-        public string AllMarket { get; set; } = null;
-
-        // Thread 간 동기화
-        public bool signal { get; set; } = false;
-        public bool order { get; set; } = false;
-        public string SignalStockCode { get; set; } = null;
-        public string SignalKrName { get; set; } = null;
-        public string SignalPrice { get; set; } = null;
-
-        // Delegate winforms
-        delegate void Ctr_Involk(Control ctr, string text);
-
-
-        // Test
-        public int StockCnt { get; set; } = 0;
-
-        // 항목별 DIctionary 설정
-
-        Dictionary<string, string> targetDict = new Dictionary<string, string>();
-        Dictionary<string, string> StockKrNameDict = new Dictionary<string, string>();
-        Dictionary<string, string> StockPriceDict = new Dictionary<string, string>();
-        Dictionary<string, string> TickSpeedDict = new Dictionary<string, string>();
-        Dictionary<string, string> StockPnLDict = new Dictionary<string, string>();
-        Dictionary<string, string> StockHighPriceDict = new Dictionary<string, string>();
-        
-        Dictionary<string, List<string>> TickAvgDict = new Dictionary<string, List<string>>();
-        Dictionary<string, List<string>> StockDict = new Dictionary<string, List<string>>();
-
-
-        // 계좌관련 Dictionary 설정
-        Dictionary<string, string> Accnt_StockName = new Dictionary<string, string>();
-        Dictionary<string, string> Accnt_StockLots = new Dictionary<string, string>();
-        Dictionary<string, string> Accnt_StockPnL = new Dictionary<string, string>();
-        Dictionary<string, string> Accnt_StockPnL_Won = new Dictionary<string, string>();
-
-
+        // Thread 선언
+        Thread GetTime = null;
         Thread GetDataThread = null;
         Thread MonitoringSignalThread = null;
-        Thread OrderThread = null;
+        Thread BlotterThread = null;
+        Thread PositionTread = null;
+
+        // Instance Other WinForms
+        Logs logs = new Logs();
+        Params Params = new Params();
+        Universe universe = new Universe();
+        Position position = new Position();
+        Blotter blt = new Blotter();
+        Utils utils = new Utils();
+
+        TelegramClass telegram = new TelegramClass();
+
+
+        Dictionary<string, StockState> stockState = new Dictionary<string, StockState>();
+
+        private DateTime compareTime { get; set; }
+
+
+        delegate void Ctr_Involk(Control ctr, string text);
 
 
         public Main()
         {
             InitializeComponent();
-            /*
-            this.API.OnReceiveTrData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEventHandler(this.DKHOpenAPI1_OnReceiveTrData);
-            this.API.OnReceiveMsg += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveMsgEventHandler(this.DKHOpenAPI1_OnReceiveMsg);
-            this.API.OnReceiveChejanData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEventHandler(this.DKHOpenAPI1_OnReceiveChejanData);
-            this.API.OnReceiveRealData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEventHandler(this.DKHOpenAPI1_OnReceiveRealData);
-            */
 
-            InitialParams();
-            MakeLogFile();
-            MakeTickDataFile();
+            version.Text = "version : " + BotParams.version;
+
+            // Open Windows
+            logs.StartPosition = FormStartPosition.Manual;
+            logs.Location = new Point(755, 520);
+            logs.Show();
+
+            universe.StartPosition = FormStartPosition.Manual;
+            universe.Location = new Point(100, 520);
+            universe.Show();
+
+            blt.StartPosition = FormStartPosition.Manual;
+            blt.Location = new Point(860, 100);
+            blt.Show();
+
+            position.StartPosition = FormStartPosition.Manual;
+            position.Location = new Point(100, 100);
+            position.Show();
+
+            // Initialize Parameters
+            utils.InitialParams();
+
+            // Make Log text files
+            logs.MakeLogFile();
+            logs.MakeTickDataFile();
 
             // Tr code 검색
             this.API.OnReceiveTrData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEventHandler(this.OnReceiveTrData);
             this.API.OnReceiveRealData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEventHandler(this.OnReceiveRealData);
-
 
             // 조건검색
             this.API.OnReceiveConditionVer += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveConditionVerEventHandler(this.OnReceiveConditionVer);
@@ -127,167 +93,186 @@ namespace TaewooBot_v2
             }
             else
             {
-                Market = MarketType.Text;
+                BotParams.Market = MarketType.Text;
             }
+        }
+
+        // 로그인 함수 구현
+        public void Login()
+        {
+            int ret = 0;
+            int ret2 = 0;
+
+            String accno_cnt = null;
+            string[] accno_arr = null;
+
+            ret = API.CommConnect(); // 로그인 창 호출
+
+            Status.Text = "로그인 중..."; // 화면 하단 상태란에 메시지 출력
+
+            for (; ; )
+            {
+                ret2 = API.GetConnectState(); // 로그인 완료 여부를 가져옴
+                if (ret2 == 1)
+                {
+                    // 로그인 성공
+                    break;
+                }
+                else
+                {
+                    // 로그인 대기
+                    utils.delay(1000); // 1초 지연
+                }
+            } // end for
+
+            Status.Text = "로그인 완료"; // 화면 하단 상태란에 메시지 출력
+
+            BotParams.UserID = "";
+            BotParams.UserID = API.GetLoginInfo("USER_ID").Trim(); // 사용자 아이디를 가져와서 클래스 변수(전역변수)에 저장
+            //textBox1.Text = g_user_id; // 전역변수에 저장한 아이디를 텍스트박스에 출력
+
+            accno_cnt = "";
+            accno_cnt = API.GetLoginInfo("ACCOUNT_CNT").Trim(); // 사용자의 증권계좌 수를 가져옴
+
+            // TODO : Error
+            accno_arr = new string[int.Parse(accno_cnt)];
+
+            BotParams.AccountNumber = API.GetLoginInfo("ACCNO").Trim().Replace(";", "");
+
+            accno_arr = BotParams.AccountNumber.Split(';');  // API에서 ';'를 구분자로 여러개의 계좌번호를 던져준다.
+            logs.write_sys_log("Account Number : " + BotParams.AccountNumber, 0);
+            logs.write_sys_log("Welcome " + BotParams.UserID, 0);
+
+
         }
 
         private void Start_Btn_Click(object sender, EventArgs e)
         {
 
-            if (Market == "Stock")
+            if (BotParams.Market == "Stock")
             {
-                write_sys_log(Market, 0);
+                logs.write_sys_log(BotParams.Market, 0);
                 Login();
 
 
                 // 자동매매 Thread 시작
-                if (IsThread is true) // 스레드가 이미 생성된 상태라면
+                if (BotParams.IsThread is true) // 스레드가 이미 생성된 상태라면
                 {
-                    write_sys_log("AUTO TRADING SYSTEM is on already. \n", 0);
+                    logs.write_sys_log("AUTO TRADING SYSTEM is on already. \n", 0);
                     return;
                 }
 
-                write_sys_log("AUTO TRADING SYSTEM is just started \r\n", 0);
-                IsThread = true;
+                logs.write_sys_log("AUTO TRADING SYSTEM is just started \r\n", 0);
+                BotParams.IsThread = true;
                 GetDataThread = new Thread(new ThreadStart(GetData));
                 MonitoringSignalThread = new Thread(new ThreadStart(MonitoringSignal));
+                BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
+                PositionTread = new Thread(new ThreadStart(PositionDisplay));
+                GetTime = new Thread(new ThreadStart(GetCurrentTime));
+
+                GetTime.Start();
                 GetDataThread.Start();
                 MonitoringSignalThread.Start();
             }
         }
 
+
+        // GetTime Thread
+        public void GetCurrentTime()
+        {
+            while (true)
+            {
+                BotParams.CurTime = utils.get_cur_tm();
+                // Display time
+                CurrentTime.Text = BotParams.CurTime;
+            }
+        }
+
+
         // Thread1 (GetData Thread)
         public void GetData()
         {
-     
-            if (TestCheck.Checked)
+
+            telegram.SendTelegramMsg("GetData Thread is started");
+
+            var batchData = false;
+            // while 문으로 무한루프 & 시간계산
+            while(true)
             {
-                Test = true;
-            }
-
-            for (; ; )  // 장전 30분 무한루프 실행
-            {
-
-                CurTime = get_cur_tm(); // 현재시각 조회
-                CurrentTime.Text = CurTime; // 화면 하단 상태란에 메시지 출력
-
-                if (CurTime.CompareTo("08:30:01") >= 0 && CurTime.CompareTo("09:00:00") < 0)
+                try
                 {
-                    
-                }
-
-                else if (CurTime.CompareTo("09:00:00") >= 0 && CurTime.CompareTo("15:19:59") < 0)
-                {
-                    // Step1. 조건검색 시작
-                    if (_SearchCondition is false)
+                    if (BotParams.CurTime.CompareTo("08:30:01") >= 0 && BotParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
                     {
+                        compareTime = DateTime.Parse(BotParams.CurTime);
+                        batchData = true;
 
                         GetAccountInformation();
-
-                        _SearchCondition = true;
-                        write_sys_log("Start SearchCondition", 0);
-                        
-                        // 조건검색 종목
-                        //API.GetConditionLoad();
-
-                        // 전 종목
-                        RequestAllStocks();
+                        GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
+                        RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
-                    
-                    for (; ; )  // 장 중 무한루프 실행
+
+                    else if (TestCheck.Checked && batchData == false)
                     {
-                        // Test
-                        // break;
+                        batchData = true;
+                        compareTime = DateTime.Parse(BotParams.CurTime);
 
-                        setText_Control(GetDataTextBox, "running");
-                        
-                        CurTime = get_cur_tm();
-                        CurrentTime.Text = CurTime; // 화면 하단 상태란에 메시지 출력
-
-                        if (CurTime.CompareTo("15:19:50") >= 0)
-                        {
-                            // 여기서 모든 데이터 전송 Disconnect 하기.
-                            write_sys_log("End of Today's Trade!", 0);
-                            InitialParams();
-                            break;
-                        }
-                        delay(1000);
+                        GetAccountInformation();
+                        GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
+                        RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
-                    break;
                 }
 
-                // After Market for test
-                else if (Test == true)
+                catch(Exception e)
                 {
-                    GetAccountInformation();
-                    RequestAllStocks();
-                    setText_Control(GetDataTextBox, "running");
-
-                    Test = false;
-
+                    logs.write_sys_log(e.ToString(), 0);
+                    continue;
                 }
 
-                delay(200);
             }
+
         }
 
         // Thread2 (Monitoring Thread)
         public void MonitoringSignal()
         {
+            // TODO : 여기에 계좌정보 계속 업데이트 하면서 Sell Signal 일 때 매도 주문 전송.
+            // PositionState에서 정의된 State Dictionary를 무한루프로 계속 모니터링.
+        }
+
+        public void BlotterDisplay()
+        {
+            Blotter bltScreen = new Blotter();
+            int bltListCnt = 0;
+            int temp = 0;
+
             while(true)
             {
-
-                setText_Control(MonitoringTextBox, "Singal is false");
-
-                if (signal == true)
-                {
-
-                    setText_Control(MonitoringTextBox, "Singal is true");
-
-                    write_sys_log("Get the MonitroingSignalThread in here", 0);
-
-                    DisplayPosition(SignalStockCode, SignalKrName, SignalPrice, "", "Buy");
-
-                    order = true;
-
-                    // 만약 한종목만 사면 여기서 
-                    // singal을 다시 false로 풀어주는게 아니라
-                    // order thread에서 Sell Order 가 끝나고 나서 signal, order flag를 false 로 풀어준다.
-
+                bltListCnt = BotParams.BltList.Count;
+               
+                if(bltListCnt > temp)
+                {      
+                    temp = bltListCnt;
+                    bltScreen.DisplayBLT(BotParams.BltList[temp - 1]);
                 }
-
             }
         }
 
-
-        public void Order()
+        public void PositionDisplay()
         {
-            // 계좌상황 체크
-            GetAccountInformation();
+            Position positionScreen = new Position();
+            int positionListCnt = 0;
+            int temp = 0;
 
             while (true)
             {
-                setText_Control(OrderTextBox, "Order is true");
-                if (order == true)
+                positionListCnt = BotParams.PositionList.Count;
+
+                if (positionListCnt > temp)
                 {
-                    // API OCX를 따로 두고 여기서 계속 매도 조건 Monitoring 하기.
-                    if (AccountStockLots != 0)
-                    {
-                        setText_Control(OrderTextBox, "BuyOrder is true");                        
-                        // 매도까지 기다리기.
-                        //MonitoringSellStocks();
-                    }
-                    else
-                    {
-                        setText_Control(OrderTextBox, "SellOrder is true");
-                        // 조건에 맞는 종목 매수하기
-
-                        //MonitoringBuyStocks();
-                    }
+                    temp = positionListCnt;
+                    positionScreen.DisplayAccount(BotParams.AccountList[temp - 1]);
                 }
-
             }
-
         }
 
         private void TestCheck_CheckedChanged(object sender, EventArgs e)
