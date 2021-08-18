@@ -8,7 +8,7 @@ namespace TaewooBot_v2
 {
     class BlotterClass
     {
-        private AxKHOpenAPILib.AxKHOpenAPI BLT_API;
+        private AxKHOpenAPILib.AxKHOpenAPI BLT_API = new AxKHOpenAPILib.AxKHOpenAPI();
        
         Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
 
@@ -108,8 +108,6 @@ namespace TaewooBot_v2
 
             }
         }
-
-
 
 
         public void SendBuyOrder(string RqName, string scr_no, string ShortCode, string curPrice, int ordQty, int ordPrice, string hogaGB)
