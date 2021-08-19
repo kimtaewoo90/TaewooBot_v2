@@ -8,8 +8,8 @@ namespace TaewooBot_v2
 {
     class BlotterClass
     {
-        private AxKHOpenAPILib.AxKHOpenAPI BLT_API = new AxKHOpenAPILib.AxKHOpenAPI();
-       
+        public AxKHOpenAPILib.AxKHOpenAPI BLT_API = new AxKHOpenAPILib.AxKHOpenAPI();
+        
         Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
 
         TelegramClass telegram = new TelegramClass();
@@ -111,16 +111,18 @@ namespace TaewooBot_v2
 
         public void SendBuyOrder(string RqName, string scr_no, string ShortCode, string curPrice, int ordQty, int ordPrice, string hogaGB)
         {
+            BLT_API.CreateControl();
             telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty}");
             Console.WriteLine($"RqName : {BotParams.RqName} screen_no : {scr_no} Account Number : {BotParams.AccountNumber} OrderType : 1 ShortCode : {ShortCode} ordQty : {ordQty} ordPrice : {ordPrice} hogaGB : {hogaGB}");
             // TODO : 매수잔량 취소 기능 추가
-            BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 1, ShortCode, ordQty, ordPrice, hogaGB, "");
+            BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 1, ShortCode, ordQty, 0, "03", "");
         }
 
         public void SendSellOrder(string scr_no, string ShortCode, double curPrice, int ordQty, int ordPrice, string hogaGB)
         {
+            BLT_API.CreateControl();
             telegram.SendTelegramMsg($"SellOrder {ShortCode}/{ordQty}");
-            BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 3, ShortCode, ordQty, ordPrice, hogaGB, "");
+            BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 3, ShortCode, ordQty, 0, "03", "");
         }
 
     }
