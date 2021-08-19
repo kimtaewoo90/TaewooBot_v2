@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Reflection;
+using Microsoft.Win32;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,13 +13,14 @@ namespace TaewooBot_v2
     {
         public AxKHOpenAPILib.AxKHOpenAPI BLT_API = new AxKHOpenAPILib.AxKHOpenAPI();
         
-        Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
+        public Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
 
-        TelegramClass telegram = new TelegramClass();
+        public TelegramClass telegram = new TelegramClass();
         
 
         public BlotterClass()
         {
+            BLT_API.CreateControl();
             this.BLT_API.OnReceiveChejanData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEventHandler(this.OnReceiveChejanData);
         }
 
@@ -41,6 +45,8 @@ namespace TaewooBot_v2
             switch (e.sGubun)
             {
                 case "0":
+
+                    BLT_API.CreateControl();
                     var OrderTime = BLT_API.GetChejanData(908).Trim().ToString();
                     var ShortCode = BLT_API.GetChejanData(9001).Trim().ToString();
                     var KrName = BLT_API.GetChejanData(302).Trim().ToString();
@@ -58,8 +64,8 @@ namespace TaewooBot_v2
                 // 국내주식 잔고변경
                 case "1":
 
+                    BLT_API.CreateControl();
                     BotParams.Deposit = double.Parse(BLT_API.GetChejanData(951).Trim().ToString());
-
                     var ShortCode1 = BLT_API.GetChejanData(9001).Trim().ToString();
                     var KrName1 = BLT_API.GetChejanData(302).Trim().ToString();
                     var BalanceQty = BLT_API.GetChejanData(930).Trim().ToString();
@@ -88,8 +94,6 @@ namespace TaewooBot_v2
                     BotParams.AccountList.Add(new List<string> { KrName1, BalanceQty, Change, TradingPnL.ToString() });
 
 
-                    //position.DisplayAccount(todayPnL, todayChange, BotParams.Deposit.ToString());
-
                     /* 매도 시 Mode Class를 호출하여 각각의 Mode에서의 전략으로 매도 실행 */
                     /* ver2.0 에서는 여기에 바로 매도 로직 작성 */
 
@@ -104,26 +108,41 @@ namespace TaewooBot_v2
                     }
 
                     break;
-
             }
         }
 
 
         public void SendBuyOrder(string RqName, string scr_no, string ShortCode, string curPrice, int ordQty, int ordPrice, string hogaGB)
         {
-            BLT_API.CreateControl();
-            telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty}");
-            Console.WriteLine($"RqName : {BotParams.RqName} screen_no : {scr_no} Account Number : {BotParams.AccountNumber} OrderType : 1 ShortCode : {ShortCode} ordQty : {ordQty} ordPrice : {ordPrice} hogaGB : {hogaGB}");
-            // TODO : 매수잔량 취소 기능 추가
-            BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 1, ShortCode, ordQty, 0, "03", "");
+            telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty.ToString()}");
+            try
+            {
+                Console.WriteLine($"RqName : {BotParams.RqName} screen_no : {scr_no} Account Number : {BotParams.AccountNumber} OrderType : 1 ShortCode : {ShortCode} ordQty : {ordQty} ordPrice : {ordPrice} hogaGB : {hogaGB}");
+                // TODO : 매수잔량 취소 기능 추가
+                BLT_API.CreateControl();
+                BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 1, ShortCode, ordQty, 0, "03", "");
+            }
+            catch(Exception e)
+            {
+                telegram.SendTelegramMsg($"Exception in Send BuyOrder errMsg : {e.ToString()}");
+            }
+ 
         }
 
         public void SendSellOrder(string scr_no, string ShortCode, double curPrice, int ordQty, int ordPrice, string hogaGB)
         {
-            BLT_API.CreateControl();
             telegram.SendTelegramMsg($"SellOrder {ShortCode}/{ordQty}");
-            BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 3, ShortCode, ordQty, 0, "03", "");
+            try
+            {
+                Console.WriteLine($"RqName : {BotParams.RqName} screen_no : {scr_no} Account Number : {BotParams.AccountNumber} OrderType : 1 ShortCode : {ShortCode} ordQty : {ordQty} ordPrice : {ordPrice} hogaGB : {hogaGB}");
+                
+                BLT_API.CreateControl();
+                BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 3, ShortCode, ordQty, 0, "03", "");
+            }
+            catch (Exception e)
+            {
+                telegram.SendTelegramMsg($"Exception in send SellOrder errMsg : {e.ToString()}");
+            }
         }
-
     }
 }
