@@ -30,7 +30,7 @@ namespace TaewooBot_v2
         Params Params = new Params();
         Universe universe = new Universe();
         Position position = new Position();
-        Blotter blt = new Blotter();
+        Blotter bltScreen = new Blotter();
         Utils utils = new Utils();
 
         TelegramClass telegram = new TelegramClass();
@@ -59,9 +59,9 @@ namespace TaewooBot_v2
             universe.Location = new Point(100, 520);
             universe.Show();
 
-            blt.StartPosition = FormStartPosition.Manual;
-            blt.Location = new Point(860, 100);
-            blt.Show();
+            bltScreen.StartPosition = FormStartPosition.Manual;
+            bltScreen.Location = new Point(860, 100);
+            bltScreen.Show();
 
             position.StartPosition = FormStartPosition.Manual;
             position.Location = new Point(100, 100);
@@ -241,7 +241,7 @@ namespace TaewooBot_v2
 
         public void BlotterDisplay()
         {
-            Blotter bltScreen = new Blotter();
+            
             int bltListCnt = 0;
             int temp = 0;
 
@@ -252,7 +252,7 @@ namespace TaewooBot_v2
                 if(bltListCnt > temp)
                 {      
                     temp = bltListCnt;
-                    bltScreen.DisplayBLT(BotParams.BltList[temp - 1]);
+                    bltScreen.DisplayBLT(BotParams.BltList);
                 }
             }
         }

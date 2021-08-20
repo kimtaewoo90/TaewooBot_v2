@@ -11,9 +11,8 @@ namespace TaewooBot_v2
     {
         // ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString()
 
-        //Position position = new Position();
         Utils utils = new Utils();
-        BlotterClass blt = new BlotterClass();
+     
 
         string position_ShortCode { get; set; }
         string position_KrName { get; set; }

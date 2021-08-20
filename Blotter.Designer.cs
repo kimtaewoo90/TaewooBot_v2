@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Blotter));
             this.BltDataGrid = new System.Windows.Forms.DataGridView();
             this.OrderTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -38,7 +39,9 @@
             this.FilledQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OrdPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FilledPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BLT_API = new AxKHOpenAPILib.AxKHOpenAPI();
             ((System.ComponentModel.ISupportInitialize)(this.BltDataGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BLT_API)).BeginInit();
             this.SuspendLayout();
             // 
             // BltDataGrid
@@ -105,15 +108,27 @@
             this.FilledPrice.HeaderText = "FilledPrice";
             this.FilledPrice.Name = "FilledPrice";
             // 
+            // BLT_API
+            // 
+            this.BLT_API.Enabled = true;
+            this.BLT_API.Location = new System.Drawing.Point(874, 71);
+            this.BLT_API.Name = "BLT_API";
+            this.BLT_API.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("BLT_API.OcxState")));
+            this.BLT_API.Size = new System.Drawing.Size(150, 143);
+            this.BLT_API.TabIndex = 8;
+            this.BLT_API.Visible = false;
+            // 
             // Blotter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(972, 389);
+            this.ClientSize = new System.Drawing.Size(971, 409);
+            this.Controls.Add(this.BLT_API);
             this.Controls.Add(this.BltDataGrid);
             this.Name = "Blotter";
             this.Text = "Blotter";
             ((System.ComponentModel.ISupportInitialize)(this.BltDataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BLT_API)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -131,5 +146,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn FilledPrice;
 
         private System.Windows.Forms.DataGridViewTextBoxColumn OrderTime;
+        private AxKHOpenAPILib.AxKHOpenAPI BLT_API;
     }
 }

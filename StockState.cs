@@ -65,20 +65,5 @@ namespace TaewooBot_v2
   
             return Signals;
         }
-
-        // TODO : 매수주문
-        public void SendBuyOrder()
-        {
-            BotParams.RqName = "주식주문";
-            var scr_no = utils.get_scr_no();
-            var ShortCode = states_ShortCode;
-            var curPrice = states_CurPrice;
-            var ordQty = Int32.Parse(Math.Truncate(1000000.0 / double.Parse(curPrice)).ToString());
-            var ordPrice = 0;
-            var hogaGb = "03";
-
-            // TODO : 파라미터 다시 확인
-            blt.SendBuyOrder(BotParams.RqName, scr_no, ShortCode, curPrice, ordQty, ordPrice, hogaGb);
-        }
     }
 }
