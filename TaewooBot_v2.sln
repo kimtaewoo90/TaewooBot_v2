@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaewooBot_v2", "TaewooBot_v2.csproj", "{BAF09718-C9D8-4970-BECA-3140F7FC7C49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "..\DataBase\DataBase.csproj", "{C1CC1972-A26C-433D-81FA-0B04C4049D25}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{BAF09718-C9D8-4970-BECA-3140F7FC7C49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAF09718-C9D8-4970-BECA-3140F7FC7C49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAF09718-C9D8-4970-BECA-3140F7FC7C49}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1CC1972-A26C-433D-81FA-0B04C4049D25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1CC1972-A26C-433D-81FA-0B04C4049D25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1CC1972-A26C-433D-81FA-0B04C4049D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1CC1972-A26C-433D-81FA-0B04C4049D25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

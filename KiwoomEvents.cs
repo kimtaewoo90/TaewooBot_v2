@@ -354,7 +354,18 @@ namespace TaewooBot_v2
                     if (BotParams.Deposit > 1000000 && BotParams.Accnt_StockName.ContainsKey(Code) is false)
                     {
                         telegram.SendTelegramMsg($"[{Code}/{KrName}] try to send Buy order");
-                        state.SendBuyOrder();
+
+                        // 바로 Blotter 로 주문 전송
+                        BotParams.RqName = "주식주문";
+                        var scr_no = utils.get_scr_no();
+                        var ShortCode = Code;
+                        var curPrice = Price;
+                        var ordQty = Int32.Parse(Math.Truncate(1000000.0 / curPrice).ToString());
+                        var ordPrice = 0;
+                        var hogaGb = "03";
+
+                        bltScreen.SendBuyOrder(scr_no, ShortCode, ordQty, ordPrice, hogaGb);
+                     
                     }
                 }
             }
