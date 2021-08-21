@@ -13,17 +13,16 @@ namespace TaewooBot_v2
     public partial class Blotter : Form
     {
 
-        public Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
-        public TelegramClass telegram = new TelegramClass();
+        Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
+        TelegramClass telegram = new TelegramClass();
+
+        Utils utils = new Utils();
 
         public Blotter()
         {
             InitializeComponent();
             this.BLT_API.OnReceiveChejanData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEventHandler(this.OnReceiveChejanData);
-
-
         }
-
 
 
         private void OnReceiveChejanData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEvent e)
@@ -101,10 +100,19 @@ namespace TaewooBot_v2
 
                     {
                         telegram.SendTelegramMsg($"{KrName1}의 수익률 {Change.ToString()} % / TradingPnL : {TradingPnL.ToString()}");
-                        
+
                         // Order 주문은 다 여기서 처리.
                         // 시장가 매도 주문
-                        state.SendSellOrder();
+                        BotParams.RqName = "주식주문";
+                        var scrNo = utils.get_scr_no();
+                        var ShortSellCode = ShortCode1;
+                        var curPrice = double.Parse(CurPrice);
+                        var ordQty = int.Parse(BalanceQty);
+                        var ordPrice = 0;
+                        var hogaGb = "03";   // 시장가 주문
+
+                        SendSellOrder(scrNo, ShortSellCode, ordQty, ordPrice, hogaGb);
+                        // state.SendSellOrder();
                     }
 
                     break;
@@ -129,7 +137,7 @@ namespace TaewooBot_v2
 
         }
 
-        public void SendSellOrder(string scr_no, string ShortCode, double curPrice, int ordQty, int ordPrice, string hogaGB)
+        public void SendSellOrder(string scr_no, string ShortCode, int ordQty, int ordPrice, string hogaGB)
         {
             telegram.SendTelegramMsg($"SellOrder {ShortCode}/{ordQty}");
             try

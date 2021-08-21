@@ -9,6 +9,8 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
+
 
 using System.Threading;
 
@@ -33,6 +35,9 @@ namespace TaewooBot_v2
         Blotter bltScreen = new Blotter();
         Utils utils = new Utils();
 
+        // Coin Thread
+        Thread CoinThread = null;
+
         TelegramClass telegram = new TelegramClass();
 
 
@@ -49,23 +54,6 @@ namespace TaewooBot_v2
             InitializeComponent();
 
             version.Text = "version : " + BotParams.version;
-
-            // Open Windows
-            logs.StartPosition = FormStartPosition.Manual;
-            logs.Location = new Point(755, 520);
-            logs.Show();
-
-            universe.StartPosition = FormStartPosition.Manual;
-            universe.Location = new Point(100, 520);
-            universe.Show();
-
-            bltScreen.StartPosition = FormStartPosition.Manual;
-            bltScreen.Location = new Point(860, 100);
-            bltScreen.Show();
-
-            position.StartPosition = FormStartPosition.Manual;
-            position.Location = new Point(100, 100);
-            position.Show();
 
             // Initialize Parameters
             utils.InitialParams();
@@ -151,9 +139,24 @@ namespace TaewooBot_v2
 
             if (BotParams.Market == "Stock")
             {
-                logs.write_sys_log(BotParams.Market, 0);
-                Login();
+                // Open Windows
+                logs.StartPosition = FormStartPosition.Manual;
+                logs.Location = new Point(755, 520);
+                logs.Show();
 
+                universe.StartPosition = FormStartPosition.Manual;
+                universe.Location = new Point(100, 520);
+                universe.Show();
+
+                bltScreen.StartPosition = FormStartPosition.Manual;
+                bltScreen.Location = new Point(860, 100);
+                bltScreen.Show();
+
+                position.StartPosition = FormStartPosition.Manual;
+                position.Location = new Point(100, 100);
+                position.Show();
+
+                logs.write_sys_log(BotParams.Market, 0);
 
                 // 자동매매 Thread 시작
                 if (BotParams.IsThread is true) // 스레드가 이미 생성된 상태라면
@@ -161,6 +164,8 @@ namespace TaewooBot_v2
                     logs.write_sys_log("AUTO TRADING SYSTEM is on already. \n", 0);
                     return;
                 }
+
+                Login();
 
                 logs.write_sys_log("AUTO TRADING SYSTEM is just started \r\n", 0);
                 BotParams.IsThread = true;
@@ -174,6 +179,27 @@ namespace TaewooBot_v2
                 GetDataThread.Start();
                 MonitoringSignalThread.Start();
             }
+
+            else if (BotParams.Market == "Coin")
+            {
+                logs.StartPosition = FormStartPosition.Manual;
+                logs.Location = new Point(755, 520);
+                logs.Show();
+
+                logs.write_sys_log($"Welcome to {BotParams.Market} world", 0);
+                
+                if(BotParams.CoinThread is true)
+                {
+                    logs.write_sys_log("Coin Auto trading System is on laready", 0);
+                    return;
+                }
+
+                logs.write_sys_log("Coin AUTO TRADING SYSTEM is just started \r\n", 0);
+                BotParams.CoinThread = true;
+                CoinThread = new Thread(new ThreadStart(CoinStart));
+                CoinThread.Start();
+
+            } 
         }
 
 
@@ -277,6 +303,24 @@ namespace TaewooBot_v2
 
         private void TestCheck_CheckedChanged(object sender, EventArgs e)
         {
+
+        }
+
+        public void CoinStart()
+        {
+            // access = "frGzp5hUEaQBNQ1uuO60Dx3QGkSm5ugsEVdfrpnr"
+            // secret = "L4wHqPfrfc7x8NYWHaL8IoUxbV8MBuhoxZG2ZHJa"
+
+
+            CoinMain coin = new CoinMain();
+
+            List<JObject> Result = coin.AccountInquiry();
+
+            for (int i = 0; i < Result.Count; i++)
+            {
+                // {{  "currency", "balance", "locked",  "avg_buy_price",  "avg_buy_price_modified",  "unit_currency"}}
+                logs.write_sys_log($"currency : {Result[i].GetValue("currency").ToString().Trim()} / balance : {Result[i].GetValue("balance").ToString().Trim()}", 0);
+            }
 
         }
     }
