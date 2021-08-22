@@ -87,8 +87,6 @@ namespace TaewooBot_v2
         public static List<List<string>> PositionList = new List<List<string>>();
 
 
-        // Coin
-
 
     }
 }

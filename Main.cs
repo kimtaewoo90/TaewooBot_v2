@@ -25,7 +25,7 @@ namespace TaewooBot_v2
         Thread GetDataThread = null;
         Thread MonitoringSignalThread = null;
         Thread BlotterThread = null;
-        Thread PositionTread = null;
+        Thread PositionThread = null;
 
         // Instance Other WinForms
         Logs logs = new Logs();
@@ -70,7 +70,6 @@ namespace TaewooBot_v2
             this.API.OnReceiveConditionVer += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveConditionVerEventHandler(this.OnReceiveConditionVer);
             this.API.OnReceiveTrCondition += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrConditionEventHandler(this.OnReceiveTrCondition);
             this.API.OnReceiveRealCondition += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealConditionEventHandler(this.OnReceiveRealCondition);
-
         }
 
         private void MarketType_SelectedIndexChanged(object sender, EventArgs e)
@@ -172,7 +171,7 @@ namespace TaewooBot_v2
                 GetDataThread = new Thread(new ThreadStart(GetData));
                 MonitoringSignalThread = new Thread(new ThreadStart(MonitoringSignal));
                 BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
-                PositionTread = new Thread(new ThreadStart(PositionDisplay));
+                PositionThread = new Thread(new ThreadStart(PositionDisplay));
                 GetTime = new Thread(new ThreadStart(GetCurrentTime));
 
                 GetTime.Start();
@@ -195,9 +194,12 @@ namespace TaewooBot_v2
                 }
 
                 logs.write_sys_log("Coin AUTO TRADING SYSTEM is just started \r\n", 0);
-                BotParams.CoinThread = true;
-                CoinThread = new Thread(new ThreadStart(CoinStart));
-                CoinThread.Start();
+                //BotParams.CoinThread = true;
+                //CoinThread = new Thread(new ThreadStart(CoinStart));
+                //PositionThread = new Thread(new ThreadStart(PositionDisplay));
+
+                //CoinThread.Start();
+                //PositionThread.Start();
 
             } 
         }
@@ -306,23 +308,7 @@ namespace TaewooBot_v2
 
         }
 
-        public void CoinStart()
-        {
-            // access = "frGzp5hUEaQBNQ1uuO60Dx3QGkSm5ugsEVdfrpnr"
-            // secret = "L4wHqPfrfc7x8NYWHaL8IoUxbV8MBuhoxZG2ZHJa"
 
-
-            CoinMain coin = new CoinMain();
-
-            List<JObject> Result = coin.AccountInquiry();
-
-            for (int i = 0; i < Result.Count; i++)
-            {
-                // {{  "currency", "balance", "locked",  "avg_buy_price",  "avg_buy_price_modified",  "unit_currency"}}
-                logs.write_sys_log($"currency : {Result[i].GetValue("currency").ToString().Trim()} / balance : {Result[i].GetValue("balance").ToString().Trim()}", 0);
-            }
-
-        }
     }
 
     class ConditionInfo
