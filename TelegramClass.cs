@@ -12,7 +12,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TaewooBot_v2
 {
-    class TelegramClass
+    public class TelegramClass
     {
         Logs logs = new Logs();
         public string ChatId { get; set; } = "1542664370";

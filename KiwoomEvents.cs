@@ -211,8 +211,6 @@ namespace TaewooBot_v2
                 universe.DisplayTargetStocks("Insert", Code, KrName, Price, "0", "0");
                 logs.write_sys_log($"[{BotParams.StockCnt}번째] {KrName}의 주식기본정보를 받아오는데에 성공하였습니다.", 0);
 
-                Console.WriteLine(compareTime);
-
                 // Update Dict
                 try
                 {
@@ -300,6 +298,7 @@ namespace TaewooBot_v2
 
                 double beforeAvg = 0;
 
+                // Total Tick List
                 if (!BotParams.TickList.ContainsKey(Code))
                 { 
                     beforeAvg = 0;
@@ -313,7 +312,7 @@ namespace TaewooBot_v2
                     BotParams.TickList[Code].Add(Convert.ToInt32(ContractLots));
                 }
 
-
+                // 1 Min Tick List
                 if (!BotParams.TickOneMinsList.ContainsKey(Code))
                 {
                     List<int> tempList = new List<int>() {Convert.ToInt32(ContractLots)};
@@ -324,6 +323,7 @@ namespace TaewooBot_v2
                     BotParams.TickOneMinsList[Code].Add(Convert.ToInt32(ContractLots));
                 }
 
+                // Compare Time for 1 MIn
                 if (DateTime.Parse(BotParams.CurTime) > compareTime.AddMinutes(1))
                 {
                     compareTime = DateTime.Parse(BotParams.CurTime);
@@ -338,6 +338,7 @@ namespace TaewooBot_v2
                 var state = new StockState(Code, KrName, Price.ToString(), highPrice.ToString(), Change.ToString(), ContractLots, BotParams.TickList[Code], BotParams.TickOneMinsList[Code], beforeAvg, DateTime.Parse(BotParams.CurTime));
                 stockState[Code] = state;                
 
+                // Save TickLog.txt
                 File.AppendAllText(BotParams.TickPath + BotParams.TickLogFileName, $"[{BotParams.CurTime}] : {Code} / {Price.ToString()} / {Change.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
 
                 // Display the RTD data on TargetStocks DataGridView
@@ -347,22 +348,29 @@ namespace TaewooBot_v2
                 
                 if (orderStocks is true)
                 {
-                    // TODO : Check Point : Can I request TrData(Update account) in receive Tr data session?
-                    logs.write_sys_log("Update Account Information", 0);
-                    GetAccountInformation();
-
                     if (BotParams.Deposit > 1000000 && BotParams.Accnt_StockName.ContainsKey(Code) is false)
                     {
                         telegram.SendTelegramMsg($"[{Code}/{KrName}] try to send Buy order");
-                        state.SendBuyOrder();
+
+                        // 바로 Blotter 로 주문 전송
+                        BotParams.RqName = "주식주문";
+                        var scr_no = utils.get_scr_no();
+                        var ShortCode = Code;
+                        var curPrice = Price;
+                        var ordQty = Int32.Parse(Math.Truncate(1000000.0 / curPrice).ToString());
+                        var ordPrice = 0;
+                        var hogaGb = "03";
+
+                        bltScreen.SendBuyOrder(scr_no, ShortCode, ordQty, ordPrice, hogaGb);
+                     
                     }
                 }
             }
 
-
+            // B06
             if (e.sRealType == "주식시세")
             {
-                // 체결 시 들어옴.
+                
             }
 
 

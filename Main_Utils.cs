@@ -27,8 +27,8 @@ namespace TaewooBot_v2
             API.SetInputValue("비밀번호입력매체구분", "00");
 
 
-            BotParams.RqName = "계좌평가현황요청";
-            API.CommRqData(BotParams.RqName, "OPW00004", 0, scr_no);
+            //BotParams.RqName = "계좌평가현황요청";
+            API.CommRqData("계좌평가현황요청", "OPW00004", 0, scr_no);
         }
 
         public void GetShortCodes(string market)

@@ -15,6 +15,7 @@ namespace TaewooBot_v2
         public static string UserID { get; set; }
         public static int ScrNo { get; set; }
         public static bool IsThread { get; set; }
+        public static bool CoinThread { get; set; }
         public static bool _SearchCondition { get; set; }
         public static bool _GetTrData { get; set; }
         public static bool _GetRTD { get; set; }
@@ -84,6 +85,7 @@ namespace TaewooBot_v2
         public static List<List<string>> BltList = new List<List<string>>();
         public static List<List<string>> AccountList = new List<List<string>>();
         public static List<List<string>> PositionList = new List<List<string>>();
+
 
 
     }
