@@ -61,9 +61,9 @@ namespace TaewooBot_v2
                 else
                 {
                     this.LogBox.AppendText("\n" + cur_dtm + text + Environment.NewLine);
+                    
                     // log 기록
-
-                    //File.AppendAllText(BotParams.Path + BotParams.LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
+                    File.AppendAllText(BotParams.Path + BotParams.LogFileName, cur_dtm + text + Environment.NewLine, Encoding.Default);
                 }
             }
         }

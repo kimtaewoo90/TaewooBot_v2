@@ -15,6 +15,7 @@ namespace TaewooBot_v2
 
         public Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
         public TelegramClass telegram = new TelegramClass();
+        public Utils utils = new Utils();
 
         public Blotter()
         {
@@ -58,7 +59,10 @@ namespace TaewooBot_v2
                     var FilledPrice = BLT_API.GetChejanData(910).Trim().ToString();
 
                     BotParams.BltList.Add(new List<string> { OrderTime, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice });
-                    //DisplayBLT(OrderTime, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice);
+
+                    // 매수 매도 후 잔고 갱신
+                    BLT_GetAccountInformation();
+
                     break;
 
                 // 국내주식 잔고변경
@@ -101,10 +105,16 @@ namespace TaewooBot_v2
 
                     {
                         telegram.SendTelegramMsg($"{KrName1}의 수익률 {Change.ToString()} % / TradingPnL : {TradingPnL.ToString()}");
-                        
+
                         // Order 주문은 다 여기서 처리.
                         // 시장가 매도 주문
-                        state.SendSellOrder();
+
+                        BotParams.RqName = "주식주문";
+                        var scr_no = utils.get_scr_no();
+                        var ordPrice = 0;
+                        var hogaGb = "03";
+
+                        SendSellOrder(scr_no, ShortCode1, int.Parse(BalanceQty), ordPrice, hogaGb);
                     }
 
                     break;
@@ -114,13 +124,15 @@ namespace TaewooBot_v2
 
         public void SendBuyOrder(string scr_no, string ShortCode, int ordQty, int ordPrice, string hogaGB)
         {
+
             telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty.ToString()}");
             try
             {
-                Console.WriteLine($"RqName : {BotParams.RqName} screen_no : {scr_no} Account Number : {BotParams.AccountNumber} OrderType : 1 ShortCode : {ShortCode} ordQty : {ordQty} ordPrice : {ordPrice} hogaGB : {hogaGB}");
                 // TODO : 매수잔량 취소 기능 추가
-                BLT_API.CreateControl();
-                BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 1, ShortCode, ordQty, 0, hogaGB, "");
+                var res = BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 1, ShortCode, ordQty, 0, hogaGB, "");
+
+                if (res == 0) telegram.SendTelegramMsg($"Success to Send BuyOrder {ShortCode}/{ordQty.ToString()}");
+                else telegram.SendTelegramMsg($"[{ShortCode}] Failed to Send BuyOrder, res : {res.ToString()}");
             }
             catch (Exception e)
             {
@@ -129,15 +141,15 @@ namespace TaewooBot_v2
 
         }
 
-        public void SendSellOrder(string scr_no, string ShortCode, double curPrice, int ordQty, int ordPrice, string hogaGB)
+        public void SendSellOrder(string scr_no, string ShortCode, int ordQty, int ordPrice, string hogaGB)
         {
             telegram.SendTelegramMsg($"SellOrder {ShortCode}/{ordQty}");
             try
             {
-                Console.WriteLine($"RqName : {BotParams.RqName} screen_no : {scr_no} Account Number : {BotParams.AccountNumber} OrderType : 1 ShortCode : {ShortCode} ordQty : {ordQty} ordPrice : {ordPrice} hogaGB : {hogaGB}");
+                var res = BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 3, ShortCode, ordQty, 0, "03", "");
 
-                BLT_API.CreateControl();
-                BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 3, ShortCode, ordQty, 0, "03", "");
+                if (res == 0) telegram.SendTelegramMsg($"Success to Send SellOrder {ShortCode}/{ordQty.ToString()}");
+                else telegram.SendTelegramMsg($"[{ShortCode}] Failed to Send SellOrder, res : {res.ToString()}");
             }
             catch (Exception e)
             {
@@ -147,7 +159,7 @@ namespace TaewooBot_v2
 
     // TODO : 신규주문(접수) 일 때 말고 정정 및 취소 일때 Action 추가
     public void DisplayBLT(List<List<string>> bltData)
-        {
+    {
 
             if (BltDataGrid.InvokeRequired)
             {
@@ -163,8 +175,22 @@ namespace TaewooBot_v2
             {
                 BltDataGrid.Rows.Add(bltData);
             }
-        }
-
     }
+        public void BLT_GetAccountInformation()
+        {
+            string scr_no = utils.get_scr_no();
+            BLT_API.SetInputValue("계좌번호", BotParams.AccountNumber);
+            BLT_API.SetInputValue("비밀번호", "");
+            BLT_API.SetInputValue("상장폐지조회구분", "0");
+            BLT_API.SetInputValue("비밀번호입력매체구분", "00");
+
+
+            //BotParams.RqName = "계좌평가현황요청";
+            BLT_API.CommRqData("계좌평가현황요청", "OPW00004", 0, scr_no);
+        }
+    }
+
+
+
 }
 

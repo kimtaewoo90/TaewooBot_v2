@@ -9,7 +9,6 @@ namespace TaewooBot_v2
     class StockState
     {
         //Blotter blt = new Blotter();
-        BlotterClass blt = new BlotterClass();
         Utils utils = new Utils();
 
         private string states_ShortCode { get; set; }
