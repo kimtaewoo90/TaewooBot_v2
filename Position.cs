@@ -17,6 +17,7 @@ namespace TaewooBot_v2
             InitializeComponent();
         }
 
+
         public void DisplayAccount(List<string> accountList)
         {
             if (TodayDataGrid.InvokeRequired)

@@ -13,18 +13,22 @@ namespace TaewooBot_v2
     public partial class Blotter : Form
     {
 
+<<<<<<< HEAD
         public Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
         public TelegramClass telegram = new TelegramClass();
         public Utils utils = new Utils();
+=======
+        Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
+        TelegramClass telegram = new TelegramClass();
+
+        Utils utils = new Utils();
+>>>>>>> f6d9534ca90e212dd0aa7197206d98965d16d58b
 
         public Blotter()
         {
             InitializeComponent();
             this.BLT_API.OnReceiveChejanData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEventHandler(this.OnReceiveChejanData);
-
-
         }
-
 
 
         private void OnReceiveChejanData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEvent e)
@@ -108,6 +112,7 @@ namespace TaewooBot_v2
 
                         // Order 주문은 다 여기서 처리.
                         // 시장가 매도 주문
+<<<<<<< HEAD
 
                         BotParams.RqName = "주식주문";
                         var scr_no = utils.get_scr_no();
@@ -115,6 +120,18 @@ namespace TaewooBot_v2
                         var hogaGb = "03";
 
                         SendSellOrder(scr_no, ShortCode1, int.Parse(BalanceQty), ordPrice, hogaGb);
+=======
+                        BotParams.RqName = "주식주문";
+                        var scrNo = utils.get_scr_no();
+                        var ShortSellCode = ShortCode1;
+                        var curPrice = double.Parse(CurPrice);
+                        var ordQty = int.Parse(BalanceQty);
+                        var ordPrice = 0;
+                        var hogaGb = "03";   // 시장가 주문
+
+                        SendSellOrder(scrNo, ShortSellCode, ordQty, ordPrice, hogaGb);
+                        // state.SendSellOrder();
+>>>>>>> f6d9534ca90e212dd0aa7197206d98965d16d58b
                     }
 
                     break;
