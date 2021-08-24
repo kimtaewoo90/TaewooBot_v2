@@ -72,19 +72,17 @@
             this.MarketType.Items.AddRange(new object[] {
             "Stock",
             "Coin"});
-            this.MarketType.Location = new System.Drawing.Point(13, 18);
-            this.MarketType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MarketType.Location = new System.Drawing.Point(9, 12);
             this.MarketType.Name = "MarketType";
-            this.MarketType.Size = new System.Drawing.Size(171, 26);
+            this.MarketType.Size = new System.Drawing.Size(121, 20);
             this.MarketType.TabIndex = 3;
             this.MarketType.SelectedIndexChanged += new System.EventHandler(this.MarketType_SelectedIndexChanged);
             // 
             // Start_Btn
             // 
-            this.Start_Btn.Location = new System.Drawing.Point(211, 14);
-            this.Start_Btn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Start_Btn.Location = new System.Drawing.Point(148, 9);
             this.Start_Btn.Name = "Start_Btn";
-            this.Start_Btn.Size = new System.Drawing.Size(107, 34);
+            this.Start_Btn.Size = new System.Drawing.Size(75, 23);
             this.Start_Btn.TabIndex = 4;
             this.Start_Btn.Text = "Start";
             this.Start_Btn.UseVisualStyleBackColor = true;
@@ -94,7 +92,6 @@
             // 
             this.API.Enabled = true;
             this.API.Location = new System.Drawing.Point(280, 74);
-            this.API.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.API.Name = "API";
             this.API.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("API.OcxState")));
             this.API.Size = new System.Drawing.Size(150, 143);
@@ -107,31 +104,29 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Status,
             this.CurrentTime});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 477);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 317);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 20, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(582, 32);
+            this.statusStrip1.Size = new System.Drawing.Size(407, 22);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "time";
             // 
             // Status
             // 
             this.Status.Name = "Status";
-            this.Status.Size = new System.Drawing.Size(210, 25);
+            this.Status.Size = new System.Drawing.Size(135, 17);
             this.Status.Text = "Welcome to TaewooBot";
             // 
             // CurrentTime
             // 
             this.CurrentTime.Name = "CurrentTime";
-            this.CurrentTime.Size = new System.Drawing.Size(82, 25);
+            this.CurrentTime.Size = new System.Drawing.Size(54, 17);
             this.CurrentTime.Text = "time line";
             // 
             // TestBtn
             // 
-            this.TestBtn.Location = new System.Drawing.Point(234, 1050);
-            this.TestBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TestBtn.Location = new System.Drawing.Point(164, 700);
             this.TestBtn.Name = "TestBtn";
-            this.TestBtn.Size = new System.Drawing.Size(107, 34);
+            this.TestBtn.Size = new System.Drawing.Size(75, 23);
             this.TestBtn.TabIndex = 10;
             this.TestBtn.Text = "Test";
             this.TestBtn.UseVisualStyleBackColor = true;
@@ -139,18 +134,16 @@
             // 
             // TestText
             // 
-            this.TestText.Location = new System.Drawing.Point(29, 1050);
-            this.TestText.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TestText.Location = new System.Drawing.Point(20, 700);
             this.TestText.Name = "TestText";
-            this.TestText.Size = new System.Drawing.Size(195, 28);
+            this.TestText.Size = new System.Drawing.Size(138, 21);
             this.TestText.TabIndex = 11;
             // 
             // DisplayBtn
             // 
-            this.DisplayBtn.Location = new System.Drawing.Point(401, 1050);
-            this.DisplayBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DisplayBtn.Location = new System.Drawing.Point(281, 700);
             this.DisplayBtn.Name = "DisplayBtn";
-            this.DisplayBtn.Size = new System.Drawing.Size(107, 34);
+            this.DisplayBtn.Size = new System.Drawing.Size(75, 23);
             this.DisplayBtn.TabIndex = 12;
             this.DisplayBtn.Text = "Display";
             this.DisplayBtn.UseVisualStyleBackColor = true;
@@ -158,10 +151,9 @@
             // 
             // DelBtn
             // 
-            this.DelBtn.Location = new System.Drawing.Point(517, 1050);
-            this.DelBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DelBtn.Location = new System.Drawing.Point(362, 700);
             this.DelBtn.Name = "DelBtn";
-            this.DelBtn.Size = new System.Drawing.Size(107, 34);
+            this.DelBtn.Size = new System.Drawing.Size(75, 23);
             this.DelBtn.TabIndex = 13;
             this.DelBtn.Text = "Delete";
             this.DelBtn.UseVisualStyleBackColor = true;
@@ -169,10 +161,9 @@
             // 
             // GetDeposit
             // 
-            this.GetDeposit.Location = new System.Drawing.Point(667, 1048);
-            this.GetDeposit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.GetDeposit.Location = new System.Drawing.Point(467, 699);
             this.GetDeposit.Name = "GetDeposit";
-            this.GetDeposit.Size = new System.Drawing.Size(107, 34);
+            this.GetDeposit.Size = new System.Drawing.Size(75, 23);
             this.GetDeposit.TabIndex = 14;
             this.GetDeposit.Text = "Deposit";
             this.GetDeposit.UseVisualStyleBackColor = true;
@@ -187,84 +178,74 @@
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.API);
-            this.groupBox3.Location = new System.Drawing.Point(13, 86);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Location = new System.Drawing.Point(9, 57);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox3.Size = new System.Drawing.Size(551, 183);
+            this.groupBox3.Size = new System.Drawing.Size(386, 122);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "계좌현황";
             // 
             // TotalPnLTextBox
             // 
-            this.TotalPnLTextBox.Location = new System.Drawing.Point(97, 124);
-            this.TotalPnLTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TotalPnLTextBox.Location = new System.Drawing.Point(68, 83);
             this.TotalPnLTextBox.Name = "TotalPnLTextBox";
-            this.TotalPnLTextBox.Size = new System.Drawing.Size(141, 28);
+            this.TotalPnLTextBox.Size = new System.Drawing.Size(100, 21);
             this.TotalPnLTextBox.TabIndex = 5;
             // 
             // DepositTextBox
             // 
-            this.DepositTextBox.Location = new System.Drawing.Point(97, 74);
-            this.DepositTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DepositTextBox.Location = new System.Drawing.Point(68, 49);
             this.DepositTextBox.Name = "DepositTextBox";
-            this.DepositTextBox.Size = new System.Drawing.Size(141, 28);
+            this.DepositTextBox.Size = new System.Drawing.Size(100, 21);
             this.DepositTextBox.TabIndex = 4;
             // 
             // AccountTextBox
             // 
-            this.AccountTextBox.Location = new System.Drawing.Point(97, 27);
-            this.AccountTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.AccountTextBox.Location = new System.Drawing.Point(68, 18);
             this.AccountTextBox.Name = "AccountTextBox";
-            this.AccountTextBox.Size = new System.Drawing.Size(141, 28);
+            this.AccountTextBox.Size = new System.Drawing.Size(100, 21);
             this.AccountTextBox.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 128);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(7, 85);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(86, 18);
+            this.label3.Size = new System.Drawing.Size(57, 12);
             this.label3.TabIndex = 2;
             this.label3.Text = "총 수익률";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 78);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(7, 52);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(62, 18);
+            this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 1;
             this.label2.Text = "예수금";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 32);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(7, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 18);
+            this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "계좌번호";
             // 
             // signalCnt
             // 
-            this.signalCnt.Location = new System.Drawing.Point(400, 68);
-            this.signalCnt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.signalCnt.Location = new System.Drawing.Point(280, 45);
             this.signalCnt.Name = "signalCnt";
-            this.signalCnt.Size = new System.Drawing.Size(141, 28);
+            this.signalCnt.Size = new System.Drawing.Size(100, 21);
             this.signalCnt.TabIndex = 6;
             // 
             // TestCheck
             // 
             this.TestCheck.AutoSize = true;
-            this.TestCheck.Location = new System.Drawing.Point(329, 20);
-            this.TestCheck.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TestCheck.Location = new System.Drawing.Point(230, 13);
             this.TestCheck.Name = "TestCheck";
-            this.TestCheck.Size = new System.Drawing.Size(69, 22);
+            this.TestCheck.Size = new System.Drawing.Size(49, 16);
             this.TestCheck.TabIndex = 17;
             this.TestCheck.Text = "Test";
             this.TestCheck.UseVisualStyleBackColor = true;
@@ -272,10 +253,9 @@
             // 
             // GetDataTextBox
             // 
-            this.GetDataTextBox.Location = new System.Drawing.Point(204, 30);
-            this.GetDataTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.GetDataTextBox.Location = new System.Drawing.Point(143, 20);
             this.GetDataTextBox.Name = "GetDataTextBox";
-            this.GetDataTextBox.Size = new System.Drawing.Size(141, 28);
+            this.GetDataTextBox.Size = new System.Drawing.Size(100, 21);
             this.GetDataTextBox.TabIndex = 18;
             // 
             // groupBox4
@@ -288,11 +268,9 @@
             this.groupBox4.Controls.Add(this.OrderTextBox);
             this.groupBox4.Controls.Add(this.MonitoringTextBox);
             this.groupBox4.Controls.Add(this.GetDataTextBox);
-            this.groupBox4.Location = new System.Drawing.Point(13, 278);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox4.Location = new System.Drawing.Point(9, 185);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox4.Size = new System.Drawing.Size(551, 200);
+            this.groupBox4.Size = new System.Drawing.Size(386, 133);
             this.groupBox4.TabIndex = 19;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Bot Status";
@@ -300,57 +278,51 @@
             // version
             // 
             this.version.AutoSize = true;
-            this.version.Location = new System.Drawing.Point(429, 177);
-            this.version.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.version.Location = new System.Drawing.Point(274, 118);
             this.version.Name = "version";
-            this.version.Size = new System.Drawing.Size(111, 18);
+            this.version.Size = new System.Drawing.Size(76, 12);
             this.version.TabIndex = 24;
             this.version.Text = "version view";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(9, 112);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(6, 75);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(115, 18);
+            this.label6.Size = new System.Drawing.Size(80, 12);
             this.label6.TabIndex = 23;
             this.label6.Text = "Order Thread";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 72);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(6, 48);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(154, 18);
+            this.label5.Size = new System.Drawing.Size(108, 12);
             this.label5.TabIndex = 22;
             this.label5.Text = "Monitoring Thread";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 34);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(6, 23);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(133, 18);
+            this.label4.Size = new System.Drawing.Size(93, 12);
             this.label4.TabIndex = 21;
             this.label4.Text = "GetData Thread";
             // 
             // OrderTextBox
             // 
-            this.OrderTextBox.Location = new System.Drawing.Point(204, 108);
-            this.OrderTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.OrderTextBox.Location = new System.Drawing.Point(143, 72);
             this.OrderTextBox.Name = "OrderTextBox";
-            this.OrderTextBox.Size = new System.Drawing.Size(141, 28);
+            this.OrderTextBox.Size = new System.Drawing.Size(100, 21);
             this.OrderTextBox.TabIndex = 20;
             // 
             // MonitoringTextBox
             // 
-            this.MonitoringTextBox.Location = new System.Drawing.Point(204, 68);
-            this.MonitoringTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MonitoringTextBox.Location = new System.Drawing.Point(143, 45);
             this.MonitoringTextBox.Name = "MonitoringTextBox";
-            this.MonitoringTextBox.Size = new System.Drawing.Size(141, 28);
+            this.MonitoringTextBox.Size = new System.Drawing.Size(100, 21);
             this.MonitoringTextBox.TabIndex = 19;
             // 
             // process1
@@ -365,10 +337,9 @@
             // 
             // ParamsBtn
             // 
-            this.ParamsBtn.Location = new System.Drawing.Point(407, 20);
-            this.ParamsBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ParamsBtn.Location = new System.Drawing.Point(285, 13);
             this.ParamsBtn.Name = "ParamsBtn";
-            this.ParamsBtn.Size = new System.Drawing.Size(107, 34);
+            this.ParamsBtn.Size = new System.Drawing.Size(75, 23);
             this.ParamsBtn.TabIndex = 20;
             this.ParamsBtn.Text = "Params";
             this.ParamsBtn.UseVisualStyleBackColor = true;
@@ -376,10 +347,10 @@
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(582, 509);
+            this.ClientSize = new System.Drawing.Size(407, 339);
             this.Controls.Add(this.ParamsBtn);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.TestCheck);
@@ -392,7 +363,6 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.Start_Btn);
             this.Controls.Add(this.MarketType);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "TaewooBot";

@@ -13,16 +13,9 @@ namespace TaewooBot_v2
     public partial class Blotter : Form
     {
 
-<<<<<<< HEAD
         public Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
         public TelegramClass telegram = new TelegramClass();
         public Utils utils = new Utils();
-=======
-        Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
-        TelegramClass telegram = new TelegramClass();
-
-        Utils utils = new Utils();
->>>>>>> f6d9534ca90e212dd0aa7197206d98965d16d58b
 
         public Blotter()
         {
@@ -105,14 +98,15 @@ namespace TaewooBot_v2
 
 
                     // 매도 주문
-                    if (BotParams.TickOneMinsList[ShortCode1].Average() < 0 || double.Parse(Change) > 3.0 || double.Parse(Change) < -0.9)
+                    if (BotParams.TickOneMinsList[ShortCode1].Average() < 0 
+                        || double.Parse(Change) > 3.0 || double.Parse(Change) < -0.9 
+                        || double.Parse(CurPrice) < double.Parse(BotParams.stockState[ShortCode1].states_highPrice) * 0.99)
 
                     {
                         telegram.SendTelegramMsg($"{KrName1}의 수익률 {Change.ToString()} % / TradingPnL : {TradingPnL.ToString()}");
 
                         // Order 주문은 다 여기서 처리.
                         // 시장가 매도 주문
-<<<<<<< HEAD
 
                         BotParams.RqName = "주식주문";
                         var scr_no = utils.get_scr_no();
@@ -120,18 +114,9 @@ namespace TaewooBot_v2
                         var hogaGb = "03";
 
                         SendSellOrder(scr_no, ShortCode1, int.Parse(BalanceQty), ordPrice, hogaGb);
-=======
-                        BotParams.RqName = "주식주문";
-                        var scrNo = utils.get_scr_no();
-                        var ShortSellCode = ShortCode1;
-                        var curPrice = double.Parse(CurPrice);
-                        var ordQty = int.Parse(BalanceQty);
-                        var ordPrice = 0;
-                        var hogaGb = "03";   // 시장가 주문
 
-                        SendSellOrder(scrNo, ShortSellCode, ordQty, ordPrice, hogaGb);
-                        // state.SendSellOrder();
->>>>>>> f6d9534ca90e212dd0aa7197206d98965d16d58b
+                        // 해당 종목 매도 시 다시 Tick Avg 계산.
+                        BotParams.TickList.Remove(ShortCode1);
                     }
 
                     break;
@@ -139,14 +124,15 @@ namespace TaewooBot_v2
         }
 
 
-        public void SendBuyOrder(string scr_no, string ShortCode, int ordQty, int ordPrice, string hogaGB)
+        public void SendBuyOrder(string scr_no, string ShortCode, int ordQty, long ordPrice, string hogaGB)
         {
 
-            telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty.ToString()}");
+            telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty}  / ShortCode length : {ShortCode.Length} ordQty length : {ordQty.ToString().Length}");
+
             try
             {
                 // TODO : 매수잔량 취소 기능 추가
-                var res = BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 1, ShortCode, ordQty, 0, hogaGB, "");
+                var res = BLT_API.SendOrder("주식주문", scr_no, "8003542111", 1, ShortCode.Trim(), ordQty, 0, hogaGB, "");
 
                 if (res == 0) telegram.SendTelegramMsg($"Success to Send BuyOrder {ShortCode}/{ordQty.ToString()}");
                 else telegram.SendTelegramMsg($"[{ShortCode}] Failed to Send BuyOrder, res : {res.ToString()}");
@@ -160,10 +146,10 @@ namespace TaewooBot_v2
 
         public void SendSellOrder(string scr_no, string ShortCode, int ordQty, int ordPrice, string hogaGB)
         {
-            telegram.SendTelegramMsg($"SellOrder {ShortCode}/{ordQty}");
+            telegram.SendTelegramMsg($"SellOrder {ShortCode}/{ordQty}  / ShortCode length : {ShortCode.Length} ordQty length : {ordQty.ToString().Length}");
             try
             {
-                var res = BLT_API.SendOrder(BotParams.RqName, scr_no, BotParams.AccountNumber, 3, ShortCode, ordQty, 0, "03", "");
+                var res = BLT_API.SendOrder("주식주문", scr_no, "8003542111", 3, ShortCode.Trim(), ordQty, 0, "03", "");
 
                 if (res == 0) telegram.SendTelegramMsg($"Success to Send SellOrder {ShortCode}/{ordQty.ToString()}");
                 else telegram.SendTelegramMsg($"[{ShortCode}] Failed to Send SellOrder, res : {res.ToString()}");

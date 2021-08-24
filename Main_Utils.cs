@@ -45,6 +45,12 @@ namespace TaewooBot_v2
                 BotParams.Codes = res.Split(new char[] { ';' });
             }
 
+            else if (market == "MM")
+            {
+                string[] ShortCodeList = System.IO.File.ReadAllLines(BotParams.Path + "ShortCode.txt");
+                BotParams.Codes = ShortCodeList;
+            }
+
             else
             {
                 string kospi = API.GetCodeListByMarket("0");
@@ -52,13 +58,16 @@ namespace TaewooBot_v2
                 string res = kospi + kosdaq;
                 BotParams.Codes = res.Split(new char[] { ';' });
             }
+
+            
+
         }
 
         // 전종목 주식데이터 요청
         public void RequestStocksData()
         {
             // 종목개수 제한...
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < BotParams.Codes.Length; i++)
             {
                 BotParams.StockCnt = i + 1;
                 string scr_no = utils.get_scr_no();

@@ -215,8 +215,8 @@ namespace TaewooBot_v2
                 try
                 {
                     List<int> arr = new List<int>();
-                    var state = new StockState(Code, KrName, Price, "0", "0", "0", arr, arr, 0.0, DateTime.Parse(BotParams.CurTime));
-                    stockState[Code] = state;
+                    var state = new StockState(Code, KrName, Price, "0", "0", "0", "0", arr, arr, 0.0, DateTime.Parse(BotParams.CurTime));
+                    BotParams.stockState[Code] = state;
 
                 }
                 catch (Exception err)
@@ -294,9 +294,11 @@ namespace TaewooBot_v2
                 string ContractLots = API.GetCommRealData(e.sRealType, 15).Trim().ToString(); // 체결량
                 //double buy_price = get_hoga_unit_price((int)Price, Code, -2);
                 double highPrice = double.Parse(API.GetCommRealData(e.sRealType, 17).Trim());
+                double lowPrice = double.Parse(API.GetCommRealData(e.sRealType, 18).Trim());
                 string TickTime = API.GetCommRealData(e.sRealType, 20).Trim().ToString();
 
                 double beforeAvg = 0;
+
 
                 // Total Tick List
                 if (!BotParams.TickList.ContainsKey(Code))
@@ -323,6 +325,9 @@ namespace TaewooBot_v2
                     BotParams.TickOneMinsList[Code].Add(Convert.ToInt32(ContractLots));
                 }
 
+                double lowOneMinPrice = double.Parse(BotParams.stockState[Code].states_lowPrice);
+                if (lowOneMinPrice > Price) lowOneMinPrice = Price;
+
                 // Compare Time for 1 MIn
                 if (DateTime.Parse(BotParams.CurTime) > compareTime.AddMinutes(1))
                 {
@@ -332,11 +337,23 @@ namespace TaewooBot_v2
                         BotParams.TickOneMinsList.Remove(Code);
                         BotParams.TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
                     }
+
+                    lowOneMinPrice = Price;
                 }
 
                 // Update stockState Dictionary
-                var state = new StockState(Code, KrName, Price.ToString(), highPrice.ToString(), Change.ToString(), ContractLots, BotParams.TickList[Code], BotParams.TickOneMinsList[Code], beforeAvg, DateTime.Parse(BotParams.CurTime));
-                stockState[Code] = state;                
+                var state = new StockState(Code, 
+                                           KrName, 
+                                           Price.ToString(), 
+                                           highPrice.ToString(),
+                                           lowOneMinPrice.ToString(),
+                                           Change.ToString(), 
+                                           ContractLots, 
+                                           BotParams.TickList[Code], 
+                                           BotParams.TickOneMinsList[Code], 
+                                           beforeAvg, 
+                                           DateTime.Parse(BotParams.CurTime));
+                BotParams.stockState[Code] = state;         
 
                 // Save TickLog.txt
                 File.AppendAllText(BotParams.TickPath + BotParams.TickLogFileName, $"[{BotParams.CurTime}] : {Code} / {Price.ToString()} / {Change.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
@@ -357,12 +374,16 @@ namespace TaewooBot_v2
                         var scr_no = utils.get_scr_no();
                         var ShortCode = Code;
                         var curPrice = Price;
-                        var ordQty = Int32.Parse(Math.Truncate(1000000.0 / curPrice).ToString());
+                        var ordQty = Convert.ToInt32(Math.Truncate(1000000.0 / curPrice));
                         var ordPrice = 0;
                         var hogaGb = "03";
 
                         bltScreen.SendBuyOrder(scr_no, ShortCode, ordQty, ordPrice, hogaGb);
-                     
+
+                        // reset signal.
+                        state.signal_1 = false;
+                        state.signal_2 = false;
+                        state.signal_3 = false;
                     }
                 }
             }

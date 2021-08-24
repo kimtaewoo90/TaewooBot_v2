@@ -40,9 +40,6 @@ namespace TaewooBot_v2
 
         TelegramClass telegram = new TelegramClass();
 
-
-        Dictionary<string, StockState> stockState = new Dictionary<string, StockState>();
-
         private DateTime compareTime { get; set; }
 
 
@@ -235,7 +232,7 @@ namespace TaewooBot_v2
                         batchData = true;
 
                         GetAccountInformation();
-                        GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
+                        GetShortCodes("MM");            // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
 
@@ -245,7 +242,7 @@ namespace TaewooBot_v2
                         compareTime = DateTime.Parse(BotParams.CurTime);
 
                         GetAccountInformation();
-                        GetShortCodes("Kosdaq");            // botParams.Codes 에 저장
+                        GetShortCodes("MM");            // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
                 }

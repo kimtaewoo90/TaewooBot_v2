@@ -8,7 +8,7 @@ namespace TaewooBot_v2
 {
     public static class BotParams
     {
-        public static string version { get; set; } = "2.0";
+        public static string version { get; set; } = "2.0.001";
         
         // Initialize global params
         public static string Market { get; set; }
@@ -73,6 +73,8 @@ namespace TaewooBot_v2
 
         public static Dictionary<string, List<string>> TickAvgDict = new Dictionary<string, List<string>>();
         public static Dictionary<string, List<string>> StockDict = new Dictionary<string, List<string>>();
+
+        public static Dictionary<string, StockState> stockState = new Dictionary<string, StockState>();
 
 
         // 계좌관련 Dictionary 설정

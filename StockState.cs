@@ -6,32 +6,40 @@ using System.Threading.Tasks;
 
 namespace TaewooBot_v2
 {
-    class StockState
+    public class StockState
     {
-<<<<<<< HEAD
-        //Blotter blt = new Blotter();
-=======
->>>>>>> f6d9534ca90e212dd0aa7197206d98965d16d58b
+
         Utils utils = new Utils();
 
-        private string states_ShortCode { get; set; }
-        private string states_KrName { get; set; }
-        private string states_CurPrice { get; set; }
-        private string states_highPrice { get; set; }
-        private string states_Change { get; set; }
-        private string states_ContractLots { get; set; }
-        private List<int> states_TickList { get; set; }
-        private List<int> states_TickOneMinList { get; set; }
-        private double states_BeforeAvg { get; set; }
-        private DateTime states_UpdateTime { get; set; }
+        public string states_ShortCode { get; set; }
+        public string states_KrName { get; set; }
+        public string states_CurPrice { get; set; }
+        public string states_highPrice { get; set; }
+        public string states_lowPrice { get; set; }
+        public string states_Change { get; set; }
+        public string states_ContractLots { get; set; }
+        public List<int> states_TickList { get; set; }
+        public List<int> states_TickOneMinList { get; set; }
+        public double states_BeforeAvg { get; set; }
+        public DateTime states_UpdateTime { get; set; }
 
-        private bool Signals { get; set; } = false;
-        private bool signal_1 { get; set; } = false;
-        private bool signal_2 { get; set; } = false;
-        private bool signal_3 { get; set; } = false;
+        public bool Signals { get; set; } = false;
+        public bool signal_1 { get; set; } = false;
+        public bool signal_2 { get; set; } = false;
+        public bool signal_3 { get; set; } = false;
 
 
-        public StockState(string ShortCode, string KrName, string curPrice, string highPrice, string change, string contactLots, List<int> tickList, List<int> tickOneList, double beforeAvg, DateTime updateTime)
+        public StockState(string ShortCode,
+                          string KrName,
+                          string curPrice,
+                          string highPrice,
+                          string lowPrice,
+                          string change, 
+                          string contactLots, 
+                          List<int> tickList, 
+                          List<int> tickOneList, 
+                          double beforeAvg, 
+                          DateTime updateTime)
         {
             states_ShortCode = ShortCode;
             states_KrName = KrName;
