@@ -45,6 +45,7 @@ namespace TaewooBot_v2
             states_KrName = KrName;
             states_CurPrice = curPrice;
             states_highPrice = highPrice;
+            states_lowPrice = lowPrice;
             states_Change = change;
             states_ContractLots = contactLots;
             states_UpdateTime = updateTime;
