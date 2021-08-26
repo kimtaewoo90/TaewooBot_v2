@@ -13,7 +13,6 @@ namespace TaewooBot_v2
     public partial class Blotter : Form
     {
 
-        public Dictionary<string, PositionState> State = new Dictionary<string, PositionState>();
         public TelegramClass telegram = new TelegramClass();
         public Utils utils = new Utils();
 
@@ -77,7 +76,7 @@ namespace TaewooBot_v2
 
                     // TODO
                     var state = new PositionState(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString());
-                    State[ShortCode1] = state;
+                    BotParams.PositionDict[ShortCode1] = state;
 
                     //position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString());
 
@@ -170,15 +169,15 @@ namespace TaewooBot_v2
                 {
                     for (int i = 0; i < bltData.Count; i++)
                     {
-                        BltDataGrid.Rows.Add(bltData[i]);
+                        BltDataGrid.Rows.Add(bltData[0], bltData[1], bltData[2], bltData[3], bltData[4], bltData[5], bltData[6], bltData[7], bltData[8]);
                     }
                 }));
             }
             else
             {
-                BltDataGrid.Rows.Add(bltData);
+                BltDataGrid.Rows.Add(bltData[0], bltData[1], bltData[2], bltData[3], bltData[4], bltData[5], bltData[6], bltData[7], bltData[8]);
             }
-    }
+        }
         public void BLT_GetAccountInformation()
         {
             string scr_no = utils.get_scr_no();

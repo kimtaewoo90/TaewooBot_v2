@@ -37,72 +37,77 @@ namespace TaewooBot_v2
             }
         }
 
-        public void DisplayPosition(List<string> positionList)
+        public void DisplayPosition(Dictionary<string, PositionState> positionDict)
         {
 
 
-            if(PositionDataGrid.InvokeRequired)
+            List<string> codes = positionDict.Keys.ToList();
+            var dataGridCnt = PositionDataGrid.Rows.Count;
+            var positionDictCnt = positionDict.Count;
+
+            if (PositionDataGrid.InvokeRequired)
             {
+             
                 PositionDataGrid.Invoke(new MethodInvoker(delegate ()
                 {
 
-                    int UpdateCnt = PositionDataGrid.Rows.Count;
-
-                    if (UpdateCnt > 0)
+                    for (int positionCnt = 0; positionCnt < positionDictCnt; positionCnt++)
                     {
-                        for (int i = 0; i < UpdateCnt - 1; i++)
+                        var shortCode = codes[positionCnt];
+                        var krName = positionDict[shortCode].position_KrName;
+                        var balance = positionDict[shortCode].position_BalanceQty;
+                        var buyPrice = positionDict[shortCode].position_BuyPrice;
+                        var curPrice = positionDict[shortCode].position_CurPrice;
+                        var change = positionDict[shortCode].position_Change;
+                        var tradingPnL = positionDict[shortCode].position_TradingPnL;
+
+                        for(int gridCnt = 0; gridCnt < dataGridCnt; gridCnt++)
                         {
-                            if (PositionDataGrid["StockCode", i].Value.ToString() == positionList[0])
+                            if (PositionDataGrid["Position_StockCode", gridCnt].Value.ToString() == codes[positionCnt].ToString())
                             {
-                                PositionDataGrid.Rows[i].Cells[0].Value = positionList[0];
-                                PositionDataGrid.Rows[i].Cells[1].Value = positionList[1];
-                                PositionDataGrid.Rows[i].Cells[2].Value = positionList[2];
-                                PositionDataGrid.Rows[i].Cells[3].Value = positionList[3];
-                                PositionDataGrid.Rows[i].Cells[4].Value = positionList[4];
-                                PositionDataGrid.Rows[i].Cells[5].Value = positionList[5] + "%";
-                                PositionDataGrid.Rows[i].Cells[6].Value = positionList[6];
+                                PositionDataGrid["Position_StockCode", gridCnt].Value = shortCode;
+                                PositionDataGrid["Position_KrName", gridCnt].Value = krName;
+                                PositionDataGrid["BalanceQty", gridCnt].Value = balance;
+                                PositionDataGrid["BuyPrice", gridCnt].Value = buyPrice;
+                                PositionDataGrid["CurPrice", gridCnt].Value = curPrice;
+                                PositionDataGrid["Change", gridCnt].Value = change;
+                                PositionDataGrid["TradingPnL", gridCnt].Value = tradingPnL;
                                 break;
                             }
                             else
-                            {
-                                PositionDataGrid.Rows.Add(positionList);
-                            }
+                                PositionDataGrid.Rows.Add(shortCode, krName, balance, buyPrice, curPrice, change, tradingPnL);
                         }
-                    }
-                    else
-                    {
-                        PositionDataGrid.Rows.Add(positionList);
                     }
                 }));
             }
             else
             {
-                int UpdateCnt = PositionDataGrid.Rows.Count;
-
-                if (UpdateCnt > 0)
+                for (int positionCnt = 0; positionCnt < positionDictCnt; positionCnt++)
                 {
-                    for (int i = 0; i < UpdateCnt - 1; i++)
+                    var shortCode = codes[positionCnt];
+                    var krName = positionDict[shortCode].position_KrName;
+                    var balance = positionDict[shortCode].position_BalanceQty;
+                    var buyPrice = positionDict[shortCode].position_BuyPrice;
+                    var curPrice = positionDict[shortCode].position_CurPrice;
+                    var change = positionDict[shortCode].position_Change;
+                    var tradingPnL = positionDict[shortCode].position_TradingPnL;
+
+                    for (int gridCnt = 0; gridCnt < dataGridCnt; gridCnt++)
                     {
-                        if (PositionDataGrid["StockCode", i].Value.ToString() == positionList[0])
+                        if (PositionDataGrid["Position_StockCode", gridCnt].Value.ToString() == codes[positionCnt].ToString())
                         {
-                            PositionDataGrid.Rows[i].Cells[0].Value = positionList[0];
-                            PositionDataGrid.Rows[i].Cells[1].Value = positionList[1];
-                            PositionDataGrid.Rows[i].Cells[2].Value = positionList[2];
-                            PositionDataGrid.Rows[i].Cells[3].Value = positionList[3];
-                            PositionDataGrid.Rows[i].Cells[4].Value = positionList[4];
-                            PositionDataGrid.Rows[i].Cells[5].Value = positionList[5] + "%";
-                            PositionDataGrid.Rows[i].Cells[6].Value = positionList[6];
+                            PositionDataGrid["Position_StockCode", gridCnt].Value = shortCode;
+                            PositionDataGrid["Position_KrName", gridCnt].Value = krName;
+                            PositionDataGrid["BalanceQty", gridCnt].Value = balance;
+                            PositionDataGrid["BuyPrice", gridCnt].Value = buyPrice;
+                            PositionDataGrid["CurPrice", gridCnt].Value = curPrice;
+                            PositionDataGrid["Change", gridCnt].Value = change;
+                            PositionDataGrid["TradingPnL", gridCnt].Value = tradingPnL;
                             break;
                         }
                         else
-                        {
-                            PositionDataGrid.Rows.Add(positionList);
-                        }
+                            PositionDataGrid.Rows.Add(shortCode, krName, balance, buyPrice, curPrice, change, tradingPnL);
                     }
-                }
-                else
-                {
-                    PositionDataGrid.Rows.Add(positionList);
                 }
             }
         }

@@ -88,6 +88,10 @@ namespace TaewooBot_v2
         public static List<List<string>> AccountList = new List<List<string>>();
         public static List<List<string>> PositionList = new List<List<string>>();
 
+        // Position Dictionary
+        public static Dictionary<string, PositionState> PositionDict = new Dictionary<string, PositionState>();
+
+
 
 
     }

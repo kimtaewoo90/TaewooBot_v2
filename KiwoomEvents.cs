@@ -367,6 +367,9 @@ namespace TaewooBot_v2
                 {
                     if (BotParams.Deposit > 1000000 && BotParams.Accnt_StockName.ContainsKey(Code) is false)
                     {
+
+                        logs.write_sys_log($"{Code} Signal is true", 0);
+
                         telegram.SendTelegramMsg($"[{Code}/{KrName}] try to send Buy order");
 
                         // 바로 Blotter 로 주문 전송

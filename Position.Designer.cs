@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             this.PositionDataGrid = new System.Windows.Forms.DataGridView();
-            this.Order_StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Order_StockName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TodayDataGrid = new System.Windows.Forms.DataGridView();
+            this.TodayPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TodayPnLPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TodayDeposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Position_StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Position_StockName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BalanceQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BuyPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CurPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Change = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TradingPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TodayDataGrid = new System.Windows.Forms.DataGridView();
-            this.TodayPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TodayPnLPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TodayDeposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TodayDataGrid)).BeginInit();
             this.SuspendLayout();
@@ -47,10 +47,9 @@
             // PositionDataGrid
             // 
             this.PositionDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.PositionDataGrid.CurrentCell = null;
             this.PositionDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Order_StockCode,
-            this.Order_StockName,
+            this.Position_StockCode,
+            this.Position_StockName,
             this.BalanceQty,
             this.BuyPrice,
             this.CurPrice,
@@ -61,41 +60,6 @@
             this.PositionDataGrid.RowTemplate.Height = 23;
             this.PositionDataGrid.Size = new System.Drawing.Size(753, 291);
             this.PositionDataGrid.TabIndex = 1;
-            // 
-            // Order_StockCode
-            // 
-            this.Order_StockCode.HeaderText = "종목코드";
-            this.Order_StockCode.Name = "Order_StockCode";
-            // 
-            // Order_StockName
-            // 
-            this.Order_StockName.HeaderText = "종목명";
-            this.Order_StockName.Name = "Order_StockName";
-            // 
-            // BalanceQty
-            // 
-            this.BalanceQty.HeaderText = "BalanceQuantity";
-            this.BalanceQty.Name = "BalanceQty";
-            // 
-            // BuyPrice
-            // 
-            this.BuyPrice.HeaderText = "BuyPrice";
-            this.BuyPrice.Name = "BuyPrice";
-            // 
-            // CurPrice
-            // 
-            this.CurPrice.HeaderText = "현재가";
-            this.CurPrice.Name = "CurPrice";
-            // 
-            // Change
-            // 
-            this.Change.HeaderText = "Change(%)";
-            this.Change.Name = "Change";
-            // 
-            // TradingPnL
-            // 
-            this.TradingPnL.HeaderText = "TradingPnL";
-            this.TradingPnL.Name = "TradingPnL";
             // 
             // TodayDataGrid
             // 
@@ -129,6 +93,41 @@
             this.TodayDeposit.HeaderText = "예수금";
             this.TodayDeposit.Name = "TodayDeposit";
             // 
+            // Position_StockCode
+            // 
+            this.Position_StockCode.HeaderText = "종목코드";
+            this.Position_StockCode.Name = "Position_StockCode";
+            // 
+            // Position_StockName
+            // 
+            this.Position_StockName.HeaderText = "종목명";
+            this.Position_StockName.Name = "Position_StockName";
+            // 
+            // BalanceQty
+            // 
+            this.BalanceQty.HeaderText = "BalanceQuantity";
+            this.BalanceQty.Name = "BalanceQty";
+            // 
+            // BuyPrice
+            // 
+            this.BuyPrice.HeaderText = "BuyPrice";
+            this.BuyPrice.Name = "BuyPrice";
+            // 
+            // CurPrice
+            // 
+            this.CurPrice.HeaderText = "현재가";
+            this.CurPrice.Name = "CurPrice";
+            // 
+            // Change
+            // 
+            this.Change.HeaderText = "Change(%)";
+            this.Change.Name = "Change";
+            // 
+            // TradingPnL
+            // 
+            this.TradingPnL.HeaderText = "TradingPnL";
+            this.TradingPnL.Name = "TradingPnL";
+            // 
             // Position
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -145,18 +144,18 @@
         }
 
         #endregion
-        private System.Windows.Forms.DataGridViewTextBoxColumn Order_StockCode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Order_StockName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BalanceQty;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BuyPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CurPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Change;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TradingPnL;
         public System.Windows.Forms.DataGridView PositionDataGrid;
         //private AxKHOpenAPILib.AxKHOpenAPI Position_API;
         private System.Windows.Forms.DataGridView TodayDataGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnL;
         private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnLPercent;
         private System.Windows.Forms.DataGridViewTextBoxColumn TodayDeposit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Position_StockCode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Position_StockName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BalanceQty;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BuyPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CurPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Change;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TradingPnL;
     }
 }

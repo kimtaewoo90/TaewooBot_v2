@@ -36,7 +36,7 @@ namespace TaewooBot_v2
         Utils utils = new Utils();
 
         // Coin Thread
-        Thread CoinThread = null;
+        //Thread CoinThread = null;
 
         TelegramClass telegram = new TelegramClass();
 
@@ -165,15 +165,24 @@ namespace TaewooBot_v2
 
                 logs.write_sys_log("AUTO TRADING SYSTEM is just started \r\n", 0);
                 BotParams.IsThread = true;
+
+                // Main Thread
                 GetDataThread = new Thread(new ThreadStart(GetData));
-                MonitoringSignalThread = new Thread(new ThreadStart(MonitoringSignal));
+                
+                // Blotter Thread
                 BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
+                
+                // Position Thread
                 PositionThread = new Thread(new ThreadStart(PositionDisplay));
+                
+                // Get global time Thread.
                 GetTime = new Thread(new ThreadStart(GetCurrentTime));
 
                 GetTime.Start();
                 GetDataThread.Start();
-                MonitoringSignalThread.Start();
+                BlotterThread.Start();
+                PositionThread.Start();
+                //MonitoringSignalThread.Start();
             }
 
             else if (BotParams.Market == "Coin")
@@ -285,17 +294,21 @@ namespace TaewooBot_v2
         public void PositionDisplay()
         {
             Position positionScreen = new Position();
-            int positionListCnt = 0;
-            int temp = 0;
+            var positionDictCnt = BotParams.PositionDict.Count;
+            var positionListCnt = BotParams.PositionList.Count;
 
             while (true)
             {
-                positionListCnt = BotParams.PositionList.Count;
+                var accountCntTemp = BotParams.PositionList.Count;
+                var positionCntTemp = BotParams.PositionDict.Count;
 
-                if (positionListCnt > temp)
+                //if (positionListCnt > accountCntTemp)
+                //    positionScreen.DisplayAccount(BotParams.AccountList[positionCntTemp - 1]);
+
+                if (positionCntTemp > positionDictCnt)
                 {
-                    temp = positionListCnt;
-                    positionScreen.DisplayAccount(BotParams.AccountList[temp - 1]);
+                    positionScreen.DisplayPosition(BotParams.PositionDict);
+                    positionDictCnt = BotParams.PositionDict.Count;
                 }
             }
         }
