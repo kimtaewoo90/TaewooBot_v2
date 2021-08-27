@@ -214,8 +214,14 @@ namespace TaewooBot_v2
                 // Update Dict
                 try
                 {
-                    List<int> arr = new List<int>();
-                    var state = new StockState(Code, KrName, Price, "0", "0", "0", "0", arr, arr, 0.0, DateTime.Parse(BotParams.CurTime));
+                    // Initialize BotParams parameters
+                    List<int> initializeTickList = new List<int>() { 0};
+                    List<int> initializeTickOneMinList = new List<int>() { 0 };
+
+                    BotParams.TickList[Code] = initializeTickList;
+                    BotParams.TickOneMinsList[Code] = initializeTickOneMinList;
+
+                    var state = new StockState(Code, KrName, Price, "0", "0", "0", "0", BotParams.TickList[Code], BotParams.TickOneMinsList[Code], 0.0, DateTime.Parse(BotParams.CurTime));
                     BotParams.stockState[Code] = state;
 
                 }
@@ -287,96 +293,78 @@ namespace TaewooBot_v2
             // A03
             if (e.sRealType == "주식체결")
             {
-                string Code = e.sRealKey;
-                string KrName = GetKrName(Code);
-                double Price = Math.Abs(double.Parse(API.GetCommRealData(e.sRealType, 10).Trim()));  // current price;
-                double Change = double.Parse(API.GetCommRealData(e.sRealType, 12));
-                string ContractLots = API.GetCommRealData(e.sRealType, 15).Trim().ToString(); // 체결량
+                string code = e.sRealKey;
+                string krName = GetKrName(code);
+                double price = Math.Abs(double.Parse(API.GetCommRealData(e.sRealType, 10).Trim()));  // current price;
+                string contractLots = API.GetCommRealData(e.sRealType, 15).Trim().ToString(); // 체결량
                 //double buy_price = get_hoga_unit_price((int)Price, Code, -2);
+                double startPrice = double.Parse(API.GetCommRealData(e.sRealType, 16).Trim());
                 double highPrice = double.Parse(API.GetCommRealData(e.sRealType, 17).Trim());
+                double change = Math.Round(price / startPrice, 2);
                 double lowPrice = double.Parse(API.GetCommRealData(e.sRealType, 18).Trim());
                 string TickTime = API.GetCommRealData(e.sRealType, 20).Trim().ToString();
 
-                double beforeAvg = 0;
-
-
                 // Total Tick List
-                if (!BotParams.TickList.ContainsKey(Code))
-                { 
-                    beforeAvg = 0;
-                    List<int> tempTickList = new List<int>() { Convert.ToInt32(ContractLots) };
-                    BotParams.TickList[Code] = tempTickList;
-                }
+                double beforeAvg = BotParams.TickList[code].Average();
+                BotParams.TickList[code].Add(Convert.ToInt32(contractLots));
+           
+                // 1 Min Tick List                
+                BotParams.TickOneMinsList[code].Add(Convert.ToInt32(contractLots));
 
-                else
-                { 
-                    beforeAvg = BotParams.TickList[Code].Average();
-                    BotParams.TickList[Code].Add(Convert.ToInt32(ContractLots));
-                }
-
-                // 1 Min Tick List
-                if (!BotParams.TickOneMinsList.ContainsKey(Code))
-                {
-                    List<int> tempList = new List<int>() {Convert.ToInt32(ContractLots)};
-                    BotParams.TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
-                }
-                else
-                {
-                    BotParams.TickOneMinsList[Code].Add(Convert.ToInt32(ContractLots));
-                }
-
-                double lowOneMinPrice = double.Parse(BotParams.stockState[Code].states_lowPrice);
-                if (lowOneMinPrice > Price) lowOneMinPrice = Price;
+                // Low price of 1 minutes
+                double lowOneMinPrice = double.Parse(BotParams.stockState[code].states_lowPrice);
+                if (startPrice > price || lowOneMinPrice > price)         
+                    lowOneMinPrice = price;
 
                 // Compare Time for 1 MIn
                 if (DateTime.Parse(BotParams.CurTime) > compareTime.AddMinutes(1))
                 {
                     compareTime = DateTime.Parse(BotParams.CurTime);
-                    if(BotParams.TickOneMinsList.ContainsKey(Code))
+                    if(BotParams.TickOneMinsList.ContainsKey(code))
                     {
-                        BotParams.TickOneMinsList.Remove(Code);
-                        BotParams.TickOneMinsList[Code] = new List<int> { Convert.ToInt32(ContractLots) };
+                        BotParams.TickOneMinsList.Remove(code);
+                        BotParams.TickOneMinsList[code] = new List<int> { Convert.ToInt32(contractLots) };
                     }
-
-                    lowOneMinPrice = Price;
+                    lowOneMinPrice = price;
                 }
 
                 // Update stockState Dictionary
-                var state = new StockState(Code, 
-                                           KrName, 
-                                           Price.ToString(), 
+                var state = new StockState(code, 
+                                           krName, 
+                                           price.ToString(), 
                                            highPrice.ToString(),
                                            lowOneMinPrice.ToString(),
-                                           Change.ToString(), 
-                                           ContractLots, 
-                                           BotParams.TickList[Code], 
-                                           BotParams.TickOneMinsList[Code], 
+                                           change.ToString(), 
+                                           contractLots, 
+                                           BotParams.TickList[code], 
+                                           BotParams.TickOneMinsList[code], 
                                            beforeAvg, 
                                            DateTime.Parse(BotParams.CurTime));
-                BotParams.stockState[Code] = state;         
+                BotParams.stockState[code] = state;         
 
                 // Save TickLog.txt
-                File.AppendAllText(BotParams.TickPath + BotParams.TickLogFileName, $"[{BotParams.CurTime}] : {Code} / {Price.ToString()} / {Change.ToString()} / {ContractLots}" + Environment.NewLine, Encoding.Default);
+                File.AppendAllText(BotParams.TickPath + BotParams.TickLogFileName, $"[{BotParams.CurTime}] : {code} / {price.ToString()} / {change.ToString()} / {contractLots}" + Environment.NewLine, Encoding.Default);
 
                 // Display the RTD data on TargetStocks DataGridView
-                universe.DisplayTargetStocks("Update", Code, "", Price.ToString(), BotParams.TickOneMinsList[Code].Average().ToString(), Change.ToString());
+                universe.DisplayTargetStocks("Update", code, "", price.ToString(), BotParams.TickOneMinsList[code].Average().ToString(), change.ToString());
 
-                bool orderStocks = state.MonitoringSignals();
-                
-                if (orderStocks is true)
+                bool signalsStocks = state.MonitoringSignals();
+
+                logs.write_sys_log($"{krName} {BotParams.TickList[code].Average()} / {beforeAvg} /  {BotParams.TickOneMinsList[code].Sum()}", 0);
+                if (signalsStocks is true)
                 {
-                    if (BotParams.Deposit > 1000000 && BotParams.Accnt_StockName.ContainsKey(Code) is false)
+                    if (BotParams.Deposit > 1000000 && BotParams.Accnt_StockName.ContainsKey(code) is false)
                     {
 
-                        logs.write_sys_log($"{Code} Signal is true", 0);
+                        logs.write_sys_log($"{code} Signal is true", 0);
 
-                        telegram.SendTelegramMsg($"[{Code}/{KrName}] try to send Buy order");
+                        telegram.SendTelegramMsg($"[{code}/{krName}] try to send Buy order");
 
                         // 바로 Blotter 로 주문 전송
                         BotParams.RqName = "주식주문";
                         var scr_no = utils.get_scr_no();
-                        var ShortCode = Code;
-                        var curPrice = Price;
+                        var ShortCode = code;
+                        var curPrice = price;
                         var ordQty = Convert.ToInt32(Math.Truncate(1000000.0 / curPrice));
                         var ordPrice = 0;
                         var hogaGb = "03";

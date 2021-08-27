@@ -58,11 +58,13 @@ namespace TaewooBot_v2
         // TODO : 시그널 확인 함수
         public bool MonitoringSignals()
         {
+            Console.Write($"{states_TickList.Average()}/{states_BeforeAvg} OneMinsList Sum : {states_TickOneMinList.Sum()}");
+
             if (double.Parse(states_CurPrice) >= double.Parse(states_highPrice))
                 signal_1 = true;
 
             // 기준 잡기.
-            if (states_TickList.Average() > states_BeforeAvg * 10)
+            if (states_TickList.Average() > states_BeforeAvg * 2)
                 signal_2 = true;
 
             // 거래대금도 detail 하게 다시 잡기

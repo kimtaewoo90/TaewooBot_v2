@@ -20,9 +20,7 @@ namespace TaewooBot_v2
     public partial class Utils
     {
         Logs logs = new Logs();
-        Universe universe = new Universe();
 
-        // Utils
         //  현재시간 불러오기
         public string get_cur_tm()
         {

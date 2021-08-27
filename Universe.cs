@@ -41,9 +41,9 @@ namespace TaewooBot_v2
                     if (TargetStocks["StockCode", i].Value.ToString() == StockCode)
                     {
                         TargetStocks.Rows[i].Cells[2].Value = Price;
-                        TargetStocks.Rows[i].Cells[3].Value = Change;
-                        TargetStocks.Rows[i].Cells[4].Value = TickSpeed;
-
+                        TargetStocks.Rows[i].Cells[3].Value = Math.Round(double.Parse(Change), 2).ToString();
+                        TargetStocks.Rows[i].Cells[4].Value = Math.Round(double.Parse(TickSpeed), 2).ToString();
+                        break;
                     }
                 }
             }
