@@ -20,29 +20,52 @@ namespace TaewooBot_v2
         }
 
 
-        public void DisplayTargetStocks(string Type, string StockCode, string StockName, string Price, string Change, string TickSpeed)
+        public void DisplayTargetStocks(string type, 
+                                        string stockCode, 
+                                        string stockName, 
+                                        string price, 
+                                        string change, 
+                                        string tickSpeed,
+                                        string highPrice,
+                                        string tickAvg,
+                                        string beforeAvg,
+                                        string totalVolume)
         {
-            if (Type == "Insert")
+            price = price.Replace("-", "");
+            price = price.Replace("+", "");
+            highPrice = price.Replace("-", "");
+
+            if (type == "Insert")
             {
                 int AddCnt = TargetStocks.Rows.Count;
                 // StockCode, StockKrName, Price, TickSpeed, PnL
 
-                TargetStocks.Rows.Add(StockCode, StockName, Price, TickSpeed, Change);
+                TargetStocks.Rows.Add(stockCode, stockName, price, 
+                                                            tickSpeed, 
+                                                            change, 
+                                                            highPrice, 
+                                                            tickAvg, 
+                                                            beforeAvg, 
+                                                           totalVolume);
 
 
-                logs.write_sys_log(StockCode + "종목이 추가 되었습니다.", 0);
+                logs.write_sys_log(stockCode + "종목이 추가 되었습니다.", 0);
             }
 
-            else if (Type == "Update")
+            else if (type == "Update")
             {
                 int UpdateCnt = TargetStocks.Rows.Count;
                 for (int i = 0; i < UpdateCnt - 1; i++)
                 {
-                    if (TargetStocks["StockCode", i].Value.ToString() == StockCode)
+                    if (TargetStocks["StockCode", i].Value.ToString() == stockCode)
                     {
-                        TargetStocks.Rows[i].Cells[2].Value = Price;
-                        TargetStocks.Rows[i].Cells[3].Value = Math.Round(double.Parse(Change), 2).ToString();
-                        TargetStocks.Rows[i].Cells[4].Value = Math.Round(double.Parse(TickSpeed), 2).ToString();
+                        TargetStocks.Rows[i].Cells[2].Value = String.Format("{0:0,0}", double.Parse(price));
+                        TargetStocks.Rows[i].Cells[3].Value = String.Format("{0:0,0}", double.Parse(tickSpeed));
+                        TargetStocks.Rows[i].Cells[4].Value = String.Format("{0:0,0}", double.Parse(change));
+                        TargetStocks.Rows[i].Cells[5].Value = String.Format("{0:0,0}", double.Parse(highPrice));
+                        TargetStocks.Rows[i].Cells[6].Value = String.Format("{0:0,0}", double.Parse(tickAvg));
+                        TargetStocks.Rows[i].Cells[7].Value = String.Format("{0:0,0}", double.Parse(beforeAvg)); 
+                        TargetStocks.Rows[i].Cells[8].Value = String.Format("{0:0,0}", double.Parse(totalVolume));
                         break;
                     }
                 }

@@ -19,7 +19,7 @@ namespace TaewooBot_v2
         {
             string code = TestText.Text;
 
-            universe.DisplayTargetStocks("Insert", code, GetKrName(code), BotParams.StockPriceDict[TestText.Text], "0", "0");
+            //universe.DisplayTargetStocks("Insert", code, GetKrName(code), BotParams.StockPriceDict[TestText.Text], "0", "0");
         }
 
         private void DelBtn_Click(object sender, EventArgs e)

@@ -34,7 +34,7 @@
             this.TodayPnLPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TodayDeposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Position_StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Position_StockName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Position_KrName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BalanceQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BuyPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CurPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,7 +49,7 @@
             this.PositionDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Position_StockCode,
-            this.Position_StockName,
+            this.Position_KrName,
             this.BalanceQty,
             this.BuyPrice,
             this.CurPrice,
@@ -98,10 +98,10 @@
             this.Position_StockCode.HeaderText = "종목코드";
             this.Position_StockCode.Name = "Position_StockCode";
             // 
-            // Position_StockName
+            // Position_KrName
             // 
-            this.Position_StockName.HeaderText = "종목명";
-            this.Position_StockName.Name = "Position_StockName";
+            this.Position_KrName.HeaderText = "종목명";
+            this.Position_KrName.Name = "Position_KrName";
             // 
             // BalanceQty
             // 
@@ -151,7 +151,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnLPercent;
         private System.Windows.Forms.DataGridViewTextBoxColumn TodayDeposit;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position_StockCode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Position_StockName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Position_KrName;
         private System.Windows.Forms.DataGridViewTextBoxColumn BalanceQty;
         private System.Windows.Forms.DataGridViewTextBoxColumn BuyPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn CurPrice;

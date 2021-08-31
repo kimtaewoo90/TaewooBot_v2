@@ -159,6 +159,8 @@ namespace TaewooBot_v2
             }
         }
 
+
+
     // TODO : 신규주문(접수) 일 때 말고 정정 및 취소 일때 Action 추가
     public void DisplayBLT(List<List<string>> bltData)
     {
@@ -169,7 +171,15 @@ namespace TaewooBot_v2
                 {
                     for (int i = 0; i < bltData.Count; i++)
                     {
-                        BltDataGrid.Rows.Add(bltData[0], bltData[1], bltData[2], bltData[3], bltData[4], bltData[5], bltData[6], bltData[7], bltData[8]);
+                        BltDataGrid.Rows.Add(bltData[i][0], 
+                                             bltData[i][1], 
+                                             bltData[i][2], 
+                                             bltData[i][3], 
+                                             bltData[i][4], 
+                                             bltData[i][5], 
+                                             bltData[i][6], 
+                                             bltData[i][7], 
+                                             bltData[i][8]);
                     }
                 }));
             }

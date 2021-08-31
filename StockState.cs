@@ -62,13 +62,14 @@ namespace TaewooBot_v2
 
             if (double.Parse(states_CurPrice) >= double.Parse(states_highPrice))
                 signal_1 = true;
+            signal_1 = true;
 
             // 기준 잡기.
-            if (states_TickList.Average() > states_BeforeAvg * 2)
+            if (states_TickList.Average() > states_BeforeAvg * 2 && states_BeforeAvg != 0)
                 signal_2 = true;
 
             // 거래대금도 detail 하게 다시 잡기
-            if (states_TickOneMinList.Sum() * double.Parse(states_CurPrice) > 1000000000)
+            if (states_TickOneMinList.Sum() * double.Parse(states_CurPrice) > 100000000)
                 signal_3 = true;
 
             if (signal_1 && signal_2 && signal_3)

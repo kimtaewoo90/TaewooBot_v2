@@ -78,6 +78,9 @@ namespace TaewooBot_v2
 
 
         // 계좌관련 Dictionary 설정
+        public static Dictionary<string, List<string>> Accnt_Position = new Dictionary<string, List<string>>();
+
+
         public static Dictionary<string, string> Accnt_StockName = new Dictionary<string, string>();
         public static Dictionary<string, string> Accnt_StockLots = new Dictionary<string, string>();
         public static Dictionary<string, string> Accnt_StockPnL = new Dictionary<string, string>();

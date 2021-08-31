@@ -34,7 +34,10 @@
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.StockChange = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TickSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Confirm = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.universe_highPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Universe_TickAvg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Universe_BeforeAvg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Universe_TotalVolume = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.TargetStocks)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,11 +50,14 @@
             this.Price,
             this.StockChange,
             this.TickSpeed,
-            this.Confirm});
+            this.universe_highPrice,
+            this.Universe_TickAvg,
+            this.Universe_BeforeAvg,
+            this.Universe_TotalVolume});
             this.TargetStocks.Location = new System.Drawing.Point(12, 12);
             this.TargetStocks.Name = "TargetStocks";
             this.TargetStocks.RowTemplate.Height = 23;
-            this.TargetStocks.Size = new System.Drawing.Size(643, 359);
+            this.TargetStocks.Size = new System.Drawing.Size(946, 359);
             this.TargetStocks.TabIndex = 0;
             // 
             // StockCode
@@ -79,16 +85,31 @@
             this.TickSpeed.HeaderText = "틱속도";
             this.TickSpeed.Name = "TickSpeed";
             // 
-            // Confirm
+            // universe_highPrice
             // 
-            this.Confirm.HeaderText = "Confirm";
-            this.Confirm.Name = "Confirm";
+            this.universe_highPrice.HeaderText = "고가";
+            this.universe_highPrice.Name = "universe_highPrice";
+            // 
+            // Universe_TickAvg
+            // 
+            this.Universe_TickAvg.HeaderText = "TickAvg";
+            this.Universe_TickAvg.Name = "Universe_TickAvg";
+            // 
+            // Universe_BeforeAvg
+            // 
+            this.Universe_BeforeAvg.HeaderText = "BeforeAvg";
+            this.Universe_BeforeAvg.Name = "Universe_BeforeAvg";
+            // 
+            // Universe_TotalVolume
+            // 
+            this.Universe_TotalVolume.HeaderText = "거래대금";
+            this.Universe_TotalVolume.Name = "Universe_TotalVolume";
             // 
             // Universe
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(662, 377);
+            this.ClientSize = new System.Drawing.Size(965, 377);
             this.Controls.Add(this.TargetStocks);
             this.Name = "Universe";
             this.Text = "Universe";
@@ -105,6 +126,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
         private System.Windows.Forms.DataGridViewTextBoxColumn StockChange;
         private System.Windows.Forms.DataGridViewTextBoxColumn TickSpeed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Confirm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn universe_highPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Universe_TickAvg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Universe_BeforeAvg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Universe_TotalVolume;
     }
 }

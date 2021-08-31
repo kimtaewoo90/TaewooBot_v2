@@ -67,6 +67,10 @@ namespace TaewooBot_v2
             this.API.OnReceiveConditionVer += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveConditionVerEventHandler(this.OnReceiveConditionVer);
             this.API.OnReceiveTrCondition += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrConditionEventHandler(this.OnReceiveTrCondition);
             this.API.OnReceiveRealCondition += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealConditionEventHandler(this.OnReceiveRealCondition);
+
+            // 주식 매수 매도
+            this.API.OnReceiveChejanData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEventHandler(this.OnReceiveChejanData);
+
         }
 
         private void MarketType_SelectedIndexChanged(object sender, EventArgs e)
@@ -173,7 +177,7 @@ namespace TaewooBot_v2
                 BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
                 
                 // Position Thread
-                PositionThread = new Thread(new ThreadStart(PositionDisplay));
+                // PositionThread = new Thread(new ThreadStart(PositionDisplay));
                 
                 // Get global time Thread.
                 GetTime = new Thread(new ThreadStart(GetCurrentTime));
@@ -181,7 +185,7 @@ namespace TaewooBot_v2
                 GetTime.Start();
                 GetDataThread.Start();
                 BlotterThread.Start();
-                PositionThread.Start();
+               // PositionThread.Start();
                 //MonitoringSignalThread.Start();
             }
 
@@ -307,7 +311,7 @@ namespace TaewooBot_v2
 
                 if (positionCntTemp > positionDictCnt)
                 {
-                    positionScreen.DisplayPosition(BotParams.PositionDict);
+                    //positionScreen.DisplayPosition(BotParams.PositionDict);
                     positionDictCnt = BotParams.PositionDict.Count;
                 }
             }
