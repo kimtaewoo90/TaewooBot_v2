@@ -393,6 +393,9 @@ namespace TaewooBot_v2
 
                         SendBuyOrder(scr_no, ShortCode, ordQty, ordPrice, hogaGb);
 
+                        // sleep 2 sec after Send buy order.
+                        utils.delay(2000);
+
                         // reset signal.
                         state.signal_1 = false;
                         state.signal_2 = false;
@@ -432,6 +435,7 @@ namespace TaewooBot_v2
             {
                 case "0":
                     var OrderTime = API.GetChejanData(908).Trim().ToString();
+                    var orderNmumber = API.GetChejanData(9203).Trim().ToString();
                     var ShortCode = API.GetChejanData(9001).Trim().ToString();
                     var KrName = API.GetChejanData(302).Trim().ToString();
                     var OrderType = API.GetChejanData(913).Trim().ToString();
@@ -441,7 +445,32 @@ namespace TaewooBot_v2
                     var OrderPrice = API.GetChejanData(901).Trim().ToString();
                     var FilledPrice = API.GetChejanData(910).Trim().ToString();
 
-                    BotParams.BltList.Add(new List<string> { OrderTime, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice });
+                    var curPrice = "";
+
+                    // OrderNumber && OrderType
+                    var orderNumberAndOrderType = new List<string>() { orderNmumber, OrderType };
+
+                    if (!BotParams.OrderNumberAndOrderType.ContainsKey(orderNumberAndOrderType))
+                    {
+                        BotParams.BltList = new List<string> { OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice };
+                        bltScreen.DisplayBLT(BotParams.BltList);
+
+                        BotParams.OrderNumberAndOrderType[orderNumberAndOrderType] = ShortCode;
+                     
+                    }
+
+                    // 체결된 주식만 OrderedStock 리스트에 추가
+                    if (!BotParams.OrderedStocks.Contains(ShortCode) && OrderType == "체결" && !BotParams.Accnt_Position.ContainsKey(ShortCode))
+                    {
+                        BotParams.OrderedStocks.Add(ShortCode);
+                        if (BotParams.OrderingStocks.Contains(ShortCode))
+                            BotParams.OrderingStocks.Remove(ShortCode);
+                    }
+
+                    if (!BotParams.OrderingStocks.Contains(ShortCode) && OrderType == "접수")
+                    {
+                        BotParams.OrderingStocks.Add(ShortCode);
+                    }
 
                     // 매수 매도 후 잔고 갱신
                     //BLT_GetAccountInformation();
@@ -460,26 +489,21 @@ namespace TaewooBot_v2
                     var Change = API.GetChejanData(8019).Trim().ToString();
                     var TradingPnL = (double.Parse(CurPrice) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
 
-                    BotParams.PositionList.Add(new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString() });
+                    BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString() };
 
-                    // TODO
                     var state = new PositionState(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString());
                     BotParams.PositionDict[ShortCode1] = state;
 
                     position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice, Change, TradingPnL.ToString());
 
+                    // Display Account Information
                     var todayPnL = API.GetChejanData(990).Trim().ToString();
                     var todayChange = API.GetChejanData(991).Trim().ToString();
+                    BotParams.Deposit = double.Parse(API.GetChejanData(951).Trim());
 
-                    // BotParams 계좌정보 Dictionary Update
-                    BotParams.Accnt_StockName[ShortCode1] = KrName1;
-                    BotParams.Accnt_StockLots[ShortCode1] = BalanceQty;
-                    BotParams.Accnt_StockPnL[ShortCode1] = Change;
-                    BotParams.Accnt_StockPnL_Won[ShortCode1] = TradingPnL.ToString();
+                    BotParams.AccountList = new List<string> { todayPnL, todayChange, BotParams.Deposit.ToString() };
 
-                    BotParams.AccountList.Add(new List<string> { KrName1, BalanceQty, Change, TradingPnL.ToString() });
-
-
+                    position.DisplayAccount(BotParams.AccountList);
                     /* 매도 시 Mode Class를 호출하여 각각의 Mode에서의 전략으로 매도 실행 */
                     /* ver2.0 에서는 여기에 바로 매도 로직 작성 */
 
@@ -519,10 +543,23 @@ namespace TaewooBot_v2
             try
             {
                 // TODO : 매수잔량 취소 기능 추가
-                var res = API.SendOrder("주식주문", scr_no, "8003542111", 1, ShortCode.Trim(), ordQty, 0, hogaGB, "");
+                if (!BotParams.OrderingStocks.Contains(ShortCode))
+                {
+                    var res = API.SendOrder("주식주문", scr_no, "8003542111", 1, ShortCode.Trim(), ordQty, 0, hogaGB, "");
 
-                if (res == 0) telegram.SendTelegramMsg($"Success to Send BuyOrder {ShortCode}/{ordQty.ToString()}");
-                else telegram.SendTelegramMsg($"[{ShortCode}] Failed to Send BuyOrder, res : {res.ToString()}");
+                    if (res == 0)
+                    {
+                        telegram.SendTelegramMsg($"Success to Send BuyOrder {ShortCode}/{ordQty.ToString()}");
+
+                    }
+                    else telegram.SendTelegramMsg($"[{ShortCode}] Failed to Send BuyOrder, res : {res.ToString()}");
+                }
+
+                else
+                {
+                    telegram.SendTelegramMsg($"[{ShortCode}] have ordering List");
+                }
+                    
             }
             catch (Exception e)
             {
@@ -538,7 +575,13 @@ namespace TaewooBot_v2
             {
                 var res = API.SendOrder("주식주문", scr_no, "8003542111", 3, ShortCode.Trim(), ordQty, 0, "03", "");
 
-                if (res == 0) telegram.SendTelegramMsg($"Success to Send SellOrder {ShortCode}/{ordQty.ToString()}");
+                if (res == 0)
+                {
+                    telegram.SendTelegramMsg($"Success to Send SellOrder {ShortCode}/{ordQty.ToString()}");
+                    // Sell 성공 시 public static Dictionary<List<string>, string> OrderNumberAndOrderType 삭제
+                    //if()
+                    
+                }
                 else telegram.SendTelegramMsg($"[{ShortCode}] Failed to Send SellOrder, res : {res.ToString()}");
             }
             catch (Exception e)

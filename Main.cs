@@ -23,9 +23,9 @@ namespace TaewooBot_v2
         // Thread 선언
         Thread GetTime = null;
         Thread GetDataThread = null;
-        Thread MonitoringSignalThread = null;
-        Thread BlotterThread = null;
-        Thread PositionThread = null;
+        //Thread MonitoringSignalThread = null;
+        //Thread BlotterThread = null;
+        //Thread PositionThread = null;
 
         // Instance Other WinForms
         Logs logs = new Logs();
@@ -174,7 +174,7 @@ namespace TaewooBot_v2
                 GetDataThread = new Thread(new ThreadStart(GetData));
                 
                 // Blotter Thread
-                BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
+                // BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
                 
                 // Position Thread
                 // PositionThread = new Thread(new ThreadStart(PositionDisplay));
@@ -184,7 +184,8 @@ namespace TaewooBot_v2
 
                 GetTime.Start();
                 GetDataThread.Start();
-                BlotterThread.Start();
+
+                //BlotterThread.Start();
                // PositionThread.Start();
                 //MonitoringSignalThread.Start();
             }
@@ -239,7 +240,7 @@ namespace TaewooBot_v2
             {
                 try
                 {
-                    if (BotParams.CurTime.CompareTo("08:30:01") >= 0 && BotParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
+                    if (BotParams.CurTime.CompareTo("08:59:30") >= 0 && BotParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
                     {
                         compareTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
@@ -270,53 +271,9 @@ namespace TaewooBot_v2
 
         }
 
-        // Thread2 (Monitoring Thread)
-        public void MonitoringSignal()
-        {
-            // TODO : 여기에 계좌정보 계속 업데이트 하면서 Sell Signal 일 때 매도 주문 전송.
-            // PositionState에서 정의된 State Dictionary를 무한루프로 계속 모니터링.
-        }
-
-        public void BlotterDisplay()
-        {
-            
-            int bltListCnt = 0;
-            int temp = 0;
-
-            while(true)
-            {
-                bltListCnt = BotParams.BltList.Count;
-               
-                if(bltListCnt > temp)
-                {      
-                    temp = bltListCnt;
-                    bltScreen.DisplayBLT(BotParams.BltList);
-                }
-            }
-        }
-
-        public void PositionDisplay()
-        {
-            Position positionScreen = new Position();
-            var positionDictCnt = BotParams.PositionDict.Count;
-            var positionListCnt = BotParams.PositionList.Count;
-
-            while (true)
-            {
-                var accountCntTemp = BotParams.PositionList.Count;
-                var positionCntTemp = BotParams.PositionDict.Count;
-
-                //if (positionListCnt > accountCntTemp)
-                //    positionScreen.DisplayAccount(BotParams.AccountList[positionCntTemp - 1]);
-
-                if (positionCntTemp > positionDictCnt)
-                {
-                    //positionScreen.DisplayPosition(BotParams.PositionDict);
-                    positionDictCnt = BotParams.PositionDict.Count;
-                }
-            }
-        }
-
+    
+      
+      
         private void TestCheck_CheckedChanged(object sender, EventArgs e)
         {
 

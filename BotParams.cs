@@ -87,9 +87,13 @@ namespace TaewooBot_v2
         public static Dictionary<string, string> Accnt_StockPnL_Won = new Dictionary<string, string>();
 
         // Blotter List
-        public static List<List<string>> BltList = new List<List<string>>();
-        public static List<List<string>> AccountList = new List<List<string>>();
-        public static List<List<string>> PositionList = new List<List<string>>();
+        public static List<string> BltList = new List<string>();
+        public static List<string> AccountList = new List<string>();
+        public static List<string> PositionList = new List<string>();
+        public static List<string> OrderedStocks = new List<string>();
+        public static List<string> OrderingStocks = new List<string>();
+
+        public static Dictionary<List<string>, string> OrderNumberAndOrderType = new Dictionary<List<string>, string>();
 
         // Position Dictionary
         public static Dictionary<string, PositionState> PositionDict = new Dictionary<string, PositionState>();
