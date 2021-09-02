@@ -18,9 +18,8 @@ namespace TaewooBot_v2
         public string states_lowPrice { get; set; }
         public string states_Change { get; set; }
         public string states_ContractLots { get; set; }
-        public List<int> states_TickList { get; set; }
-        public List<int> states_TickOneMinList { get; set; }
-        public double states_BeforeAvg { get; set; }
+        public List<double> states_TickList { get; set; }
+        public List<double> states_TickOneMinList { get; set; }
         public DateTime states_UpdateTime { get; set; }
 
         public bool Signals { get; set; } = false;
@@ -36,9 +35,8 @@ namespace TaewooBot_v2
                           string lowPrice,
                           string change, 
                           string contactLots, 
-                          List<int> tickList, 
-                          List<int> tickOneList, 
-                          double beforeAvg, 
+                          List<double> tickList, 
+                          List<double> tickOneList, 
                           DateTime updateTime)
         {
             states_ShortCode = ShortCode;
@@ -51,21 +49,18 @@ namespace TaewooBot_v2
             states_UpdateTime = updateTime;
             states_TickList = tickList;
             states_TickOneMinList = tickOneList;
-            states_BeforeAvg = beforeAvg;
             states_UpdateTime = updateTime;
         }
 
         // TODO : 시그널 확인 함수
         public bool MonitoringSignals()
         {
-            Console.Write($"{states_TickList.Average()}/{states_BeforeAvg} OneMinsList Sum : {states_TickOneMinList.Sum()}");
-
             if (double.Parse(states_CurPrice) >= double.Parse(states_highPrice))
                 signal_1 = true;
             signal_1 = true;
 
             // 기준 잡기.
-            if (states_TickList.Average() > states_BeforeAvg * 2 && states_BeforeAvg != 0)
+            if (states_TickList.Average() > BotParams.BeforeAvg[states_ShortCode] * 2 && BotParams.BeforeAvg[states_ShortCode] != 0)
                 signal_2 = true;
 
             // 거래대금도 detail 하게 다시 잡기

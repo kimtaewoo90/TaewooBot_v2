@@ -56,8 +56,9 @@ namespace TaewooBot_v2
         public static string SignalPrice { get; set; } = null;
 
         // Tick Speed Dictionary.
-        public static Dictionary<string, List<int>> TickList = new Dictionary<string, List<int>>();
-        public static Dictionary<string, List<int>> TickOneMinsList = new Dictionary<string, List<int>>();
+        public static Dictionary<string, List<double>> TickList = new Dictionary<string, List<double>>();
+        public static Dictionary<string, List<double>> TickOneMinsList = new Dictionary<string, List<double>>();
+        public static Dictionary<string, double> BeforeAvg = new Dictionary<string, double>();
 
         // Test
         public static int StockCnt { get; set; } = 0;
@@ -93,7 +94,12 @@ namespace TaewooBot_v2
         public static List<string> OrderedStocks = new List<string>();
         public static List<string> OrderingStocks = new List<string>();
 
+        
         public static Dictionary<List<string>, string> OrderNumberAndOrderType = new Dictionary<List<string>, string>();
+        public static Dictionary<string, BlotterState> BlotterStateDict = new Dictionary<string, BlotterState>();
+
+        // Order
+        public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();
 
         // Position Dictionary
         public static Dictionary<string, PositionState> PositionDict = new Dictionary<string, PositionState>();

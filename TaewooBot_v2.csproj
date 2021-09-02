@@ -108,6 +108,7 @@
     <Compile Include="Blotter.Designer.cs">
       <DependentUpon>Blotter.cs</DependentUpon>
     </Compile>
+    <Compile Include="BlotterState.cs" />
     <Compile Include="BotParams.cs" />
     <Compile Include="KiwoomEvents.cs">
       <SubType>Form</SubType>
