@@ -102,10 +102,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blotter.cs">
+    <Compile Include="DisplayModule\Blotter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Blotter.Designer.cs">
+    <Compile Include="DisplayModule\Blotter.Designer.cs">
       <DependentUpon>Blotter.cs</DependentUpon>
     </Compile>
     <Compile Include="BlotterState.cs" />
@@ -113,10 +113,10 @@
     <Compile Include="KiwoomEvents.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Logs.cs">
+    <Compile Include="DisplayModule\Logs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Logs.Designer.cs">
+    <Compile Include="DisplayModule\Logs.Designer.cs">
       <DependentUpon>Logs.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
@@ -128,16 +128,16 @@
     <Compile Include="Main_Utils.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Params.cs">
+    <Compile Include="DisplayModule\Params.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Params.Designer.cs">
+    <Compile Include="DisplayModule\Params.Designer.cs">
       <DependentUpon>Params.cs</DependentUpon>
     </Compile>
-    <Compile Include="Position.cs">
+    <Compile Include="DisplayModule\Position.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Position.Designer.cs">
+    <Compile Include="DisplayModule\Position.Designer.cs">
       <DependentUpon>Position.cs</DependentUpon>
     </Compile>
     <Compile Include="PositionState.cs" />
@@ -148,26 +148,26 @@
     <Compile Include="Test.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Universe.cs">
+    <Compile Include="DisplayModule\Universe.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Universe.Designer.cs">
+    <Compile Include="DisplayModule\Universe.Designer.cs">
       <DependentUpon>Universe.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
-    <EmbeddedResource Include="Blotter.resx">
+    <EmbeddedResource Include="DisplayModule\Blotter.resx">
       <DependentUpon>Blotter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Logs.resx">
+    <EmbeddedResource Include="DisplayModule\Logs.resx">
       <DependentUpon>Logs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Params.resx">
+    <EmbeddedResource Include="DisplayModule\Params.resx">
       <DependentUpon>Params.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Position.resx">
+    <EmbeddedResource Include="DisplayModule\Position.resx">
       <DependentUpon>Position.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -179,7 +179,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Universe.resx">
+    <EmbeddedResource Include="DisplayModule\Universe.resx">
       <DependentUpon>Universe.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

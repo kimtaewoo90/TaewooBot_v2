@@ -8,7 +8,7 @@ namespace TaewooBot_v2
 {
     public class BlotterState
     {
-        public DateTime OrderTime { get; set; }
+        public string OrderTime { get; set; }
         public string OrderNumber { get; set; }
         public string ShortCode { get; set; }
         public string KrName { get; set; }
@@ -19,7 +19,7 @@ namespace TaewooBot_v2
         public double OrderPrice { get; set; }
         public double FilledPrice { get; set; }
 
-        public BlotterState(DateTime orderTime, 
+        public BlotterState(string orderTime, 
                             string orderNumber, 
                             string shortCode, 
                             string krName, 

@@ -525,7 +525,7 @@ namespace TaewooBot_v2
                     BotParams.SellSignals[ShortCode1] = false;
 
                     // Monitoring Sell Signals
-                    if (DateTime.Parse(BotParams.BlotterStateDict[ShortCode1].OrderTime).AddSeconds(20) < DateTime.Parse(BotParams.CurTime) && double.Parse(CurPrice) != 0.0)
+                    if (DateTime.Parse(BotParams.BlotterStateDict[ShortCode1].OrderTime).AddSeconds(30) < DateTime.Parse(BotParams.CurTime) && double.Parse(CurPrice) != 0.0)
                     {
                         if (double.Parse(CurPrice) < double.Parse(BuyPrice))
                         {
@@ -533,12 +533,13 @@ namespace TaewooBot_v2
                             telegram.SendTelegramMsg($"[{ShortCode1}] cur_price < buy_price");
                         }
 
-                        if (double.Parse(Change) > 3.0 || double.Parse(Change) < -0.9)
+                        if (double.Parse(Change) > 0.03 || double.Parse(Change) < -0.009)
                         {
                             BotParams.SellSignals[ShortCode1] = true;
                             telegram.SendTelegramMsg($"[{ShortCode1}] Target change rates");
                         }
 
+                        //TODO : Get Parameters
                         if (BotParams.BeforeAvg[ShortCode1] > BotParams.TickOneMinsList[ShortCode1].Average() * 2)
                         {
                             BotParams.SellSignals[ShortCode1] = true;
