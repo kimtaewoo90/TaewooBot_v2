@@ -2,4 +2,8 @@
 /obj
 /.vs
 /LogFile
+*.txt
+*.csproj
+*.sln
+*.config
 
