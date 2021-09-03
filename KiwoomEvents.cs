@@ -437,6 +437,7 @@ namespace TaewooBot_v2
             {
                 case "0":
                     var OrderTime = API.GetChejanData(908).Trim().ToString();
+                    OrderTime = OrderTime.Substring(0, 2) + ":" + OrderTime.Substring(2, 2) + ":" + OrderTime.Substring(4, 2);
                     var orderNmumber = API.GetChejanData(9203).Trim().ToString();
                     var ShortCode = API.GetChejanData(9001).Trim().ToString();
                     var KrName = API.GetChejanData(302).Trim().ToString();
@@ -467,7 +468,8 @@ namespace TaewooBot_v2
                         BotParams.TickOneMinsList[ShortCode] = new List<double>() { 0.0 };
                         BotParams.BeforeAvg[ShortCode] = BotParams.TickList[ShortCode].Average();
 
-                        var blotterState = new BlotterState(DateTime.Parse(OrderTime), orderNmumber, ShortCode, KrName, OrderType, Type, double.Parse(OrderQty), double.Parse(FilledQty), double.Parse(OrderPrice), double.Parse(FilledPrice));
+                       
+                        var blotterState = new BlotterState(OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, double.Parse(OrderQty), double.Parse(FilledQty), double.Parse(OrderPrice), double.Parse(FilledPrice));
                         BotParams.BlotterStateDict[ShortCode] = blotterState;
                         
                         BotParams.OrderedStocks.Add(ShortCode);
@@ -523,7 +525,7 @@ namespace TaewooBot_v2
                     BotParams.SellSignals[ShortCode1] = false;
 
                     // Monitoring Sell Signals
-                    if (BotParams.BlotterStateDict[ShortCode1].OrderTime.AddSeconds(20) < DateTime.Parse(BotParams.CurTime) && double.Parse(CurPrice) != 0.0)
+                    if (DateTime.Parse(BotParams.BlotterStateDict[ShortCode1].OrderTime).AddSeconds(20) < DateTime.Parse(BotParams.CurTime) && double.Parse(CurPrice) != 0.0)
                     {
                         if (double.Parse(CurPrice) < double.Parse(BuyPrice))
                         {
