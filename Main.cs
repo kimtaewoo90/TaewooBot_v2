@@ -39,12 +39,9 @@ namespace TaewooBot_v2
         //Thread CoinThread = null;
 
         TelegramClass telegram = new TelegramClass();
-
-        private DateTime compareTime { get; set; }
-
+        Strategy.Strategy1 strategy1 = new Strategy.Strategy1();
 
         delegate void Ctr_Involk(Control ctr, string text);
-
 
         public Main()
         {
@@ -242,7 +239,7 @@ namespace TaewooBot_v2
                 {
                     if (BotParams.CurTime.CompareTo("08:59:30") >= 0 && BotParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
                     {
-                        compareTime = DateTime.Parse(BotParams.CurTime);
+                        BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
 
                         GetAccountInformation();
@@ -253,7 +250,7 @@ namespace TaewooBot_v2
                     else if (TestCheck.Checked && batchData == false)
                     {
                         batchData = true;
-                        compareTime = DateTime.Parse(BotParams.CurTime);
+                        BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
 
                         GetAccountInformation();
                         GetShortCodes("MM");            // botParams.Codes 에 저장
@@ -271,9 +268,6 @@ namespace TaewooBot_v2
 
         }
 
-    
-      
-      
         private void TestCheck_CheckedChanged(object sender, EventArgs e)
         {
 
