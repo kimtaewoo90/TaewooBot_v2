@@ -323,45 +323,20 @@ namespace TaewooBot_v2
                 double lowPrice = double.Parse(API.GetCommRealData(e.sRealType, 18).Trim());
                 string TickTime = API.GetCommRealData(e.sRealType, 20).Trim().ToString();
 
-                // Total Tick List
-                BotParams.TickList[code].Add(double.Parse(contractLots));
-                
-                //
-
-
-                // 1 Min Tick List                
-                BotParams.TickOneMinsList[code].Add(double.Parse(contractLots));
-
-                // Low price of 1 minutes
-                double lowOneMinPrice = double.Parse(BotParams.stockState[code].states_lowPrice);
-                if (startPrice > price || lowOneMinPrice > price)         
-                    lowOneMinPrice = price;
-
-                compareTime = BotParams.stockState[code].states_UpdateTime;
-                // Compare Time for 1 MIn
-                if (DateTime.Parse(BotParams.CurTime) > compareTime.AddMinutes(1))
-                {
-                    compareTime = DateTime.Parse(BotParams.CurTime);
-                    if(BotParams.TickOneMinsList.ContainsKey(code))
-                    {
-                        BotParams.TickOneMinsList.Remove(code);
-                        BotParams.TickOneMinsList[code] = new List<double> { double.Parse(contractLots) };
-                    }
-                    lowOneMinPrice = price;
-                    BotParams.BeforeAvg[code] = BotParams.TickList[code].Average();
-                }
+                // Strategy1 
+                strategy1.CalculateTickSpeed(code, contractLots, price, startPrice);
 
                 // Update stockState Dictionary
                 var state = new StockState(code, 
                                            krName, 
                                            price.ToString(), 
                                            highPrice.ToString(),
-                                           lowOneMinPrice.ToString(),
+                                           BotParams.LowPriceOneMinute[code].ToString(),
                                            change.ToString(), 
                                            contractLots, 
                                            BotParams.TickList[code], 
-                                           BotParams.TickOneMinsList[code], 
-                                           compareTime);
+                                           BotParams.TickOneMinsList[code],
+                                           BotParams.comparedTime);
                 BotParams.stockState[code] = state;         
 
                 // Save TickLog.txt
@@ -373,13 +348,17 @@ namespace TaewooBot_v2
                                                 BotParams.TickList[code].Average().ToString(), BotParams.BeforeAvg[code].ToString(), 
                                                 (BotParams.TickOneMinsList[code].Sum() * price).ToString());
 
-                bool signalsStocks = state.MonitoringSignals();
+                bool signalsStocks = state.MonitoringSignals_Strategy1();
 
                 if (signalsStocks is true)
                 {
+                    // reset signal.
+                    state.signal_1 = false;
+                    state.signal_2 = false;
+                    state.signal_3 = false;
+
                     if (BotParams.Deposit > 1000000 && BotParams.Accnt_StockName.ContainsKey(code) is false)
                     {
-
                         logs.write_sys_log($"{code} Signal is true", 0);
 
                         telegram.SendTelegramMsg($"[{code}/{krName}] try to send Buy order");
@@ -397,22 +376,13 @@ namespace TaewooBot_v2
 
                         // sleep 2 sec after Send buy order.
                         utils.delay(2000);
-
-                        // reset signal.
-                        state.signal_1 = false;
-                        state.signal_2 = false;
-                        state.signal_3 = false;
                     }
                 }
             }
 
             // B06
             if (e.sRealType == "주식시세")
-            {
-                
-            }
-
-
+            { }
         }
 
         private void OnReceiveChejanData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveChejanDataEvent e)
@@ -448,9 +418,10 @@ namespace TaewooBot_v2
                     var OrderPrice = API.GetChejanData(901).Trim().ToString();
                     var FilledPrice = API.GetChejanData(910).Trim().ToString();
 
-                    // OrderNumber && OrderType
+                    // OrderNumber && OrderType.
                     var orderNumberAndOrderType = new List<string>() { orderNmumber, OrderType };
 
+                    // Display blotter display.
                     if (!BotParams.OrderNumberAndOrderType.ContainsKey(orderNumberAndOrderType))
                     {
                         BotParams.BltList = new List<string> { OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice };
@@ -464,11 +435,8 @@ namespace TaewooBot_v2
                     if (!BotParams.OrderedStocks.Contains(ShortCode) && OrderType == "체결" && !BotParams.Accnt_Position.ContainsKey(ShortCode))
                     {
                         // TickList, TickOneMinList, BeforeAvg Dictionary 초기화
-                        BotParams.TickList[ShortCode] = new List<double>() { 0.0 };
-                        BotParams.TickOneMinsList[ShortCode] = new List<double>() { 0.0 };
-                        BotParams.BeforeAvg[ShortCode] = BotParams.TickList[ShortCode].Average();
+                        strategy1.ResetTickDataList(ShortCode);
 
-                       
                         var blotterState = new BlotterState(OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, double.Parse(OrderQty), double.Parse(FilledQty), double.Parse(OrderPrice), double.Parse(FilledPrice));
                         BotParams.BlotterStateDict[ShortCode] = blotterState;
                         
@@ -521,31 +489,8 @@ namespace TaewooBot_v2
                     if (double.Parse(CurPrice) == 0.0)
                         telegram.SendTelegramMsg($"{KrName1}의 현재가가 {CurPrice} 입니다.");
 
-
-                    BotParams.SellSignals[ShortCode1] = false;
-
-                    // Monitoring Sell Signals
-                    if (DateTime.Parse(BotParams.BlotterStateDict[ShortCode1].OrderTime).AddSeconds(30) < DateTime.Parse(BotParams.CurTime) && double.Parse(CurPrice) != 0.0)
-                    {
-                        if (double.Parse(CurPrice) < double.Parse(BuyPrice))
-                        {
-                            BotParams.SellSignals[ShortCode1] = true;
-                            telegram.SendTelegramMsg($"[{ShortCode1}] cur_price < buy_price");
-                        }
-
-                        if (double.Parse(Change) > 0.03 || double.Parse(Change) < -0.009)
-                        {
-                            BotParams.SellSignals[ShortCode1] = true;
-                            telegram.SendTelegramMsg($"[{ShortCode1}] Target change rates");
-                        }
-
-                        //TODO : Get Parameters
-                        if (BotParams.BeforeAvg[ShortCode1] > BotParams.TickOneMinsList[ShortCode1].Average() * 2)
-                        {
-                            BotParams.SellSignals[ShortCode1] = true;
-                            telegram.SendTelegramMsg($"[{ShortCode1}] BeforeAvg > OneMins Avg * 2"); 
-                        }
-                    }
+                    // Monitoring sell signals
+                    strategy1.MonitoringSellSignals(ShortCode1, CurPrice, BuyPrice, Change);
 
                     // 매도 주문
                     if (BotParams.SellSignals[ShortCode1] == true)
@@ -563,11 +508,7 @@ namespace TaewooBot_v2
                         SendSellOrder(scr_no, ShortCode1, int.Parse(BalanceQty), ordPrice, hogaGb);
 
                         // 해당 종목 매도 시 다시 Tick Avg 계산.
-                        //BotParams.TickList.Remove(ShortCode1);
-                        BotParams.TickList[ShortCode1] = new List<double>() { 0.0 };
-                        BotParams.TickOneMinsList[ShortCode1] = new List<double>() { 0.0 };
-                        BotParams.BeforeAvg[ShortCode1] = BotParams.TickList[ShortCode1].Average();
-
+                        strategy1.ResetTickDataList(ShortCode1);
                     }
 
                     break;
@@ -595,17 +536,13 @@ namespace TaewooBot_v2
                     else telegram.SendTelegramMsg($"[{ShortCode}] Failed to Send BuyOrder, res : {res.ToString()}");
                 }
 
-                else
-                {
-                    telegram.SendTelegramMsg($"[{ShortCode}] have ordering List");
-                }
-                    
+                else telegram.SendTelegramMsg($"[{ShortCode}] have ordering List");
+
             }
             catch (Exception e)
             {
                 telegram.SendTelegramMsg($"Exception in Send BuyOrder errMsg : {e}");
             }
-
         }
 
         public void SendSellOrder(string scr_no, string ShortCode, int ordQty, int ordPrice, string hogaGB)
@@ -629,9 +566,5 @@ namespace TaewooBot_v2
                 telegram.SendTelegramMsg($"Exception in send SellOrder errMsg : {e.ToString()}");
             }
         }
-
-
-
-
     }
 }

@@ -32,6 +32,8 @@ namespace TaewooBot_v2
 
         // Slow Params
         public static double LossCut { get; set; }
+        public static DateTime comparedTime { get; set; }
+
 
         // Logs File
         public static string date { get; set; } = DateTime.Now.ToString("yyyyMMdd");
@@ -81,7 +83,6 @@ namespace TaewooBot_v2
         // 계좌관련 Dictionary 설정
         public static Dictionary<string, List<string>> Accnt_Position = new Dictionary<string, List<string>>();
 
-
         public static Dictionary<string, string> Accnt_StockName = new Dictionary<string, string>();
         public static Dictionary<string, string> Accnt_StockLots = new Dictionary<string, string>();
         public static Dictionary<string, string> Accnt_StockPnL = new Dictionary<string, string>();
@@ -93,10 +94,10 @@ namespace TaewooBot_v2
         public static List<string> PositionList = new List<string>();
         public static List<string> OrderedStocks = new List<string>();
         public static List<string> OrderingStocks = new List<string>();
-
         
         public static Dictionary<List<string>, string> OrderNumberAndOrderType = new Dictionary<List<string>, string>();
         public static Dictionary<string, BlotterState> BlotterStateDict = new Dictionary<string, BlotterState>();
+        public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();
 
         // Order
         public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();

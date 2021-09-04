@@ -9,8 +9,6 @@ namespace TaewooBot_v2
     public class StockState
     {
 
-        Utils utils = new Utils();
-
         public string states_ShortCode { get; set; }
         public string states_KrName { get; set; }
         public string states_CurPrice { get; set; }
@@ -53,7 +51,7 @@ namespace TaewooBot_v2
         }
 
         // TODO : 시그널 확인 함수
-        public bool MonitoringSignals()
+        public bool MonitoringSignals_Strategy1()
         {
             if (double.Parse(states_CurPrice) >= double.Parse(states_highPrice))
                 signal_1 = true;
