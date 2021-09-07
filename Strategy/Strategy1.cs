@@ -9,6 +9,7 @@ namespace TaewooBot_v2.Strategy
     public class Strategy1
     {
         TelegramClass telegram = new TelegramClass();
+        Utils utils = new Utils();
 
         public Strategy1()
         {
@@ -66,7 +67,7 @@ namespace TaewooBot_v2.Strategy
                 if (double.Parse(change) > 0.03 || double.Parse(change) < -0.009)
                 {
                     BotParams.SellSignals[shortCode] = true;
-                    telegram.SendTelegramMsg($"[{shortCode}] Target change rates");
+                    telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
                 }
 
                 //TODO : 매수 후 리셋 된 avgerage tick list > 현재 1분봉(30초) average * 2  => 매도

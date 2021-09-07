@@ -189,26 +189,6 @@ namespace TaewooBot_v2
 
             else if (BotParams.Market == "Coin")
             {
-                logs.StartPosition = FormStartPosition.Manual;
-                logs.Location = new Point(755, 520);
-                logs.Show();
-
-                logs.write_sys_log($"Welcome to {BotParams.Market} world", 0);
-                
-                if(BotParams.CoinThread is true)
-                {
-                    logs.write_sys_log("Coin Auto trading System is on laready", 0);
-                    return;
-                }
-
-                logs.write_sys_log("Coin AUTO TRADING SYSTEM is just started \r\n", 0);
-                //BotParams.CoinThread = true;
-                //CoinThread = new Thread(new ThreadStart(CoinStart));
-                //PositionThread = new Thread(new ThreadStart(PositionDisplay));
-
-                //CoinThread.Start();
-                //PositionThread.Start();
-
             } 
         }
 
@@ -232,18 +212,35 @@ namespace TaewooBot_v2
             telegram.SendTelegramMsg("GetData Thread is started");
 
             var batchData = false;
+            var arrangePosition = true;
             // while 문으로 무한루프 & 시간계산
             while(true)
             {
                 try
                 {
-                    if (BotParams.CurTime.CompareTo("08:59:30") >= 0 && BotParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
+                    if ((BotParams.CurTime.CompareTo("08:50:00") >= 0 && BotParams.CurTime.CompareTo("08:59:00") < 0)  && arrangePosition == true)
+                    {
+                        BotParams.ArrangingPosition = true;
+                        arrangePosition = false;
+                        GetAccountInformation();
+                    }
+
+                    if ((BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0) && arrangePosition == true)
+                    {
+                        BotParams.ArrangingPosition = true;
+                        arrangePosition = false;
+                        GetAccountInformation();
+                    }
+
+                    if (BotParams.CurTime.CompareTo("08:59:30") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && batchData == false)
                     {
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
+                        arrangePosition = true;
+                        BotParams.ArrangingPosition = false;
 
                         GetAccountInformation();
-                        GetShortCodes("MM");            // botParams.Codes 에 저장
+                        GetShortCodes("MM");                // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
 
@@ -272,33 +269,5 @@ namespace TaewooBot_v2
         {
 
         }
-
-
-    }
-
-    class ConditionInfo
-    {
-        public int ConditionNum { get; set; }
-        public String ConditionNm { get; set; }
-        public Boolean ReqRealTime = true;
-
-        //public List<StockItemInfo> stockItemList;
-    }
-
-    public class StockInfo
-    {
-        public string Code { get; set; }
-        public string KrName { get; set; }
-        public string Price { get; set; }
-    }
-
-    class StockValueInfo
-    {
-        public string Code { get; set; }
-        public string KrName { get; set; }
-        public int BuyPrice { get; set; }
-        public int ValuePrice { get; set; }
-        public double ValueRate { get; set; }
-        public int Inventory { get; set; }
     }
 }
