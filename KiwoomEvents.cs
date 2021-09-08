@@ -511,6 +511,10 @@ namespace TaewooBot_v2
                     /* 매도 시 Mode Class를 호출하여 각각의 Mode에서의 전략으로 매도 실행 */
                     /* ver2.0 에서는 여기에 바로 매도 로직 작성 */
 
+
+                    telegram.SendTelegramMsg($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice} Change : {Change} TradingPnL : {TradingPnL}");
+                    logs.write_sys_log($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice} Change : {Change} TradingPnL : {TradingPnL}", 0);
+
                     // Test CurPrice
                     if (double.Parse(CurPrice) == 0.0)
                         telegram.SendTelegramMsg($"{KrName1}의 현재가가 {CurPrice} 입니다.");

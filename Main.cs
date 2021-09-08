@@ -218,7 +218,7 @@ namespace TaewooBot_v2
             {
                 try
                 {
-                    if ((BotParams.CurTime.CompareTo("08:50:00") >= 0 && BotParams.CurTime.CompareTo("08:59:00") < 0)  && arrangePosition == true)
+                    if ((BotParams.CurTime.CompareTo("09:00:30") >= 0 && BotParams.CurTime.CompareTo("09::00:59") < 0)  && arrangePosition == true)
                     {
                         BotParams.ArrangingPosition = true;
                         arrangePosition = false;
@@ -232,7 +232,7 @@ namespace TaewooBot_v2
                         GetAccountInformation();
                     }
 
-                    if (BotParams.CurTime.CompareTo("08:59:30") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && batchData == false)
+                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && batchData == false)
                     {
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
