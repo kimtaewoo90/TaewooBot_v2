@@ -45,6 +45,7 @@ namespace TaewooBot_v2
 
         // Stocks
         public static List<string> TargetCodes = new List<string>();
+        public static List<string> RequestRealDataScrNo = new List<string>();
 
         public static string[] Codes;
         public static string Kospi { get; set; } = null;
@@ -82,7 +83,7 @@ namespace TaewooBot_v2
 
 
         // 계좌관련 Dictionary 설정
-        public static Dictionary<string, List<string>> Accnt_Position = new Dictionary<string, List<string>>();
+        public static Dictionary<string, PositionState> Accnt_Position = new Dictionary<string, PositionState>();
 
         public static Dictionary<string, string> Accnt_StockName = new Dictionary<string, string>();
         public static Dictionary<string, string> Accnt_StockLots = new Dictionary<string, string>();

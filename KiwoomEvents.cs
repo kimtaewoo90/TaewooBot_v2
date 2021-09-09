@@ -285,7 +285,9 @@ namespace TaewooBot_v2
                     var change = Math.Round((curPrice / buyPrice) - 1, 2);
                     var tradingPnL = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "손익금액").Trim());
 
-                    BotParams.Accnt_Position[code] = new List<string>() { code, krName, balance.ToString(), buyPrice.ToString(), curPrice.ToString(), change.ToString(), tradingPnL.ToString()};
+                    var positionState = new PositionState(code, krName, balance.ToString(), buyPrice.ToString(), curPrice.ToString(), change.ToString(), tradingPnL.ToString());
+
+                    BotParams.Accnt_Position[code] = positionState;
 
                     position.DisplayPosition(code, krName, balance.ToString(), 
                                                            buyPrice.ToString(), 
@@ -360,7 +362,6 @@ namespace TaewooBot_v2
 
                 bool signalsStocks = state.MonitoringSignals_Strategy1();
 
-
                 if (signalsStocks is true)
                 {
                     // reset signal.
@@ -368,7 +369,7 @@ namespace TaewooBot_v2
                     state.signal_2 = false;
                     state.signal_3 = false;
 
-                    if (BotParams.Deposit > 1000000 && BotParams.Accnt_StockName.ContainsKey(code) is false)
+                    if (BotParams.Deposit > 1000000 && BotParams.Accnt_Position.ContainsKey(code) is false)
                     {
                         logs.write_sys_log($"{code} Signal is true", 0);
 
@@ -387,6 +388,33 @@ namespace TaewooBot_v2
 
                         // sleep 2 sec after Send buy order.
                         utils.delay(2000);
+                    }
+                }
+
+                // 매도
+                if (BotParams.Accnt_Position.ContainsKey(code))
+                {
+                    var shortCode = code;
+                    var curPrice = price.ToString();
+                    var buyPrice = BotParams.Accnt_Position[shortCode].position_BuyPrice;
+                    var balanceQty = BotParams.Accnt_Position[shortCode].position_BalanceQty;
+                    var positionChange = BotParams.Accnt_Position[shortCode].position_Change;
+
+                    // Monitoring sell signals
+                    strategy1.MonitoringSellSignals(shortCode, curPrice, buyPrice, positionChange);
+
+                    // 매도 주문qq
+                    if (BotParams.SellSignals[code] == true)
+                    {
+                        BotParams.RqName = "주식주문";
+                        var scr_no = utils.get_scr_no();
+                        var ordPrice = 0;
+                        var hogaGb = "03";
+
+                        SendSellOrder(scr_no, code, Convert.ToInt32(balanceQty), ordPrice, hogaGb);
+
+                        // 해당 종목 매도 시 다시 Tick Avg 계산.
+                        strategy1.ResetTickDataList(code);
                     }
                 }
             }
@@ -421,6 +449,7 @@ namespace TaewooBot_v2
                     OrderTime = OrderTime.Substring(0, 2) + ":" + OrderTime.Substring(2, 2) + ":" + OrderTime.Substring(4, 2);
                     var orderNmumber = API.GetChejanData(9203).Trim().ToString();
                     var ShortCode = API.GetChejanData(9001).Trim().ToString();
+                    ShortCode = ShortCode.Replace("A", "");
                     var KrName = API.GetChejanData(302).Trim().ToString();
                     var OrderType = API.GetChejanData(913).Trim().ToString();
                     var Type = API.GetChejanData(905).Trim().ToString();
@@ -442,7 +471,7 @@ namespace TaewooBot_v2
                      
                     }
 
-                    telegram.SendTelegramMsg($"Test! Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
+                    //telegram.SendTelegramMsg($"Test! Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
 
                     // 체결된 주식만 OrderedStock 리스트에 추가
                     if (!BotParams.OrderedStocks.Contains(ShortCode) && OrderType == "체결" && Type == "+매수")
@@ -450,9 +479,12 @@ namespace TaewooBot_v2
                         // TickList, TickOneMinList, BeforeAvg Dictionary 초기화
                         strategy1.ResetTickDataList(ShortCode);
 
+                        // 체결 후 계좌조회
+                        GetAccountInformation();
+
                         telegram.SendTelegramMsg($"Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
 
-
+                        // Update Blotter DIctionary
                         var blotterState = new BlotterState(OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, double.Parse(OrderQty), double.Parse(FilledQty), double.Parse(OrderPrice), double.Parse(FilledPrice));
                         BotParams.BlotterStateDict[ShortCode] = blotterState;
                         
@@ -463,9 +495,11 @@ namespace TaewooBot_v2
                             BotParams.OrderingStocks.Remove(ShortCode);
                     }
 
-                    if (BotParams.OrderedStocks.Contains(ShortCode) && Type == "-매도")
+                    if (OrderType == "체결" && BotParams.OrderedStocks.Contains(ShortCode) && Type == "-매도")
                     {
                         telegram.SendTelegramMsg($"Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
+
+                        BotParams.Accnt_Position.Remove(ShortCode);
                         BotParams.OrderedStocks.Remove(ShortCode);
                     }
 
@@ -474,6 +508,9 @@ namespace TaewooBot_v2
                     {
                         BotParams.OrderingStocks.Add(ShortCode);
                         logs.write_sys_log($"OrderingStock {KrName}", 0);
+
+                        var blotterState_jubsu = new BlotterState(OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, double.Parse(OrderQty), double.Parse("0"), double.Parse(OrderPrice), double.Parse("0"));
+                        BotParams.BlotterStateDict[ShortCode] = blotterState_jubsu;
                     }
 
                     // 매수 매도 후 잔고 갱신
@@ -519,23 +556,6 @@ namespace TaewooBot_v2
                     if (double.Parse(CurPrice) == 0.0)
                         telegram.SendTelegramMsg($"{KrName1}의 현재가가 {CurPrice} 입니다.");
 
-                    // Monitoring sell signals
-                    strategy1.MonitoringSellSignals(ShortCode1, CurPrice, BuyPrice, Change);
-
-                    // 매도 주문
-                    if (BotParams.SellSignals[ShortCode1] == true)
-                    {
-                        BotParams.RqName = "주식주문";
-                        var scr_no = utils.get_scr_no();
-                        var ordPrice = 0;
-                        var hogaGb = "03";
-
-                        SendSellOrder(scr_no, ShortCode1, Convert.ToInt32(BalanceQty), ordPrice, hogaGb);
-
-                        // 해당 종목 매도 시 다시 Tick Avg 계산.
-                        strategy1.ResetTickDataList(ShortCode1);
-                    }
-
                     break;
             }
         }
@@ -544,7 +564,7 @@ namespace TaewooBot_v2
         public void SendBuyOrder(string scr_no, string ShortCode, int ordQty, long ordPrice, string hogaGB)
         {
 
-            telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty}  / ShortCode length : {ShortCode.Length} ordQty length : {ordQty.ToString().Length}");
+            //telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty}  / ShortCode length : {ShortCode.Length} ordQty length : {ordQty.ToString().Length}");
 
             try
             {

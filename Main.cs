@@ -227,6 +227,11 @@ namespace TaewooBot_v2
 
                     if ((BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0) && arrangePosition == true)
                     {
+                        for (int Idx = 0; Idx < BotParams.RequestRealDataScrNo.Count; Idx++)
+                        {
+                            API.DisconnectRealData(BotParams.RequestRealDataScrNo[Idx]);
+                        }
+
                         BotParams.ArrangingPosition = true;
                         arrangePosition = false;
                         GetAccountInformation();
