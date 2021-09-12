@@ -392,7 +392,7 @@ namespace TaewooBot_v2
                 }
 
                 // 매도
-                if (BotParams.Accnt_Position.ContainsKey(code))
+                if (BotParams.Accnt_Position.ContainsKey(code) && BotParams.BlotterStateDict.ContainsKey(code))
                 {
                     var shortCode = code;
                     var curPrice = price.ToString();
