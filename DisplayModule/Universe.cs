@@ -53,7 +53,7 @@ namespace TaewooBot_v2
                     if (TargetStocks["StockCode", i].Value.ToString() == stockCode)
                     {
                         TargetStocks.Rows[i].Cells[2].Value = String.Format("{0:0,0}", double.Parse(price));
-                        TargetStocks.Rows[i].Cells[3].Value = String.Format("{0:0,0}", double.Parse(change));
+                        TargetStocks.Rows[i].Cells[3].Value = String.Format("{0:f2}%", double.Parse(change));
                         TargetStocks.Rows[i].Cells[4].Value = String.Format("{0:0,0}", double.Parse(tickSpeed));
                         TargetStocks.Rows[i].Cells[5].Value = String.Format("{0:0,0}", double.Parse(highPrice));
                         TargetStocks.Rows[i].Cells[6].Value = String.Format("{0:0,0}", double.Parse(tickAvg));
