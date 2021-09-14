@@ -330,6 +330,12 @@ namespace TaewooBot_v2
             }
         }
 
+        private void OnReceiveMsg(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveMsgEvent e)
+        {
+            logs.write_sys_log($"ScrNo : {e.sScrNo} RQName : {e.sRQName} TrCode : {e.sTrCode} Msg : {e.sMsg}", 0);
+        }
+
+
         // Get Real Data
         private void OnReceiveRealData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEvent e)
         {
