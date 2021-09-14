@@ -100,7 +100,7 @@ namespace TaewooBot_v2
         
         public static Dictionary<List<string>, string> OrderNumberAndOrderType = new Dictionary<List<string>, string>();
         public static Dictionary<string, BlotterState> BlotterStateDict = new Dictionary<string, BlotterState>();
-        //public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();
+        public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();
 
         // Order
         public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();

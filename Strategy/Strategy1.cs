@@ -21,7 +21,7 @@ namespace TaewooBot_v2.Strategy
         {
             // Add Total Tick List
             BotParams.TickList[shortCode].Add(double.Parse(contractLots));
-            logs.write_sys_log($"{shortCode} updated TickList");
+            logs.write_sys_log($"{shortCode} updated TickList", 0);
 
             // Add 1 Min Tick List                
             BotParams.TickOneMinsList[shortCode].Add(double.Parse(contractLots));
