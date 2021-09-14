@@ -28,7 +28,7 @@ namespace TaewooBot_v2
 
 
             BotParams.RqName = "계좌평가현황요청";
-            API.CommRqData("계좌평가현황요청", "OPW00004", 0, scr_no);
+            API.CommRqData(BotParams.RqName, "OPW00004", 0, scr_no);
         }
 
         public void GetShortCodes(string market)
