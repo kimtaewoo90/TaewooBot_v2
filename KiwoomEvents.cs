@@ -152,7 +152,7 @@ namespace TaewooBot_v2
             {
                 if (BotParams.RqName.CompareTo(e.sRQName) != 0)
                 {
-                    logs.write_sys_log("Should check the TRCode", 0);
+                    logs.write_sys_log($"Should check the TRCode, e.sRQName is {e.sRQName}", 0);
                 }
                 else
                 {
@@ -302,9 +302,21 @@ namespace TaewooBot_v2
                             telegram.SendTelegramMsg($"[{krName}] 정리매매 주문 전송합니다.");
                             SentOrderList.Add(code);
 
+                            // add pending orders
+                            BotParams.PendingOrders.Add(code);
+
+                            // Send sell order
                             var scr_no = utils.get_scr_no();
                             SendSellOrder(scr_no, code, Convert.ToInt32(balance), 0, "03");
-                            utils.delay(200);
+
+                            while (true)
+                            {
+                                if (!BotParams.PendingOrders.Contains(code))
+                                {
+                                    logs.write_sys_log($"[{krName}] 정리매매 주문 성공했습니다.", 0);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -488,11 +500,10 @@ namespace TaewooBot_v2
                         BotParams.BltList = new List<string> { OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, OrderQty, FilledQty, OrderPrice, FilledPrice, BotParams.CurTime };
                         bltScreen.DisplayBLT(BotParams.BltList);
 
-                        BotParams.OrderNumberAndOrderType[orderNumberAndOrderType] = ShortCode;
-                     
+                        BotParams.OrderNumberAndOrderType[orderNumberAndOrderType] = ShortCode;              
                     }
 
-                    // 체결된 주식만 OrderedStock 리스트에 추가
+                    // 체결 + 매수
                     if (!BotParams.OrderedStocks.Contains(ShortCode) && OrderType == "체결" && Type == "+매수")
                     {
                         // Remove Pending Orders
@@ -509,7 +520,7 @@ namespace TaewooBot_v2
                         BotParams.Accnt_Position[ShortCode] = positionState;
 
                         // 체결 후 계좌조회
-                        GetAccountInformation();
+                        // GetAccountInformation();
 
                         telegram.SendTelegramMsg($"Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
 
@@ -524,6 +535,7 @@ namespace TaewooBot_v2
                             BotParams.OrderingStocks.Remove(ShortCode);
                     }
 
+                    // 체결 + 매도
                     if (OrderType == "체결" && BotParams.OrderedStocks.Contains(ShortCode) && Type == "-매도")
                     {
                         telegram.SendTelegramMsg($"매도 => Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
