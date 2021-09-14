@@ -10,6 +10,7 @@ namespace TaewooBot_v2.Strategy
     {
         TelegramClass telegram = new TelegramClass();
         Utils utils = new Utils();
+        Logs logs = new Logs();
 
         public Strategy1()
         {
@@ -20,6 +21,7 @@ namespace TaewooBot_v2.Strategy
         {
             // Add Total Tick List
             BotParams.TickList[shortCode].Add(double.Parse(contractLots));
+            logs.write_sys_log($"{shortCode} updated TickList");
 
             // Add 1 Min Tick List                
             BotParams.TickOneMinsList[shortCode].Add(double.Parse(contractLots));
@@ -61,6 +63,7 @@ namespace TaewooBot_v2.Strategy
                 {
                     BotParams.SellSignals[shortCode] = true;
                     telegram.SendTelegramMsg($"[{shortCode}] cur_price < buy_price....Lostcut");
+                    return;
                 }
 
                 // 익절 3% 손절 0.9%
@@ -68,6 +71,7 @@ namespace TaewooBot_v2.Strategy
                 {
                     BotParams.SellSignals[shortCode] = true;
                     telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
+                    return;
                 }
 
                 //TODO : 매수 후 리셋 된 avgerage tick list > 현재 1분봉(30초) average * 2  => 매도
@@ -75,6 +79,7 @@ namespace TaewooBot_v2.Strategy
                 {
                     BotParams.SellSignals[shortCode] = true;
                     telegram.SendTelegramMsg($"[{shortCode}] BeforeAvg > OneMins Avg * 2");
+                    return;
                 }
             }
         }

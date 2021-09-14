@@ -55,7 +55,6 @@ namespace TaewooBot_v2
         {
             if (double.Parse(states_CurPrice) >= double.Parse(states_highPrice))
                 signal_1 = true;
-            signal_1 = true;
 
             // 기준 잡기.
             if (states_TickList.Average() > BotParams.BeforeAvg[states_ShortCode] * 2 && BotParams.BeforeAvg[states_ShortCode] != 0)

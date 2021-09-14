@@ -355,7 +355,7 @@ namespace TaewooBot_v2
                 File.AppendAllText(BotParams.TickPath + BotParams.TickLogFileName, $"[{BotParams.CurTime}] : {code} / {price.ToString()} / {change.ToString()} / {contractLots}" + Environment.NewLine, Encoding.Default);
 
                 // Display the RTD data on TargetStocks DataGridView    TODO: Change -> startPrice to check
-                universe.DisplayTargetStocks("Update", code, "", price.ToString(), startPrice.ToString(), 
+                universe.DisplayTargetStocks("Update", code, "", price.ToString(), change.ToString(), 
                                                 BotParams.TickOneMinsList[code].Average().ToString(), highPrice.ToString(), 
                                                 BotParams.TickList[code].Average().ToString(), BotParams.BeforeAvg[code].ToString(), 
                                                 (BotParams.TickOneMinsList[code].Sum() * price).ToString());
@@ -373,6 +373,7 @@ namespace TaewooBot_v2
 
                 bool signalsStocks = state.MonitoringSignals_Strategy1();
 
+                // 매수
                 if (signalsStocks is true)
                 {
                     // reset signal.
@@ -380,7 +381,8 @@ namespace TaewooBot_v2
                     state.signal_2 = false;
                     state.signal_3 = false;
 
-                    if (BotParams.Deposit > 1000000 && BotParams.Accnt_Position.ContainsKey(code) is false)
+                    // 매수 주문
+                    if (BotParams.Deposit > 1000000 && !BotParams.Accnt_Position.ContainsKey(code) && !BotParams.PendingOrders.Contains(code))
                     {
                         logs.write_sys_log($"{code} Signal is true", 0);
 
@@ -394,6 +396,9 @@ namespace TaewooBot_v2
                         var ordQty = Convert.ToInt32(Math.Truncate(1000000.0 / curPrice));
                         var ordPrice = 0;
                         var hogaGb = "03";
+
+                        // add pending order
+                        BotParams.PendingOrders.Add(shortCode);
 
                         SendBuyOrder(scr_no, ShortCode, ordQty, ordPrice, hogaGb);
 
@@ -415,12 +420,15 @@ namespace TaewooBot_v2
                     strategy1.MonitoringSellSignals(shortCode, curPrice, buyPrice, positionChange);
 
                     // 매도 주문
-                    if (BotParams.SellSignals[code] == true)
+                    if (BotParams.SellSignals[code] == true && !BotParams.PendingOrders.Contains(code))
                     {
                         BotParams.RqName = "주식주문";
                         var scr_no = utils.get_scr_no();
                         var ordPrice = 0;
                         var hogaGb = "03";
+
+                        // add Pending order
+                        BotParams.PendingOrders.Add(shortCode);
 
                         SendSellOrder(scr_no, code, Convert.ToInt32(balanceQty), ordPrice, hogaGb);
 
@@ -487,6 +495,10 @@ namespace TaewooBot_v2
                     // 체결된 주식만 OrderedStock 리스트에 추가
                     if (!BotParams.OrderedStocks.Contains(ShortCode) && OrderType == "체결" && Type == "+매수")
                     {
+                        // Remove Pending Orders
+                        if (Botparams.PendingOrders.Contains(ShortCode))
+                            BotParams.PendingOrders.Remove(ShortCode);
+
                         // TickList, TickOneMinList, BeforeAvg Dictionary 초기화
                         strategy1.ResetTickDataList(ShortCode);
 
@@ -515,6 +527,10 @@ namespace TaewooBot_v2
                     if (OrderType == "체결" && BotParams.OrderedStocks.Contains(ShortCode) && Type == "-매도")
                     {
                         telegram.SendTelegramMsg($"매도 => Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
+                        
+                        // Remove Pending Orders
+                        if (Botparams.PendingOrders.Contains(ShortCode))
+                            BotParams.PendingOrders.Remove(ShortCode);
 
                         BotParams.Accnt_Position.Remove(ShortCode);
                         BotParams.OrderedStocks.Remove(ShortCode);

@@ -40,15 +40,8 @@ namespace TaewooBot_v2
                 int AddCnt = TargetStocks.Rows.Count;
                 // StockCode, StockKrName, Price, TickSpeed, PnL
 
-                TargetStocks.Rows.Add(stockCode, stockName, price, 
-                                                            tickSpeed, 
-                                                            change, 
-                                                            highPrice, 
-                                                            tickAvg, 
-                                                            beforeAvg, 
-                                                           totalVolume);
-
-
+                TargetStocks.Rows.Add(stockCode, stockName, price, change, tickSpeed, highPrice, tickAvg, beforeAvg, totalVolume);
+                                                      
                 logs.write_sys_log(stockCode + "종목이 추가 되었습니다.", 0);
             }
 
@@ -60,8 +53,8 @@ namespace TaewooBot_v2
                     if (TargetStocks["StockCode", i].Value.ToString() == stockCode)
                     {
                         TargetStocks.Rows[i].Cells[2].Value = String.Format("{0:0,0}", double.Parse(price));
-                        TargetStocks.Rows[i].Cells[3].Value = String.Format("{0:0,0}", double.Parse(tickSpeed));
-                        TargetStocks.Rows[i].Cells[4].Value = String.Format("{0:0,0}", double.Parse(change));
+                        TargetStocks.Rows[i].Cells[3].Value = String.Format("{0:0,0}", double.Parse(change));
+                        TargetStocks.Rows[i].Cells[4].Value = String.Format("{0:0,0}", double.Parse(tickSpeed));
                         TargetStocks.Rows[i].Cells[5].Value = String.Format("{0:0,0}", double.Parse(highPrice));
                         TargetStocks.Rows[i].Cells[6].Value = String.Format("{0:0,0}", double.Parse(tickAvg));
                         TargetStocks.Rows[i].Cells[7].Value = String.Format("{0:0,0}", double.Parse(beforeAvg)); 
@@ -88,14 +81,12 @@ namespace TaewooBot_v2
 
                             logs.write_sys_log(StockCode + "종목이 삭제 되었습니다.", 0);
                             break;
-
                         }
                     }
                     catch (Exception err)
                     {
                         logs.write_sys_log(err.ToString(), 0);
                     }
-
                 }
             }
 
