@@ -343,7 +343,7 @@ namespace TaewooBot_v2
                                            krName, 
                                            price.ToString(), 
                                            highPrice.ToString(),
-                                           BotParams.LowPriceOneMinute[code].ToString(),
+                                           lowPrice.ToString(),
                                            change.ToString(), 
                                            contractLots, 
                                            BotParams.TickList[code], 
@@ -366,7 +366,7 @@ namespace TaewooBot_v2
                     var shortCode = BotParams.Accnt_Position[code].position_ShortCode;
                     var balanceQty = BotParams.Accnt_Position[code].position_BalanceQty;
                     var buyPrice = BotParams.Accnt_Position[code].position_BuyPrice;
-                    var change_in_position = price / double.Parse(buyPrice);
+                    var change_in_position = (price / double.Parse(buyPrice) - 1) * 100;
                     var tradingPnL_in_position = (price - double.Parse(buyPrice)) * double.Parse(balanceQty); 
                     position.DisplayPosition(shortCode, krName, balanceQty, buyPrice, price.ToString(), change_in_position.ToString(), tradingPnL_in_position.ToString());
                 }

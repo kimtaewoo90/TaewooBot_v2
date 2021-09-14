@@ -47,6 +47,7 @@ namespace TaewooBot_v2
         public static List<string> TargetCodes = new List<string>();
         public static List<string> RequestRealDataScrNo = new List<string>();
 
+        // Market
         public static string[] Codes;
         public static string Kospi { get; set; } = null;
         public static string Kosdaq { get; set; } = null;
@@ -99,7 +100,7 @@ namespace TaewooBot_v2
         
         public static Dictionary<List<string>, string> OrderNumberAndOrderType = new Dictionary<List<string>, string>();
         public static Dictionary<string, BlotterState> BlotterStateDict = new Dictionary<string, BlotterState>();
-        public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();
+        //public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();
 
         // Order
         public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();
