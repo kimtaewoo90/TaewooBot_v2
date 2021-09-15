@@ -61,7 +61,7 @@ namespace TaewooBot_v2
                             PositionDataGrid["CurPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(curPrice));
                             PositionDataGrid["Change", cnt].Value = String.Format("{0:f2}%", double.Parse(change));
                             PositionDataGrid["TradingPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradingPnL));
-                            break;
+                            return;
                         }     
                     }
                     PositionDataGrid.Rows.Add(shortCode, krName, String.Format("{0:0,0}", double.Parse(balanceQty)),
@@ -86,7 +86,7 @@ namespace TaewooBot_v2
                         PositionDataGrid["CurPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(curPrice));
                         PositionDataGrid["Change", cnt].Value = String.Format("{0:f2}%", double.Parse(change));
                         PositionDataGrid["TradingPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradingPnL));
-                        break;
+                        return;
                     }
                 }
                 PositionDataGrid.Rows.Add(shortCode, krName, String.Format("{0:0,0}", double.Parse(balanceQty)),

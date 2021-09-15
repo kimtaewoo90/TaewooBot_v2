@@ -281,7 +281,6 @@ namespace TaewooBot_v2
                     var balance = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "보유수량").Trim());
                     var buyPrice = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "평균단가").Trim());
                     var curPrice = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "현재가").Trim().Replace("-", ""));
-                    //var change = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "손익율").Trim());
                     var change = Math.Round((curPrice / buyPrice) - 1, 2);
                     var tradingPnL = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "손익금액").Trim());
 
@@ -324,6 +323,7 @@ namespace TaewooBot_v2
                     }
                 }
 
+                SentOrderList = new List<string>();
                 BotParams.ArrangingPosition = false;
 
                 if (BotParams.AccountStockLots == 0)

@@ -219,7 +219,7 @@ namespace TaewooBot_v2
             {
                 try
                 {
-                    if ((BotParams.CurTime.CompareTo("09:00:30") >= 0 && BotParams.CurTime.CompareTo("09::00:59") < 0)  && arrangePosition == true)
+                    if ((BotParams.CurTime.CompareTo("08:55:00") >= 0 && BotParams.CurTime.CompareTo("09::00:59") < 0)  && arrangePosition == true)
                     {
                         BotParams.ArrangingPosition = true;
                         arrangePosition = false;
@@ -245,7 +245,7 @@ namespace TaewooBot_v2
                         arrangePosition = true;
                         BotParams.ArrangingPosition = false;
 
-                        GetAccountInformation();
+                        // GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?
                         GetShortCodes("MM");                // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
@@ -254,6 +254,7 @@ namespace TaewooBot_v2
                     {
                         batchData = true;
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
+                        BotParams.ArrangingPosition = true;
 
                         GetAccountInformation();
                         GetShortCodes("MM");            // botParams.Codes 에 저장
