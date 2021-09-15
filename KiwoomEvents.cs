@@ -353,12 +353,9 @@ namespace TaewooBot_v2
                 //double buy_price = get_hoga_unit_price((int)Price, Code, -2);
                 double startPrice = Math.Abs(double.Parse(API.GetCommRealData(e.sRealType, 16).Trim()));
                 double highPrice = Math.Abs(double.Parse(API.GetCommRealData(e.sRealType, 17).Trim()));
-                double change = Math.Round((price / startPrice - 1), 2);
+                double change = Math.Round((price / startPrice - 1) * 100, 2);
                 double lowPrice = double.Parse(API.GetCommRealData(e.sRealType, 18).Trim());
                 string TickTime = API.GetCommRealData(e.sRealType, 20).Trim().ToString();
-
-                // Strategy1 
-                strategy1.CalculateTickSpeed(code, contractLots, price, startPrice);
 
                 // Update stockState Dictionary
                 var state = new StockState(code, 
@@ -377,9 +374,15 @@ namespace TaewooBot_v2
                 File.AppendAllText(BotParams.TickPath + BotParams.TickLogFileName, $"[{BotParams.CurTime}] : {code} / {price.ToString()} / {change.ToString()} / {contractLots}" + Environment.NewLine, Encoding.Default);
 
                 // Display the RTD data on TargetStocks DataGridView    TODO: Change -> startPrice to check
-                universe.DisplayTargetStocks("Update", code, "", price.ToString(), change.ToString(), 
-                                                BotParams.TickOneMinsList[code].Average().ToString(), highPrice.ToString(), 
-                                                BotParams.TickList[code].Average().ToString(), BotParams.BeforeAvg[code].ToString(), 
+                universe.DisplayTargetStocks("Update", 
+                                                code, 
+                                                "", 
+                                                price.ToString(), 
+                                                change.ToString(), 
+                                                BotParams.TickOneMinsList[code].Average().ToString(), 
+                                                highPrice.ToString(), 
+                                                BotParams.TickList[code].Average().ToString(), 
+                                                BotParams.BeforeAvg[code].ToString(), 
                                                 (BotParams.TickOneMinsList[code].Sum() * price).ToString());
 
                 // Display Position in Real Time
@@ -393,6 +396,10 @@ namespace TaewooBot_v2
                     position.DisplayPosition(shortCode, krName, balanceQty, buyPrice, price.ToString(), change_in_position.ToString(), tradingPnL_in_position.ToString());
                 }
 
+                // Strategy1 
+                strategy1.CalculateTickSpeed(code, contractLots, price, startPrice);
+                
+                // Buy Signals
                 bool signalsStocks = state.MonitoringSignals_Strategy1();
 
                 // 매수
