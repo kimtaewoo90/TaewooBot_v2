@@ -632,7 +632,31 @@ namespace TaewooBot_v2
         public void SendBuyOrder(string scr_no, string ShortCode, int ordQty, long ordPrice, string hogaGB)
         {
 
-            //telegram.SendTelegramMsg($"BuyOrder {ShortCode}/{ordQty}  / ShortCode length : {ShortCode.Length} ordQty length : {ordQty.ToString().Length}");
+            /*
+            OrderType
+            1 : 신규매수
+            2 : 신규매도
+            3 : 매수취소
+            4 : 매도취소
+            5 : 매수정정
+            6 : 매도정정
+
+            HogaGb
+            00 : 지정가
+            03 : 시장가
+            05 : 조건부지정가
+            06 : 최유리지정가
+            07 : 최우선지정가
+            10 : 지정가IOC
+            13 : 시장가IOC
+            16 : 최유리IOC
+            20 : 지정가FOK
+            23 : 시장가FOK
+            26 : 최유리FOK 
+            61 : 장전시간외종가
+            62 : 시간외단일가
+            81 : 장후시간외종가
+             */
 
             try
             {
