@@ -296,33 +296,6 @@ namespace TaewooBot_v2
                                              change.ToString(), 
                                              tradingPnL.ToString());
 
-                    if (BotParams.ArrangingPosition is true)
-                    {
-                        if (!SentOrderList.Contains(code))
-                        {
-                            SentOrderList.Add(code);
-
-                            // add pending orders
-                            BotParams.PendingOrders.Add(code);
-
-                            // Send sell order
-                            var scr_no = utils.get_scr_no();
-                            telegram.SendTelegramMsg($"[{krName}] 정리매매 주문 전송합니다. scrNo : {scr_no}");
-
-                            SendSellOrder(scr_no, code, Convert.ToInt32(balance), 0, "03");
-
-                            while (true)
-                            {
-                                if (!BotParams.PendingOrders.Contains(code))
-                                {
-                                    logs.write_sys_log($"[{krName}] 정리매매 주문 성공했습니다.", 0);
-                                    telegram.SendTelegramMsg($"[{krName}] 정리매매 주문 성공했습니다");
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
                 }
 
                 SentOrderList = new List<string>();
@@ -622,6 +595,39 @@ namespace TaewooBot_v2
             }
         }
 
+        public void LiquidationStocks()
+        {
+
+            var accntStockCodes = BotParams.Accnt_Position.Keys;
+
+            for (int i=0; i < accntStockCodes.Count; i++)
+            {
+                var shortCode = BotParams.Accnt_Position[accntStockCodes[i]].position_ShortCode;
+                var krName = BotParams.Accnt_Position[accntStockCodes[i]].position_KrName;
+                var balance = BotParams.Accnt_Position[accntStockCodes[i]].position_BalanceQty;
+
+                // add pending orders
+                BotParams.PendingOrders.Add(shortCode);
+
+                // Send sell order
+                var scr_no = utils.get_scr_no();
+                telegram.SendTelegramMsg($"[{krName}] 정리매매 주문 전송합니다. scrNo : {scr_no}");
+
+                SendSellOrder(scr_no, shortCode, Convert.ToInt32(balance), 0, "03");
+
+                while (true)
+                {
+                    if (!BotParams.PendingOrders.Contains(shortCode))
+                    {
+                        logs.write_sys_log($"[{krName}] 정리매매 주문 성공했습니다.", 0);
+                        telegram.SendTelegramMsg($"[{krName}] 정리매매 주문 성공했습니다");
+
+                        break;
+                    }
+                }
+            }
+        }
+
 
         public void SendBuyOrder(string scr_no, string ShortCode, int ordQty, long ordPrice, string hogaGB)
         {
@@ -655,7 +661,7 @@ namespace TaewooBot_v2
         {
             try
             {
-                var res = API.SendOrder("주식주문", scr_no, "8003542111", 3, ShortCode.Trim(), ordQty, 0, hogaGB, "");
+                var res = API.SendOrder("주식주문", scr_no, "8003542111", 2, ShortCode.Trim(), ordQty, 0, hogaGB, "");
 
                 if (res == 0)
                 {

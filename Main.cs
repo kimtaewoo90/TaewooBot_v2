@@ -244,6 +244,9 @@ namespace TaewooBot_v2
                         BotParams.ArrangingPosition = true;
                         arrangePosition = false;
                         GetAccountInformation();
+
+                        // 정리 매매
+                        LiquidationStocks();
                     }
 
                     if ((BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0) && arrangePosition == true)
@@ -256,6 +259,9 @@ namespace TaewooBot_v2
                         BotParams.ArrangingPosition = true;
                         arrangePosition = false;
                         GetAccountInformation();
+
+                        // 정리 매매
+                        LiquidationStocks();
                     }
 
                     if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.PendingOrders.Count() == 0 && batchData == false)
