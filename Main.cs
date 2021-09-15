@@ -208,7 +208,7 @@ namespace TaewooBot_v2
                 var todayChnage = BotParams.todayChange;
                 var todayPnL = BotParams.todayPnL;
 
-                BotParams.AccountList = new List<string> { BotParams.todayPnL, BotParams.todayChange, BotParams.Deposit.ToString() };
+                BotParams.AccountList = new List<string> { BotParams.todayPnL.ToString(), BotParams.todayChange.ToString(), BotParams.Deposit.ToString() };
 
                 position.DisplayAccount(BotParams.AccountList);
             }
@@ -239,7 +239,7 @@ namespace TaewooBot_v2
             {
                 try
                 {
-                    if ((BotParams.CurTime.CompareTo("08:55:00") >= 0 && BotParams.CurTime.CompareTo("09::00:59") < 0)  && arrangePosition == true)
+                    if ((BotParams.CurTime.CompareTo("09:00:20") >= 0 && BotParams.CurTime.CompareTo("09::01:59") < 0)  && arrangePosition == true)
                     {
                         BotParams.ArrangingPosition = true;
                         arrangePosition = false;

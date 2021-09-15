@@ -577,8 +577,8 @@ namespace TaewooBot_v2
                     position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
 
                     // Display Account Information
-                    BotParams.todayPnL = API.GetChejanData(990).Trim().ToString();
-                    BotParams.todayChange = API.GetChejanData(991).Trim().ToString();
+                    BotParams.todayPnL = double.Parse(API.GetChejanData(990).Trim());
+                    BotParams.todayChange = double.Parse(API.GetChejanData(991).Trim());
                     BotParams.Deposit = double.Parse(API.GetChejanData(951).Trim());
 
                     /* 매도 시 Mode Class를 호출하여 각각의 Mode에서의 전략으로 매도 실행 */
@@ -598,13 +598,13 @@ namespace TaewooBot_v2
         public void LiquidationStocks()
         {
 
-            var accntStockCodes = BotParams.Accnt_Position.Keys;
+            List<string> codes = new List<string>(BotParams.Accnt_Position.Keys);
 
-            for (int i=0; i < accntStockCodes.Count; i++)
+            for (int i=0; i < codes.Count; i++)
             {
-                var shortCode = BotParams.Accnt_Position[accntStockCodes[i]].position_ShortCode;
-                var krName = BotParams.Accnt_Position[accntStockCodes[i]].position_KrName;
-                var balance = BotParams.Accnt_Position[accntStockCodes[i]].position_BalanceQty;
+                var shortCode = BotParams.Accnt_Position[codes[i]].position_ShortCode;
+                var krName = BotParams.Accnt_Position[codes[i]].position_KrName;
+                var balance = BotParams.Accnt_Position[codes[i]].position_BalanceQty;
 
                 // add pending orders
                 BotParams.PendingOrders.Add(shortCode);
