@@ -28,8 +28,8 @@ namespace TaewooBot_v2
         // About Account Status
         public static string AccountNumber { get; set; } = null;
         public static double Deposit { get; set; } = 0.0;
-        public static double todayChange { get; set; }
-        public static double todayPnL { get; set; }
+        public static double todayChange { get; set; } = 0.0;
+        public static double todayPnL { get; set; } = 0.0;
         public static int AccountStockLots { get; set; }
         public static int TotalPnL { get; set; }
 
