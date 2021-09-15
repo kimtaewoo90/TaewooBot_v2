@@ -288,11 +288,13 @@ namespace TaewooBot_v2
 
                     BotParams.Accnt_Position[code] = positionState;
 
-                    position.DisplayPosition(code, krName, balance.ToString(), 
-                                                           buyPrice.ToString(), 
-                                                           curPrice.ToString(), 
-                                                           change.ToString(), 
-                                                           tradingPnL.ToString());
+                    position.DisplayPosition(code, 
+                                             krName, 
+                                             balance.ToString(), 
+                                             buyPrice.ToString(), 
+                                             curPrice.ToString(), 
+                                             change.ToString(), 
+                                             tradingPnL.ToString());
 
                     if (BotParams.ArrangingPosition is true)
                     {
@@ -500,8 +502,8 @@ namespace TaewooBot_v2
                     ShortCode = ShortCode.Replace("A", "");
                     var KrName = API.GetChejanData(302).Trim().ToString();
                     var OrderType = API.GetChejanData(913).Trim().ToString();
-                    var Type = API.GetChejanData(905).Trim().ToString();
-                    var OrderQty = API.GetChejanData(900).Trim().ToString();
+                    var Type = API.GetChejanData(905).Trim().ToString();    // 매수 or 매도
+                    var OrderQty = API.GetChejanData(900).Trim().ToString();    // 주문상태
                     var FilledQty = API.GetChejanData(911).Trim().ToString();
                     var OrderPrice = API.GetChejanData(901).Trim().ToString();
                     var FilledPrice = API.GetChejanData(910).Trim().ToString();
@@ -602,16 +604,12 @@ namespace TaewooBot_v2
                     position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
 
                     // Display Account Information
-                    var todayPnL = API.GetChejanData(990).Trim().ToString();
-                    var todayChange = API.GetChejanData(991).Trim().ToString();
+                    BotParams.todayPnL = API.GetChejanData(990).Trim().ToString();
+                    BotParams.todayChange = API.GetChejanData(991).Trim().ToString();
                     BotParams.Deposit = double.Parse(API.GetChejanData(951).Trim());
 
-                    BotParams.AccountList = new List<string> { todayPnL, todayChange, BotParams.Deposit.ToString() };
-
-                    position.DisplayAccount(BotParams.AccountList);
                     /* 매도 시 Mode Class를 호출하여 각각의 Mode에서의 전략으로 매도 실행 */
                     /* ver2.0 에서는 여기에 바로 매도 로직 작성 */
-
 
                     telegram.SendTelegramMsg($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}");
                     logs.write_sys_log($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}", 0);

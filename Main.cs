@@ -23,6 +23,8 @@ namespace TaewooBot_v2
         // Thread 선언
         Thread GetTime = null;
         Thread GetDataThread = null;
+        Thread AccountStatusThread = null;
+
         //Thread MonitoringSignalThread = null;
         //Thread BlotterThread = null;
         //Thread PositionThread = null;
@@ -170,18 +172,22 @@ namespace TaewooBot_v2
 
                 // Main Thread
                 GetDataThread = new Thread(new ThreadStart(GetData));
-                
+
                 // Blotter Thread
                 // BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
-                
+
                 // Position Thread
                 // PositionThread = new Thread(new ThreadStart(PositionDisplay));
+
+                // AccountStatus Thread
+                AccountStatusThread = new Thread(new ThreadStart(AccountStatus));
                 
                 // Get global time Thread.
                 GetTime = new Thread(new ThreadStart(GetCurrentTime));
 
                 GetTime.Start();
                 GetDataThread.Start();
+                AccountStatusThread.Start();
 
                 //BlotterThread.Start();
                // PositionThread.Start();
@@ -193,6 +199,20 @@ namespace TaewooBot_v2
             } 
         }
 
+        // Account Status Thread
+        public void AccountStatus()
+        {
+            while (true)
+            {
+                var deposit = BotParams.Deposit;
+                var todayChnage = BotParams.todayChange;
+                var todayPnL = BotParams.todayPnL;
+
+                BotParams.AccountList = new List<string> { BotParams.todayPnL, BotParams.todayChange, BotParams.Deposit.ToString() };
+
+                position.DisplayAccount(BotParams.AccountList);
+            }
+        }
 
         // GetTime Thread
         public void GetCurrentTime()
