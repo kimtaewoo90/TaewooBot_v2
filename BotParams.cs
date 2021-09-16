@@ -30,6 +30,8 @@ namespace TaewooBot_v2
         public static double Deposit { get; set; } = 0.0;
         public static double todayChange { get; set; } = 0.0;
         public static double todayPnL { get; set; } = 0.0;
+        public static double positionPnL { get; set; } = 0.0;
+
         public static int AccountStockLots { get; set; }
         public static int TotalPnL { get; set; }
 
