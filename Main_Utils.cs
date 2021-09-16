@@ -28,7 +28,7 @@ namespace TaewooBot_v2
 
 
             BotParams.RqName = "계좌평가현황요청";
-            API.CommRqData("계좌평가현황요청", "OPW00004", 0, scr_no);
+            API.CommRqData(BotParams.RqName, "OPW00004", 0, scr_no);
         }
 
         public void GetShortCodes(string market)
@@ -75,6 +75,8 @@ namespace TaewooBot_v2
                 BotParams.RqName = "";
                 BotParams.RqName = "주식기본정보";   // 해당 종목 데이터 요청 이름.
                 API.SetInputValue("종목코드", BotParams.Codes[i]);
+
+                BotParams.RequestRealDataScrNo.Add(scr_no);
 
                 // 실시간 현재가 받아오기
                 int res = API.CommRqData(BotParams.RqName, "OPT10001", 0, scr_no);

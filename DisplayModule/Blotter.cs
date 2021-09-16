@@ -30,12 +30,12 @@ namespace TaewooBot_v2
                 BltDataGrid.Invoke(new MethodInvoker(delegate ()
                 {
 
-                    BltDataGrid.Rows.Add(bltData[0], bltData[1], bltData[2], bltData[3], bltData[4], bltData[5], bltData[6], bltData[7], bltData[8], bltData[9]);
+                    BltDataGrid.Rows.Add(bltData[0], bltData[1], bltData[2], bltData[3], bltData[4], bltData[5], bltData[6], bltData[7], bltData[8], bltData[9], bltData[10]);
                 }));
             }
             else
             {
-                BltDataGrid.Rows.Add(bltData[0], bltData[1], bltData[2], bltData[3], bltData[4], bltData[5], bltData[6], bltData[7], bltData[8], bltData[9]);
+                BltDataGrid.Rows.Add(bltData[0], bltData[1], bltData[2], bltData[3], bltData[4], bltData[5], bltData[6], bltData[7], bltData[8], bltData[9], bltData[10]);
             }
         }
         

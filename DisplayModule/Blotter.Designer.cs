@@ -41,6 +41,7 @@
             this.FilledQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OrdPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FilledPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FilledTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.BltDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BLT_API)).BeginInit();
             this.SuspendLayout();
@@ -58,7 +59,8 @@
             this.OrdQty,
             this.FilledQty,
             this.OrdPrice,
-            this.FilledPrice});
+            this.FilledPrice,
+            this.FilledTime});
             this.BltDataGrid.Location = new System.Drawing.Point(4, 3);
             this.BltDataGrid.Name = "BltDataGrid";
             this.BltDataGrid.RowTemplate.Height = 23;
@@ -125,11 +127,16 @@
             this.FilledPrice.HeaderText = "FilledPrice";
             this.FilledPrice.Name = "FilledPrice";
             // 
+            // FilledTime
+            // 
+            this.FilledTime.HeaderText = "FilledTime";
+            this.FilledTime.Name = "FilledTime";
+            // 
             // Blotter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1050, 396);
+            this.ClientSize = new System.Drawing.Size(1052, 396);
             this.Controls.Add(this.BLT_API);
             this.Controls.Add(this.BltDataGrid);
             this.Name = "Blotter";
@@ -143,6 +150,7 @@
         #endregion
 
         private System.Windows.Forms.DataGridView BltDataGrid;
+        private AxKHOpenAPILib.AxKHOpenAPI BLT_API;
         private System.Windows.Forms.DataGridViewTextBoxColumn OrderTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn orderNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn StockCode;
@@ -153,6 +161,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn FilledQty;
         private System.Windows.Forms.DataGridViewTextBoxColumn OrdPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn FilledPrice;
-        private AxKHOpenAPILib.AxKHOpenAPI BLT_API;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FilledTime;
     }
 }
