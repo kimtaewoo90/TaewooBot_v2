@@ -276,7 +276,7 @@ namespace TaewooBot_v2
                     {
                         batchData = true;
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
-                        BotParams.ArrangingPosition = true;
+                        BotParams.IsLiquidation = true;
 
                         GetAccountInformation();
                         GetShortCodes("MM");            // botParams.Codes 에 저장
