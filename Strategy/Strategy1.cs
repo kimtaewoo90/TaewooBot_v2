@@ -67,7 +67,7 @@ namespace TaewooBot_v2.Strategy
                 }
 
                 // 익절 3% 손절 0.9%
-                if (double.Parse(change) > 0.03 || double.Parse(change) < -0.009)
+                if (double.Parse(change) > 0.05 || double.Parse(change) < -0.009)
                 {
                     BotParams.SellSignals[shortCode] = true;
                     telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
