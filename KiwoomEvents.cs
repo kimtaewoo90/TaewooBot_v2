@@ -264,6 +264,7 @@ namespace TaewooBot_v2
                 BotParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
                 BotParams.TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
 
+                var positionPnL = 0.0;
 
                 setText_Control(AccountTextBox, BotParams.AccountNumber.ToString());
                 setText_Control(DepositTextBox, BotParams.Deposit.ToString());
@@ -294,7 +295,10 @@ namespace TaewooBot_v2
                                              change.ToString(), 
                                              tradingPnL.ToString());
 
+                    positionPnL = positionPnL + (curPrice - buyPrice) * balance;
                 }
+
+                BotParams.positionPnL = positionPnL;
 
                 // 정리매매
                 if (BotParams.IsLiquidation is true)

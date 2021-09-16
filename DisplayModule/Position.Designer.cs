@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.PositionDataGrid = new System.Windows.Forms.DataGridView();
-            this.TodayDataGrid = new System.Windows.Forms.DataGridView();
-            this.TodayPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TodayPnLPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TodayDeposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Position_StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Position_KrName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BalanceQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -40,6 +36,11 @@
             this.CurPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Change = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TradingPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TodayDataGrid = new System.Windows.Forms.DataGridView();
+            this.TodayPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PositionPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TodayPnLPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TodayDeposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TodayDataGrid)).BeginInit();
             this.SuspendLayout();
@@ -60,38 +61,6 @@
             this.PositionDataGrid.RowTemplate.Height = 23;
             this.PositionDataGrid.Size = new System.Drawing.Size(753, 291);
             this.PositionDataGrid.TabIndex = 1;
-            // 
-            // TodayDataGrid
-            // 
-            this.TodayDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.TodayDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.TodayPnL,
-            this.TodayPnLPercent,
-            this.TodayDeposit});
-            this.TodayDataGrid.Location = new System.Drawing.Point(12, 12);
-            this.TodayDataGrid.Name = "TodayDataGrid";
-            this.TodayDataGrid.RowTemplate.Height = 23;
-            this.TodayDataGrid.Size = new System.Drawing.Size(305, 69);
-            this.TodayDataGrid.TabIndex = 2;
-            // 
-            // TodayPnL
-            // 
-            this.TodayPnL.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.TodayPnL.HeaderText = "당일실현손익";
-            this.TodayPnL.Name = "TodayPnL";
-            this.TodayPnL.Width = 72;
-            // 
-            // TodayPnLPercent
-            // 
-            this.TodayPnLPercent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.TodayPnLPercent.HeaderText = "당일실현손익률";
-            this.TodayPnLPercent.Name = "TodayPnLPercent";
-            this.TodayPnLPercent.Width = 83;
-            // 
-            // TodayDeposit
-            // 
-            this.TodayDeposit.HeaderText = "예수금";
-            this.TodayDeposit.Name = "TodayDeposit";
             // 
             // Position_StockCode
             // 
@@ -128,6 +97,44 @@
             this.TradingPnL.HeaderText = "TradingPnL";
             this.TradingPnL.Name = "TradingPnL";
             // 
+            // TodayDataGrid
+            // 
+            this.TodayDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TodayDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.TodayPnL,
+            this.PositionPnL,
+            this.TodayPnLPercent,
+            this.TodayDeposit});
+            this.TodayDataGrid.Location = new System.Drawing.Point(12, 12);
+            this.TodayDataGrid.Name = "TodayDataGrid";
+            this.TodayDataGrid.RowTemplate.Height = 23;
+            this.TodayDataGrid.Size = new System.Drawing.Size(399, 59);
+            this.TodayDataGrid.TabIndex = 2;
+            // 
+            // TodayPnL
+            // 
+            this.TodayPnL.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.TodayPnL.HeaderText = "당일실현손익";
+            this.TodayPnL.Name = "TodayPnL";
+            this.TodayPnL.Width = 72;
+            // 
+            // PositionPnL
+            // 
+            this.PositionPnL.HeaderText = "포지션손익";
+            this.PositionPnL.Name = "PositionPnL";
+            // 
+            // TodayPnLPercent
+            // 
+            this.TodayPnLPercent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.TodayPnLPercent.HeaderText = "당일실현손익률";
+            this.TodayPnLPercent.Name = "TodayPnLPercent";
+            this.TodayPnLPercent.Width = 83;
+            // 
+            // TodayDeposit
+            // 
+            this.TodayDeposit.HeaderText = "예수금";
+            this.TodayDeposit.Name = "TodayDeposit";
+            // 
             // Position
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -147,9 +154,6 @@
         public System.Windows.Forms.DataGridView PositionDataGrid;
         //private AxKHOpenAPILib.AxKHOpenAPI Position_API;
         private System.Windows.Forms.DataGridView TodayDataGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnL;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnLPercent;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TodayDeposit;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position_StockCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position_KrName;
         private System.Windows.Forms.DataGridViewTextBoxColumn BalanceQty;
@@ -157,5 +161,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn CurPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn Change;
         private System.Windows.Forms.DataGridViewTextBoxColumn TradingPnL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PositionPnL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnLPercent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TodayDeposit;
     }
 }

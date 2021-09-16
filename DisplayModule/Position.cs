@@ -27,6 +27,8 @@ namespace TaewooBot_v2
                     TodayDataGrid.Rows[0].Cells[0].Value = accountList[0];
                     TodayDataGrid.Rows[0].Cells[1].Value = accountList[1];
                     TodayDataGrid.Rows[0].Cells[2].Value = accountList[2];
+                    TodayDataGrid.Rows[0].Cells[3].Value = accountList[3];
+
                 }));
             }
             else
@@ -34,6 +36,8 @@ namespace TaewooBot_v2
                 TodayDataGrid.Rows[0].Cells[0].Value = accountList[0];
                 TodayDataGrid.Rows[0].Cells[1].Value = accountList[1];
                 TodayDataGrid.Rows[0].Cells[2].Value = accountList[2];
+                TodayDataGrid.Rows[0].Cells[3].Value = accountList[3];
+
             }
         }
 
@@ -43,11 +47,19 @@ namespace TaewooBot_v2
 
             var dataGridCnt = PositionDataGrid.Rows.Count - 1;
 
+            var positionPnL = 0.0;
+
             if (PositionDataGrid.InvokeRequired)
             {
 
                 PositionDataGrid.Invoke(new MethodInvoker(delegate ()
                 {
+                    for(int row = 0; row < dataGridCnt; row++)
+                    {
+                        positionPnL = positionPnL + Convert.ToDouble(PositionDataGrid.Rows[row].Cells[6].Value);
+                    }
+
+                    BotParams.positionPnL = positionPnL;
 
 
                     for (int cnt = 0; cnt < dataGridCnt; cnt++)
@@ -61,6 +73,7 @@ namespace TaewooBot_v2
                             PositionDataGrid["CurPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(curPrice));
                             PositionDataGrid["Change", cnt].Value = String.Format("{0:f2}%", double.Parse(change));
                             PositionDataGrid["TradingPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradingPnL));
+
                             return;
                         }     
                     }
@@ -75,6 +88,13 @@ namespace TaewooBot_v2
 
             else
             {
+                for (int row = 0; row < dataGridCnt; row++)
+                {
+                    positionPnL = positionPnL + Convert.ToDouble(PositionDataGrid.Rows[row].Cells[6].Value);
+                }
+
+                BotParams.positionPnL = positionPnL;
+
                 for (int cnt = 0; cnt < dataGridCnt; cnt++)
                 {
                     if (PositionDataGrid["Position_StockCode", cnt].Value.ToString() == shortCode)

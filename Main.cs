@@ -208,7 +208,7 @@ namespace TaewooBot_v2
                 var todayChnage = BotParams.todayChange;
                 var todayPnL = BotParams.todayPnL;
 
-                BotParams.AccountList = new List<string> { BotParams.todayPnL.ToString(), BotParams.todayChange.ToString(), BotParams.Deposit.ToString() };
+                BotParams.AccountList = new List<string> { BotParams.todayPnL.ToString(), BotParams.positionPnL.ToString(), BotParams.todayChange.ToString(), BotParams.Deposit.ToString() };
 
                 position.DisplayAccount(BotParams.AccountList);
             }
@@ -234,8 +234,9 @@ namespace TaewooBot_v2
 
             var batchData = false;
             var IsLiquidation = true;
-            BotParams.IsLiquidation = true;
 
+            GetAccountInformation();
+            
             // while 문으로 무한루프 & 시간계산
             while (true)
             { 
@@ -243,6 +244,7 @@ namespace TaewooBot_v2
                 {
                     if ((BotParams.CurTime.CompareTo("09:00:20") >= 0 && BotParams.CurTime.CompareTo("09::01:59") < 0)  && IsLiquidation == true)
                     {
+                        BotParams.IsLiquidation = true;
                         IsLiquidation = false;
                         GetAccountInformation();
                     }
