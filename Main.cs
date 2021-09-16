@@ -238,7 +238,7 @@ namespace TaewooBot_v2
 
             // while 문으로 무한루프 & 시간계산
             while (true)
-            {
+            { 
                 try
                 {
                     if ((BotParams.CurTime.CompareTo("09:00:20") >= 0 && BotParams.CurTime.CompareTo("09::01:59") < 0)  && IsLiquidation == true)
@@ -261,11 +261,7 @@ namespace TaewooBot_v2
                         // LiquidationStocks();
                     }
 
-<<<<<<< HEAD
-                    if (BotParams.CurTime.CompareTo("09:02:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.PendingOrders.Count() == 0 && batchData == false)
-=======
                     if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.IsLiquidation == false && batchData == false)
->>>>>>> 79776180eacea51c114a25c945412e8c703242ff
                     {
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
@@ -280,7 +276,7 @@ namespace TaewooBot_v2
                     {
                         batchData = true;
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
-                        BotParams.ArrangingPosition = true;
+                        BotParams.IsLiquidation = true;
 
                         GetAccountInformation();
                         GetShortCodes("MM");            // botParams.Codes 에 저장
