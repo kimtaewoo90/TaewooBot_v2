@@ -53,12 +53,11 @@ namespace TaewooBot_v2
         // TODO : 시그널 확인 함수
         public bool MonitoringSignals_Strategy1()
         {
-            if (double.Parse(states_CurPrice) >= double.Parse(states_highPrice))
+            if (double.Parse(states_CurPrice) > double.Parse(states_lowPrice))
                 signal_1 = true;
-            signal_1 = true;
 
-            // 기준 잡기.
-            if (states_TickList.Average() > BotParams.BeforeAvg[states_ShortCode] * 2 && BotParams.BeforeAvg[states_ShortCode] != 0)
+            // 기준 잡기.  tickList average => OneMinTickList average
+            if (states_TickOneMinList.Average() > BotParams.BeforeAvg[states_ShortCode] * 2 && BotParams.BeforeAvg[states_ShortCode] != 0)
                 signal_2 = true;
 
             // 거래대금도 detail 하게 다시 잡기

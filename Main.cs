@@ -23,6 +23,8 @@ namespace TaewooBot_v2
         // Thread 선언
         Thread GetTime = null;
         Thread GetDataThread = null;
+        Thread AccountStatusThread = null;
+
         //Thread MonitoringSignalThread = null;
         //Thread BlotterThread = null;
         //Thread PositionThread = null;
@@ -59,6 +61,7 @@ namespace TaewooBot_v2
             // Tr code 검색
             this.API.OnReceiveTrData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEventHandler(this.OnReceiveTrData);
             this.API.OnReceiveRealData += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEventHandler(this.OnReceiveRealData);
+            this.API.OnReceiveMsg += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveMsgEventHandler(this.OnReceiveMsg);
 
             // 조건검색
             this.API.OnReceiveConditionVer += new AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveConditionVerEventHandler(this.OnReceiveConditionVer);
@@ -169,18 +172,22 @@ namespace TaewooBot_v2
 
                 // Main Thread
                 GetDataThread = new Thread(new ThreadStart(GetData));
-                
+
                 // Blotter Thread
                 // BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
-                
+
                 // Position Thread
                 // PositionThread = new Thread(new ThreadStart(PositionDisplay));
+
+                // AccountStatus Thread
+                AccountStatusThread = new Thread(new ThreadStart(AccountStatus));
                 
                 // Get global time Thread.
                 GetTime = new Thread(new ThreadStart(GetCurrentTime));
 
                 GetTime.Start();
                 GetDataThread.Start();
+                AccountStatusThread.Start();
 
                 //BlotterThread.Start();
                // PositionThread.Start();
@@ -189,29 +196,23 @@ namespace TaewooBot_v2
 
             else if (BotParams.Market == "Coin")
             {
-                logs.StartPosition = FormStartPosition.Manual;
-                logs.Location = new Point(755, 520);
-                logs.Show();
-
-                logs.write_sys_log($"Welcome to {BotParams.Market} world", 0);
-                
-                if(BotParams.CoinThread is true)
-                {
-                    logs.write_sys_log("Coin Auto trading System is on laready", 0);
-                    return;
-                }
-
-                logs.write_sys_log("Coin AUTO TRADING SYSTEM is just started \r\n", 0);
-                //BotParams.CoinThread = true;
-                //CoinThread = new Thread(new ThreadStart(CoinStart));
-                //PositionThread = new Thread(new ThreadStart(PositionDisplay));
-
-                //CoinThread.Start();
-                //PositionThread.Start();
-
             } 
         }
 
+        // Account Status Thread
+        public void AccountStatus()
+        {
+            while (true)
+            {
+                var deposit = BotParams.Deposit;
+                var todayChnage = BotParams.todayChange;
+                var todayPnL = BotParams.todayPnL;
+
+                BotParams.AccountList = new List<string> { BotParams.todayPnL.ToString(), BotParams.todayChange.ToString(), BotParams.Deposit.ToString() };
+
+                position.DisplayAccount(BotParams.AccountList);
+            }
+        }
 
         // GetTime Thread
         public void GetCurrentTime()
@@ -232,18 +233,42 @@ namespace TaewooBot_v2
             telegram.SendTelegramMsg("GetData Thread is started");
 
             var batchData = false;
+            var IsLiquidation = true;
+            BotParams.IsLiquidation = true;
+
             // while 문으로 무한루프 & 시간계산
-            while(true)
+            while (true)
             {
                 try
                 {
-                    if (BotParams.CurTime.CompareTo("08:59:30") >= 0 && BotParams.CurTime.CompareTo("15:19:59") < 0 && batchData == false)
+                    if ((BotParams.CurTime.CompareTo("09:00:20") >= 0 && BotParams.CurTime.CompareTo("09::01:59") < 0)  && IsLiquidation == true)
+                    {
+                        IsLiquidation = false;
+                        GetAccountInformation();
+                    }
+
+                    if (BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0)
+                    {
+                        for (int Idx = 0; Idx < BotParams.RequestRealDataScrNo.Count; Idx++)
+                        {
+                            API.DisconnectRealData(BotParams.RequestRealDataScrNo[Idx]);
+                        }
+
+                        BotParams.IsLiquidation = true;
+                        GetAccountInformation();
+
+                        // 정리 매매
+                        // LiquidationStocks();
+                    }
+
+                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.IsLiquidation == false && batchData == false)
                     {
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
+                        BotParams.IsLiquidation = false;
 
-                        GetAccountInformation();
-                        GetShortCodes("MM");            // botParams.Codes 에 저장
+                        GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?
+                        GetShortCodes("MM");                // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
 
@@ -251,6 +276,7 @@ namespace TaewooBot_v2
                     {
                         batchData = true;
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
+                        BotParams.IsLiquidation = true;
 
                         GetAccountInformation();
                         GetShortCodes("MM");            // botParams.Codes 에 저장
@@ -272,33 +298,5 @@ namespace TaewooBot_v2
         {
 
         }
-
-
-    }
-
-    class ConditionInfo
-    {
-        public int ConditionNum { get; set; }
-        public String ConditionNm { get; set; }
-        public Boolean ReqRealTime = true;
-
-        //public List<StockItemInfo> stockItemList;
-    }
-
-    public class StockInfo
-    {
-        public string Code { get; set; }
-        public string KrName { get; set; }
-        public string Price { get; set; }
-    }
-
-    class StockValueInfo
-    {
-        public string Code { get; set; }
-        public string KrName { get; set; }
-        public int BuyPrice { get; set; }
-        public int ValuePrice { get; set; }
-        public double ValueRate { get; set; }
-        public int Inventory { get; set; }
     }
 }

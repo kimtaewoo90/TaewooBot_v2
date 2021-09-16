@@ -59,15 +59,15 @@ namespace TaewooBot_v2
                             PositionDataGrid["BalanceQty", cnt].Value = String.Format("{0:0,0}",double.Parse(balanceQty));
                             PositionDataGrid["BuyPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(buyPrice));
                             PositionDataGrid["CurPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(curPrice));
-                            PositionDataGrid["Change", cnt].Value = String.Format("{0:0,0}", double.Parse(change));
+                            PositionDataGrid["Change", cnt].Value = String.Format("{0:f2}%", double.Parse(change));
                             PositionDataGrid["TradingPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradingPnL));
-                            break;
+                            return;
                         }     
                     }
                     PositionDataGrid.Rows.Add(shortCode, krName, String.Format("{0:0,0}", double.Parse(balanceQty)),
                                              String.Format("{0:0,0}", double.Parse(buyPrice)),
                                              String.Format("{0:0,0}", double.Parse(curPrice)),
-                                             String.Format("{0:0,0}", double.Parse(change)),
+                                             String.Format("{0:f2}%", double.Parse(change)),
                                              String.Format("{0:0,0}", double.Parse(tradingPnL)));
 
                 }));
@@ -84,15 +84,15 @@ namespace TaewooBot_v2
                         PositionDataGrid["BalanceQty", cnt].Value = String.Format("{0:0,0}", double.Parse(balanceQty));
                         PositionDataGrid["BuyPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(buyPrice));
                         PositionDataGrid["CurPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(curPrice));
-                        PositionDataGrid["Change", cnt].Value = String.Format("{0:0,0}", double.Parse(change));
+                        PositionDataGrid["Change", cnt].Value = String.Format("{0:f2}%", double.Parse(change));
                         PositionDataGrid["TradingPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradingPnL));
-                        break;
+                        return;
                     }
                 }
                 PositionDataGrid.Rows.Add(shortCode, krName, String.Format("{0:0,0}", double.Parse(balanceQty)),
                                          String.Format("{0:0,0}", double.Parse(buyPrice)),
                                          String.Format("{0:0,0}", double.Parse(curPrice)),
-                                         String.Format("{0:0,0}", double.Parse(change)),
+                                         String.Format("{0:f2}%", double.Parse(change)),
                                          String.Format("{0:0,0}", double.Parse(tradingPnL)));
             }
         }
