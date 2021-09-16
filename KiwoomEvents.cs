@@ -271,8 +271,6 @@ namespace TaewooBot_v2
 
                 BotParams.AccountStockLots = API.GetRepeatCnt(e.sTrCode, e.sRQName);
 
-                List<string> SentOrderList = new List<string>();
-
                 for (int nIdx = 0; nIdx < BotParams.AccountStockLots; nIdx++)
                 {
                     var code = API.GetCommData(e.sTrCode, e.sRQName, nIdx, "종목코드").Trim();
@@ -298,8 +296,15 @@ namespace TaewooBot_v2
 
                 }
 
-                SentOrderList = new List<string>();
-                BotParams.ArrangingPosition = false;
+                // 정리매매
+                if (BotParams.IsLiquidation is true)
+                {
+                    // LiquidationStocks 실행 후 IsLiquidation을 false로 바꿈
+                    BotParams.IsLiquidation = false;
+                    
+                    LiquidationStocks();
+                }
+
 
                 if (BotParams.AccountStockLots == 0)
                 {
@@ -600,6 +605,11 @@ namespace TaewooBot_v2
 
             List<string> codes = new List<string>(BotParams.Accnt_Position.Keys);
 
+            if (codes.Count == 0)
+            {
+                telegram.SendTelegramMsg("보유주식이 없습니다.");
+            }
+
             for (int i=0; i < codes.Count; i++)
             {
                 var shortCode = BotParams.Accnt_Position[codes[i]].position_ShortCode;
@@ -611,6 +621,7 @@ namespace TaewooBot_v2
 
                 // Send sell order
                 var scr_no = utils.get_scr_no();
+                logs.write_sys_log($"[{krName}] 정리매매 주문 전송합니다. scrNo : {scr_no}", 0);
                 telegram.SendTelegramMsg($"[{krName}] 정리매매 주문 전송합니다. scrNo : {scr_no}");
 
                 SendSellOrder(scr_no, shortCode, Convert.ToInt32(balance), 0, "03");

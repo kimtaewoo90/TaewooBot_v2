@@ -233,45 +233,41 @@ namespace TaewooBot_v2
             telegram.SendTelegramMsg("GetData Thread is started");
 
             var batchData = false;
-            var arrangePosition = true;
+            var IsLiquidation = true;
+            BotParams.IsLiquidation = true;
+
             // while 문으로 무한루프 & 시간계산
-            while(true)
+            while (true)
             {
                 try
                 {
-                    if ((BotParams.CurTime.CompareTo("09:00:20") >= 0 && BotParams.CurTime.CompareTo("09::01:59") < 0)  && arrangePosition == true)
+                    if ((BotParams.CurTime.CompareTo("09:00:20") >= 0 && BotParams.CurTime.CompareTo("09::01:59") < 0)  && IsLiquidation == true)
                     {
-                        BotParams.ArrangingPosition = true;
-                        arrangePosition = false;
+                        IsLiquidation = false;
                         GetAccountInformation();
-
-                        // 정리 매매
-                        LiquidationStocks();
                     }
 
-                    if ((BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0) && arrangePosition == true)
+                    if (BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0)
                     {
                         for (int Idx = 0; Idx < BotParams.RequestRealDataScrNo.Count; Idx++)
                         {
                             API.DisconnectRealData(BotParams.RequestRealDataScrNo[Idx]);
                         }
 
-                        BotParams.ArrangingPosition = true;
-                        arrangePosition = false;
+                        BotParams.IsLiquidation = true;
                         GetAccountInformation();
 
                         // 정리 매매
-                        LiquidationStocks();
+                        // LiquidationStocks();
                     }
 
-                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.PendingOrders.Count() == 0 && batchData == false)
+                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.IsLiquidation == false && batchData == false)
                     {
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
-                        arrangePosition = true;
-                        BotParams.ArrangingPosition = false;
+                        BotParams.IsLiquidation = false;
 
-                        // GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?
+                        GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?
                         GetShortCodes("MM");                // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
