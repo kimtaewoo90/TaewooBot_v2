@@ -4,6 +4,5 @@
 /LogFile
 *.txt
 *.csproj
-*.sln
 *.config
 
