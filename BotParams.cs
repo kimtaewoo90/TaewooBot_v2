@@ -21,7 +21,7 @@ namespace TaewooBot_v2
         public static bool _GetRTD { get; set; }
         public static string RqName { get; set; }
         public static string CurTime { get; set; }
-        public static bool ArrangingPosition { get; set; } = false;
+        public static bool IsLiquidation { get; set; } = false;
 
         public static bool Test { get; set; } = false;
 
