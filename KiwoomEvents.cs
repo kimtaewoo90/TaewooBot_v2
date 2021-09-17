@@ -433,7 +433,8 @@ namespace TaewooBot_v2
                     strategy1.MonitoringSellSignals(shortCode, curPrice, buyPrice, positionChange);
 
                     // 매도 주문
-                    if (BotParams.SellSignals[code] == true && !BotParams.PendingOrders.Contains(code))
+                    if (BotParams.SellSignals[code] == true &&
+                       !BotParams.PendingOrders.Contains(code))
                     {
                         BotParams.RqName = "주식주문";
                         var scr_no = utils.get_scr_no();
@@ -508,20 +509,21 @@ namespace TaewooBot_v2
                     if (!BotParams.OrderedStocks.Contains(ShortCode) && OrderType == "체결" && Type == "+매수")
                     {
                         // Remove Pending Orders
-                        if (BotParams.PendingOrders.Contains(ShortCode))
+                        if (BotParams.PendingOrders.Contains(ShortCode) && OrderQty == FilledQty)
+                        {
                             BotParams.PendingOrders.Remove(ShortCode);
+                            // TickList, TickOneMinList, BeforeAvg Dictionary 초기화
+                            strategy1.ResetTickDataList(ShortCode);
+                        }
 
-                        // TickList, TickOneMinList, BeforeAvg Dictionary 초기화
-                        strategy1.ResetTickDataList(ShortCode);
+                        if (BotParams.OrderingStocks.Contains(ShortCode) && OrderQty == FilledQty)
+                            BotParams.OrderingStocks.Remove(ShortCode);
 
                         var change_in_case_0 = (double.Parse(CurPrice) / double.Parse(FilledPrice));
                         var tradingPnL_in_case_0 = (double.Parse(CurPrice) - double.Parse(FilledPrice)) * double.Parse(FilledQty);
 
-                        var positionState = new PositionState(ShortCode, KrName, FilledQty.ToString(), FilledPrice.ToString(), CurPrice.ToString(), change_in_case_0.ToString(), tradingPnL_in_case_0.ToString());
+                        var positionState = new PositionState(ShortCode, KrName, OrderQty.ToString(), FilledQty.ToString(), FilledPrice.ToString(), CurPrice.ToString(), change_in_case_0.ToString(), tradingPnL_in_case_0.ToString());
                         BotParams.Accnt_Position[ShortCode] = positionState;
-
-                        // 체결 후 계좌조회
-                        // GetAccountInformation();
 
                         telegram.SendTelegramMsg($"Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
 
@@ -532,24 +534,29 @@ namespace TaewooBot_v2
                         BotParams.OrderedStocks.Add(ShortCode);
                         logs.write_sys_log($"OrderedStock {KrName}", 0);
 
-                        if (BotParams.OrderingStocks.Contains(ShortCode))
-                            BotParams.OrderingStocks.Remove(ShortCode);
+
                     }
 
                     // 체결 + 매도
                     if (OrderType == "체결" && BotParams.OrderedStocks.Contains(ShortCode) && Type == "-매도")
                     {
                         telegram.SendTelegramMsg($"매도 => Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
-                        
+
                         // Remove Pending Orders
-                        if (BotParams.PendingOrders.Contains(ShortCode))
+                        if (BotParams.PendingOrders.Contains(ShortCode) && OrderQty == FilledQty)
+                        {
+                            // 미체결 있으면 PendingOrders Remove 취소
                             BotParams.PendingOrders.Remove(ShortCode);
 
-                        BotParams.Accnt_Position.Remove(ShortCode);
-                        BotParams.OrderedStocks.Remove(ShortCode);
+                            // 미체결 있으면 Accnt_Position Remove 취소
+                            BotParams.Accnt_Position.Remove(ShortCode);
+
+                            // 미체결 있으면 OrderedStocks Remove 취소
+                            BotParams.OrderedStocks.Remove(ShortCode);
+                        }
                     }
 
-
+                    // 주문 접수
                     if (!BotParams.OrderingStocks.Contains(ShortCode) && OrderType == "접수")
                     {
                         BotParams.OrderingStocks.Add(ShortCode);
@@ -560,8 +567,6 @@ namespace TaewooBot_v2
                         BotParams.BlotterStateDict[ShortCode] = blotterState_jubsu;
                     }
 
-                    // 매수 매도 후 잔고 갱신
-                    //BLT_GetAccountInformation();
 
                     break;
 
