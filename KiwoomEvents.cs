@@ -277,13 +277,21 @@ namespace TaewooBot_v2
                     var code = API.GetCommData(e.sTrCode, e.sRQName, nIdx, "종목코드").Trim();
                     code = code.Replace("A", "");
                     var krName = API.GetCommData(e.sTrCode, e.sRQName, nIdx, "종목명").Trim().ToString();
+                    var orderQty = "0";
                     var balance = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "보유수량").Trim());
                     var buyPrice = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "평균단가").Trim());
                     var curPrice = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "현재가").Trim().Replace("-", ""));
                     var change = Math.Round((curPrice / buyPrice) - 1, 2);
                     var tradingPnL = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "손익금액").Trim());
 
-                    var positionState = new PositionState(code, krName, balance.ToString(), buyPrice.ToString(), curPrice.ToString(), change.ToString(), tradingPnL.ToString());
+                    var positionState = new PositionState(code, 
+                                                          krName, 
+                                                          orderQty,
+                                                          balance.ToString(), 
+                                                          buyPrice.ToString(), 
+                                                          curPrice.ToString(), 
+                                                          change.ToString(), 
+                                                          tradingPnL.ToString());
 
                     BotParams.Accnt_Position[code] = positionState;
 
@@ -522,7 +530,15 @@ namespace TaewooBot_v2
                         var change_in_case_0 = (double.Parse(CurPrice) / double.Parse(FilledPrice));
                         var tradingPnL_in_case_0 = (double.Parse(CurPrice) - double.Parse(FilledPrice)) * double.Parse(FilledQty);
 
-                        var positionState = new PositionState(ShortCode, KrName, OrderQty.ToString(), FilledQty.ToString(), FilledPrice.ToString(), CurPrice.ToString(), change_in_case_0.ToString(), tradingPnL_in_case_0.ToString());
+                        var positionState = new PositionState(ShortCode, 
+                                                              KrName, 
+                                                              OrderQty.ToString(), 
+                                                              FilledQty.ToString(), 
+                                                              FilledPrice.ToString(), 
+                                                              CurPrice.ToString(), 
+                                                              change_in_case_0.ToString(), 
+                                                              tradingPnL_in_case_0.ToString());
+
                         BotParams.Accnt_Position[ShortCode] = positionState;
 
                         telegram.SendTelegramMsg($"Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
@@ -576,6 +592,7 @@ namespace TaewooBot_v2
                     var ShortCode1 = API.GetChejanData(9001).Trim().ToString();
                     ShortCode1 = ShortCode1.Replace("A", "");
                     var KrName1 = API.GetChejanData(302).Trim().ToString();
+                    var OrderQty1 = BotParams.PositionDict[ShortCode1].position_OrderQty;
                     var BalanceQty = API.GetChejanData(930).Trim().ToString();
                     var BuyPrice = API.GetChejanData(931).Trim().ToString();
                     var CurPrice_in_case_1 = API.GetChejanData(10).Trim().ToString();
@@ -585,7 +602,15 @@ namespace TaewooBot_v2
 
                     BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString() };
 
-                    var state = new PositionState(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
+                    var state = new PositionState(ShortCode1, 
+                                                  KrName1, 
+                                                  OrderQty1, 
+                                                  BalanceQty, 
+                                                  BuyPrice, 
+                                                  CurPrice_in_case_1, 
+                                                  Change, 
+                                                  TradingPnL.ToString());
+
                     BotParams.PositionDict[ShortCode1] = state;
 
                     position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
