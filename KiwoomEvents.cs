@@ -281,7 +281,7 @@ namespace TaewooBot_v2
                     var balance = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "보유수량").Trim());
                     var buyPrice = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "평균단가").Trim());
                     var curPrice = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "현재가").Trim().Replace("-", ""));
-                    var change = Math.Round((curPrice / buyPrice) - 1, 2);
+                    var change = Math.Round(((curPrice / buyPrice) - 1) * 100, 2);
                     var tradingPnL = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "손익금액").Trim());
 
                     var positionState = new PositionState(code, 
@@ -519,6 +519,7 @@ namespace TaewooBot_v2
                         // Remove Pending Orders
                         if (BotParams.PendingOrders.Contains(ShortCode) && OrderQty == FilledQty)
                         {
+                            // Remove PendingOrders List
                             BotParams.PendingOrders.Remove(ShortCode);
                             // TickList, TickOneMinList, BeforeAvg Dictionary 초기화
                             strategy1.ResetTickDataList(ShortCode);
@@ -576,6 +577,7 @@ namespace TaewooBot_v2
                     if (!BotParams.OrderingStocks.Contains(ShortCode) && OrderType == "접수")
                     {
                         BotParams.OrderingStocks.Add(ShortCode);
+                        BotParams.PendingOrders.Add(ShortCode);
                         logs.write_sys_log($"OrderingStock {KrName}", 0);
                         telegram.SendTelegramMsg($"{KrName} 이(가) 주문접수 되었습니다.");
 
@@ -642,6 +644,7 @@ namespace TaewooBot_v2
             if (codes.Count == 0)
             {
                 telegram.SendTelegramMsg("보유주식이 없습니다.");
+                return;
             }
 
             for (int i=0; i < codes.Count; i++)
@@ -651,17 +654,25 @@ namespace TaewooBot_v2
                 var balance = BotParams.Accnt_Position[codes[i]].position_BalanceQty;
 
                 // add pending orders
-                BotParams.PendingOrders.Add(shortCode);
+                // BotParams.PendingOrders.Add(shortCode);
 
                 // Send sell order
                 var scr_no = utils.get_scr_no();
+
+                var hogaGb = "03";
+                if (BotParams.OrderType == "before") hogaGb = "61";
+                else if (BotParams.OrderType == "after") hogaGb = "62";
+
                 logs.write_sys_log($"[{krName}] 정리매매 주문 전송합니다. scrNo : {scr_no}", 0);
                 telegram.SendTelegramMsg($"[{krName}] 정리매매 주문 전송합니다. scrNo : {scr_no}");
 
-                SendSellOrder(scr_no, shortCode, Convert.ToInt32(balance), 0, "03");
+                SendSellOrder(scr_no, shortCode, Convert.ToInt32(balance), 0, hogaGb);
 
                 while (true)
                 {
+                    if (BotParams.OrderType == "before" || BotParams.OrderType == "after")
+                        break;
+
                     if (!BotParams.PendingOrders.Contains(shortCode))
                     {
                         logs.write_sys_log($"[{krName}] 정리매매 주문 성공했습니다.", 0);
