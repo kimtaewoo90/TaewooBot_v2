@@ -242,7 +242,7 @@ namespace TaewooBot_v2
             { 
                 try
                 {
-                    if ((BotParams.CurTime.CompareTo("08:55:00") >= 0 && BotParams.CurTime.CompareTo("08::59:59") < 0)  && IsLiquidation == true)
+                    if (BotParams.CurTime.CompareTo("08:55:00") >= 0 && BotParams.CurTime.CompareTo("08:59:59") < 0  && IsLiquidation == true)
                     {
                         BotParams.IsLiquidation = true;
                         IsLiquidation = false;
