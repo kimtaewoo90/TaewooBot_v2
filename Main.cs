@@ -242,11 +242,11 @@ namespace TaewooBot_v2
             { 
                 try
                 {
-                    if (BotParams.CurTime.CompareTo("08:55:00") >= 0 && BotParams.CurTime.CompareTo("08:59:59") < 0  && IsLiquidation == true)
+                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("09:05:00") < 0  && IsLiquidation == true)
                     {
                         BotParams.IsLiquidation = true;
                         IsLiquidation = false;
-                        BotParams.OrderType = "before";
+                        BotParams.OrderType = "market";
                         GetAccountInformation();
                     }
 
@@ -265,8 +265,9 @@ namespace TaewooBot_v2
                         // LiquidationStocks();
                     }
 
-                    if (BotParams.CurTime.CompareTo("09:00:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.PendingOrders.Count == 0 && batchData == false)
+                    if (BotParams.CurTime.CompareTo("09:05:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.PendingOrders.Count == 0 && batchData == false)
                     {
+                        telegram.SendTelegramMsg("Start Monitoring");
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
                         BotParams.IsLiquidation = false;

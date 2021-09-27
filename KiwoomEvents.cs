@@ -442,7 +442,7 @@ namespace TaewooBot_v2
 
                     // 매도 주문
                     if (BotParams.SellSignals[code] == true &&
-                       !BotParams.PendingOrders.Contains(code))
+                       !BotParams.PendingOrders.Contains(shortCode))
                     {
                         BotParams.RqName = "주식주문";
                         var scr_no = utils.get_scr_no();
@@ -450,12 +450,13 @@ namespace TaewooBot_v2
                         var hogaGb = "03";
 
                         // add Pending order
+                        telegram.SendTelegramMsg($"{krName} request sell order");
                         BotParams.PendingOrders.Add(shortCode);
 
-                        SendSellOrder(scr_no, code, Convert.ToInt32(balanceQty), ordPrice, hogaGb);
+                        SendSellOrder(scr_no, shortCode, Convert.ToInt32(balanceQty), ordPrice, hogaGb);
 
                         // 해당 종목 매도 시 다시 Tick Avg 계산.
-                        strategy1.ResetTickDataList(code);
+                        strategy1.ResetTickDataList(shortCode);
                     }
                 }
             }
@@ -594,7 +595,7 @@ namespace TaewooBot_v2
                     var ShortCode1 = API.GetChejanData(9001).Trim().ToString();
                     ShortCode1 = ShortCode1.Replace("A", "");
                     var KrName1 = API.GetChejanData(302).Trim().ToString();
-                    var OrderQty1 = BotParams.PositionDict[ShortCode1].position_OrderQty;
+                    var OrderQty1 = BotParams.Accnt_Position[ShortCode1].position_OrderQty;
                     var BalanceQty = API.GetChejanData(930).Trim().ToString();
                     var BuyPrice = API.GetChejanData(931).Trim().ToString();
                     var CurPrice_in_case_1 = API.GetChejanData(10).Trim().ToString();
@@ -668,6 +669,9 @@ namespace TaewooBot_v2
 
                 SendSellOrder(scr_no, shortCode, Convert.ToInt32(balance), 0, hogaGb);
 
+                utils.delay(3000);
+
+                /*
                 while (true)
                 {
                     if (BotParams.OrderType == "before" || BotParams.OrderType == "after")
@@ -681,6 +685,7 @@ namespace TaewooBot_v2
                         break;
                     }
                 }
+                */
             }
         }
 
