@@ -262,7 +262,8 @@ namespace TaewooBot_v2
             if (e.sRQName == "계좌평가현황요청")
             {
                 BotParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
-                BotParams.TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
+                BotParams.Deposit_T_2 = Double.Parse(API.GetCommData(e.sTrCdoe, e.sRQName, 0, "D+2추정예수금").Trim());
+                BotParams.TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "누적투자손익").Trim());
 
                 var positionPnL = 0.0;
 
@@ -296,7 +297,7 @@ namespace TaewooBot_v2
                                              tradingPnL.ToString());
 
                     positionPnL = positionPnL + (curPrice - buyPrice) * balance;
-                }
+                } 
 
                 BotParams.positionPnL = positionPnL;
 
