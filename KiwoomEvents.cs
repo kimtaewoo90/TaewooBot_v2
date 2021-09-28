@@ -450,8 +450,10 @@ namespace TaewooBot_v2
                         var hogaGb = "03";
 
                         // add Pending order
-                        telegram.SendTelegramMsg($"{krName} request sell order");
+                        //telegram.SendTelegramMsg($"{krName} request sell order");
                         BotParams.PendingOrders.Add(shortCode);
+
+                        telegram.SendTelegramMsg($"request sell order : {krName}/{balanceQty}");
 
                         SendSellOrder(scr_no, shortCode, Convert.ToInt32(balanceQty), ordPrice, hogaGb);
 
