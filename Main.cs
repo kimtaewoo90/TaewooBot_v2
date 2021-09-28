@@ -242,10 +242,11 @@ namespace TaewooBot_v2
             { 
                 try
                 {
-                    if ((BotParams.CurTime.CompareTo("09:00:20") >= 0 && BotParams.CurTime.CompareTo("09::01:59") < 0)  && IsLiquidation == true)
+                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("09:05:00") < 0  && IsLiquidation == true)
                     {
                         BotParams.IsLiquidation = true;
                         IsLiquidation = false;
+                        BotParams.OrderType = "market";
                         GetAccountInformation();
                     }
 
@@ -257,17 +258,20 @@ namespace TaewooBot_v2
                         }
 
                         BotParams.IsLiquidation = true;
+                        BotParams.OrderType = "market";
                         GetAccountInformation();
 
                         // 정리 매매
                         // LiquidationStocks();
                     }
 
-                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.IsLiquidation == false && batchData == false)
+                    if (BotParams.CurTime.CompareTo("09:05:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.PendingOrders.Count == 0 && batchData == false)
                     {
+                        telegram.SendTelegramMsg("Start Monitoring");
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
                         BotParams.IsLiquidation = false;
+                        BotParams.OrderType = "market";
 
                         GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?
                         GetShortCodes("MM");                // botParams.Codes 에 저장
