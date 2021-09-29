@@ -527,8 +527,12 @@ namespace TaewooBot_v2
                         {
                             // Remove PendingOrders List
                             // list 임
-                            BotParams.PendingOrders.Remove(ShortCode);
-                            
+                            for (int i = 0; i < BotParams.PendingOrders.Count; i++)
+                            {
+                                if (BotParams.PendingOrders[i] == ShortCode)
+                                    BotParams.PendingOrders.RemoveAt(i);
+                            }
+
                             // TickList, TickOneMinList, BeforeAvg Dictionary 초기화
                             strategy1.ResetTickDataList(ShortCode);
                         }
@@ -582,8 +586,8 @@ namespace TaewooBot_v2
                             // list 임
                             for (int i = 0; i < BotParams.OrderedStocks.Count; i++)
                             {
-                                if (BotParams.OrderedStocked[i] == ShortCode)
-                                    BotParams.OrderedStocked.RemoveAt(i);
+                                if (BotParams.OrderedStocks[i] == ShortCode)
+                                    BotParams.OrderedStocks.RemoveAt(i);
                             }
                         }
                     }
