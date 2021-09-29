@@ -419,7 +419,8 @@ namespace TaewooBot_v2
                         var hogaGb = "03";
 
                         // add pending order
-                        BotParams.PendingOrders.Add(ShortCode);
+                        // 주문접수 단계에서 PendingOrders 추가됨
+                        //BotParams.PendingOrders.Add(ShortCode);
 
                         SendBuyOrder(scr_no, ShortCode, ordQty, ordPrice, hogaGb);
 
@@ -441,6 +442,7 @@ namespace TaewooBot_v2
                     strategy1.MonitoringSellSignals(shortCode, curPrice, buyPrice, positionChange);
 
                     // 매도 주문
+                    // PendingOrders가 삭제가 안되서 매도 주문이 안나감
                     if (BotParams.SellSignals[code] == true &&
                        !BotParams.PendingOrders.Contains(shortCode))
                     {
@@ -451,7 +453,8 @@ namespace TaewooBot_v2
 
                         // add Pending order
                         //telegram.SendTelegramMsg($"{krName} request sell order");
-                        BotParams.PendingOrders.Add(shortCode);
+                        // 주문접수 단계에서 PendingOrders 추가 됨
+                        //BotParams.PendingOrders.Add(shortCode);
 
                         telegram.SendTelegramMsg($"request sell order : {krName}/{balanceQty}");
 
@@ -523,7 +526,9 @@ namespace TaewooBot_v2
                         if (BotParams.PendingOrders.Contains(ShortCode) && OrderQty == FilledQty)
                         {
                             // Remove PendingOrders List
+                            // list 임
                             BotParams.PendingOrders.Remove(ShortCode);
+                            
                             // TickList, TickOneMinList, BeforeAvg Dictionary 초기화
                             strategy1.ResetTickDataList(ShortCode);
                         }
@@ -565,14 +570,21 @@ namespace TaewooBot_v2
                         // Remove Pending Orders
                         if (BotParams.PendingOrders.Contains(ShortCode) && OrderQty == FilledQty)
                         {
-                            // 미체결 있으면 PendingOrders Remove 취소
-                            BotParams.PendingOrders.Remove(ShortCode);
+                            // list 임
+                            for(int i = 0; i < BotParams.PendingOrders.Count; i++)
+                            {
+                                if (BotParams.PendingOrders[i] == ShortCode)
+                                    BotParams.PendingOrders.RemoveAt(i);
+                            }
 
-                            // 미체결 있으면 Accnt_Position Remove 취소
                             BotParams.Accnt_Position.Remove(ShortCode);
 
-                            // 미체결 있으면 OrderedStocks Remove 취소
-                            BotParams.OrderedStocks.Remove(ShortCode);
+                            // list 임
+                            for (int i = 0; i < BotParams.OrderedStocks.Count; i++)
+                            {
+                                if (BotParams.OrderedStocked[i] == ShortCode)
+                                    BotParams.OrderedStocked.RemoveAt(i);
+                            }
                         }
                     }
 
