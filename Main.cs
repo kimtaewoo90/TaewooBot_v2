@@ -265,7 +265,7 @@ namespace TaewooBot_v2
                         // LiquidationStocks();
                     }
 
-                    if (BotParams.CurTime.CompareTo("09:05:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.PendingOrders.Count == 0 && batchData == false)
+                    if (BotParams.CurTime.CompareTo("09:05:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && batchData == false)
                     {
                         telegram.SendTelegramMsg("Start Monitoring");
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
