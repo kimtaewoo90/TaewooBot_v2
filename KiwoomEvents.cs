@@ -384,8 +384,14 @@ namespace TaewooBot_v2
                     var balanceQty = BotParams.Accnt_Position[code].position_BalanceQty;
                     var buyPrice = BotParams.Accnt_Position[code].position_BuyPrice;
                     var change_in_position = (price / double.Parse(buyPrice) - 1) * 100;
-                    var tradingPnL_in_position = (price - double.Parse(buyPrice)) * double.Parse(balanceQty); 
-                    position.DisplayPosition(shortCode, krName, balanceQty, buyPrice, price.ToString(), change_in_position.ToString(), tradingPnL_in_position.ToString());
+                    var tradingPnL_in_position = (price - double.Parse(buyPrice)) * double.Parse(balanceQty);
+
+                    //var positionState = new PositionState(shortCode, krName, balanceQty, balanceQty, buyPrice, price.ToString(), change_in_position.ToString(), tradingPnL_in_position.ToString());
+                    BotParams.Accnt_Position[shortCode].position_CurPrice = price.ToString();
+                    BotParams.Accnt_Position[shortCode].position_Change = change_in_position.ToString();
+                    BotParams.Accnt_Position[shortCode].position_TradingPnL = tradingPnL_in_position.ToString();
+
+                    //position.DisplayPosition(shortCode, krName, balanceQty, buyPrice, price.ToString(), change_in_position.ToString(), tradingPnL_in_position.ToString());
                 }
 
                 // Strategy1 
@@ -742,7 +748,7 @@ namespace TaewooBot_v2
                 // TODO : 매수잔량 취소 기능 추가
                 if (!BotParams.OrderingStocks.Contains(ShortCode))
                 {
-                    var res = API.SendOrder("주식주문", scr_no, "8003542111", 1, ShortCode.Trim(), ordQty, 0, hogaGB, "");
+                    var res = API.SendOrder("주식주문", scr_no, "8010133011", 1, ShortCode.Trim(), ordQty, 0, hogaGB, "");
 
                     if (res == 0)
                     {
@@ -764,7 +770,7 @@ namespace TaewooBot_v2
         {
             try
             {
-                var res = API.SendOrder("주식주문", scr_no, "8003542111", 2, ShortCode.Trim(), ordQty, 0, hogaGB, "");
+                var res = API.SendOrder("주식주문", scr_no, "8010133011", 2, ShortCode.Trim(), ordQty, 0, hogaGB, "");
 
                 if (res == 0)
                 {

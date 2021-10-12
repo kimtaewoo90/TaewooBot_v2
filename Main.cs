@@ -27,7 +27,7 @@ namespace TaewooBot_v2
 
         //Thread MonitoringSignalThread = null;
         //Thread BlotterThread = null;
-        //Thread PositionThread = null;
+        Thread PositionThread = null;
 
         // Instance Other WinForms
         Logs logs = new Logs();
@@ -177,7 +177,7 @@ namespace TaewooBot_v2
                 // BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
 
                 // Position Thread
-                // PositionThread = new Thread(new ThreadStart(PositionDisplay));
+                PositionThread = new Thread(new ThreadStart(PositionDisplay));
 
                 // AccountStatus Thread
                 AccountStatusThread = new Thread(new ThreadStart(AccountStatus));
@@ -190,7 +190,7 @@ namespace TaewooBot_v2
                 AccountStatusThread.Start();
 
                 //BlotterThread.Start();
-               // PositionThread.Start();
+                PositionThread.Start();
                 //MonitoringSignalThread.Start();
             }
 
@@ -198,6 +198,22 @@ namespace TaewooBot_v2
             {
             } 
         }
+
+        // Position Status Thread
+        public void PositionDisplay()
+        {
+            var tempCnt = 0;
+            while (true)
+            {
+                if (BotParams.Accnt_Position.Count != tempCnt)
+                {
+                    position.DisplayPositionOnce();
+                    tempCnt = BotParams.Accnt_Position.Count;
+
+                }
+            }
+        }
+
 
         // Account Status Thread
         public void AccountStatus()
@@ -270,7 +286,7 @@ namespace TaewooBot_v2
                         telegram.SendTelegramMsg("Start Monitoring");
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
-                        BotParams.IsLiquidation = false;
+                        BotParams.IsLiquidation = true;
                         BotParams.OrderType = "market";
 
                         GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?

@@ -116,5 +116,72 @@ namespace TaewooBot_v2
                                          String.Format("{0:0,0}", double.Parse(tradingPnL)));
             }
         }
+
+        public void DisplayPositionOnce()
+        {
+
+            if (PositionDataGrid.InvokeRequired)
+            {
+
+                PositionDataGrid.Invoke(new MethodInvoker(delegate ()
+                {
+                    ((DataTable)PositionDataGrid.DataSource).Rows.Clear();
+
+                    foreach (KeyValuePair<string, PositionState> items in BotParams.Accnt_Position)
+                    {
+                        var shortCode = items.Key;
+                        var krName = items.Value.position_KrName;
+                        var balanceQty = items.Value.position_BalanceQty;
+                        var buyPrice = items.Value.position_BuyPrice;
+                        var curPrice = items.Value.position_CurPrice;
+                        var change = items.Value.position_Change;
+                        var tradingPnL = items.Value.position_TradingPnL;
+
+                        PositionDataGrid.Rows.Add(shortCode, krName, String.Format("{0:0,0}", double.Parse(balanceQty)),
+                                                                     String.Format("{0:0,0}", double.Parse(buyPrice)),
+                                                                     String.Format("{0:0,0}", double.Parse(curPrice)),
+                                                                     String.Format("{0:f2}%", double.Parse(change)),
+                                                                     String.Format("{0:0,0}", double.Parse(tradingPnL)));
+                    }
+
+                    var positionPnL = 0.0;
+
+                    for (int row = 0; row < BotParams.Accnt_Position.Count; row++)
+                    {
+                        positionPnL = positionPnL + Convert.ToDouble(PositionDataGrid.Rows[row].Cells[6].Value);
+                    }
+                    BotParams.positionPnL = positionPnL;
+                }));
+            }
+            else
+            {
+                ((DataTable)PositionDataGrid.DataSource).Rows.Clear();
+
+                foreach (KeyValuePair<string, PositionState> items in BotParams.Accnt_Position)
+                {
+                    var shortCode = items.Key;
+                    var krName = items.Value.position_KrName;
+                    var balanceQty = items.Value.position_BalanceQty;
+                    var buyPrice = items.Value.position_BuyPrice;
+                    var curPrice = items.Value.position_CurPrice;
+                    var change = items.Value.position_Change;
+                    var tradingPnL = items.Value.position_TradingPnL;
+
+                    PositionDataGrid.Rows.Add(shortCode, krName, String.Format("{0:0,0}", double.Parse(balanceQty)),
+                                                                 String.Format("{0:0,0}", double.Parse(buyPrice)),
+                                                                 String.Format("{0:0,0}", double.Parse(curPrice)),
+                                                                 String.Format("{0:f2}%", double.Parse(change)),
+                                                                 String.Format("{0:0,0}", double.Parse(tradingPnL)));
+                }
+
+                var positionPnL = 0.0;
+
+                for (int row = 0; row < BotParams.Accnt_Position.Count; row++)
+                {
+                    positionPnL = positionPnL + Convert.ToDouble(PositionDataGrid.Rows[row].Cells[6].Value);
+                }
+                BotParams.positionPnL = positionPnL;
+            }
+        }
     }
 }
