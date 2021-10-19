@@ -205,12 +205,8 @@ namespace TaewooBot_v2
             var tempCnt = 0;
             while (true)
             {
-                if (BotParams.Accnt_Position.Count != tempCnt)
-                {
-                    position.DisplayPositionOnce();
-                    tempCnt = BotParams.Accnt_Position.Count;
-
-                }
+                position.DisplayPositionOnce();
+                tempCnt = BotParams.Accnt_Position.Count;
             }
         }
 

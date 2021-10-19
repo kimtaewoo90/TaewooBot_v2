@@ -409,7 +409,7 @@ namespace TaewooBot_v2
                     state.signal_3 = false;
 
                     // 매수 주문
-                    if (BotParams.Deposit > 1000000 && !BotParams.Accnt_Position.ContainsKey(code) && !BotParams.PendingOrders.Contains(code))
+                    if (BotParams.Deposit > 1000000 || !BotParams.Accnt_Position.ContainsKey(code) && !BotParams.PendingOrders.Contains(code))
                     {
                         logs.write_sys_log($"{code} Signal is true", 0);
 
@@ -431,7 +431,7 @@ namespace TaewooBot_v2
                         SendBuyOrder(scr_no, ShortCode, ordQty, ordPrice, hogaGb);
 
                         // sleep 2 sec after Send buy order.
-                        utils.delay(2000);
+                        //utils.delay(2000);
                     }
                 }
 
@@ -529,7 +529,7 @@ namespace TaewooBot_v2
                     if (!BotParams.OrderedStocks.Contains(ShortCode) && OrderType == "체결" && Type == "+매수")
                     {
                         // Remove Pending Orders
-                        if (BotParams.PendingOrders.Contains(ShortCode) && OrderQty == FilledQty)
+                        if (BotParams.PendingOrders.Contains(ShortCode))// && OrderQty == FilledQty)
                         {
                             // Remove PendingOrders List
                             // list 임
@@ -578,7 +578,7 @@ namespace TaewooBot_v2
                         telegram.SendTelegramMsg($"매도 => Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
 
                         // Remove Pending Orders
-                        if (BotParams.PendingOrders.Contains(ShortCode) && OrderQty == FilledQty)
+                        if (BotParams.PendingOrders.Contains(ShortCode))// && OrderQty == FilledQty)
                         {
                             // list 임
                             for(int i = 0; i < BotParams.PendingOrders.Count; i++)
@@ -619,7 +619,10 @@ namespace TaewooBot_v2
                     var ShortCode1 = API.GetChejanData(9001).Trim().ToString();
                     ShortCode1 = ShortCode1.Replace("A", "");
                     var KrName1 = API.GetChejanData(302).Trim().ToString();
-                    var OrderQty1 = BotParams.Accnt_Position[ShortCode1].position_OrderQty;
+                    var OrderQty1 = "0";
+                    if(BotParams.Accnt_Position.ContainsKey(ShortCode1))
+                        OrderQty1 = BotParams.Accnt_Position[ShortCode1].position_OrderQty;
+                    
                     var BalanceQty = API.GetChejanData(930).Trim().ToString();
                     var BuyPrice = API.GetChejanData(931).Trim().ToString();
                     var CurPrice_in_case_1 = API.GetChejanData(10).Trim().ToString();
@@ -693,7 +696,7 @@ namespace TaewooBot_v2
 
                 SendSellOrder(scr_no, shortCode, Convert.ToInt32(balance), 0, hogaGb);
 
-                utils.delay(3000);
+                //utils.delay(3000);
 
                 /*
                 while (true)

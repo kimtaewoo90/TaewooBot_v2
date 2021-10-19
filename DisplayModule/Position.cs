@@ -125,7 +125,15 @@ namespace TaewooBot_v2
 
                 PositionDataGrid.Invoke(new MethodInvoker(delegate ()
                 {
-                    ((DataTable)PositionDataGrid.DataSource).Rows.Clear();
+                    if (PositionDataGrid.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < PositionDataGrid.Rows.Count; i++)
+                        {
+                            //PositionDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                            if (!PositionDataGrid.Rows[i].IsNewRow)
+                                PositionDataGrid.Rows.Remove(PositionDataGrid.Rows[i]);
+                        }
+                    }
 
                     foreach (KeyValuePair<string, PositionState> items in BotParams.Accnt_Position)
                     {
@@ -155,7 +163,15 @@ namespace TaewooBot_v2
             }
             else
             {
-                ((DataTable)PositionDataGrid.DataSource).Rows.Clear();
+                if (PositionDataGrid.Rows.Count > 0)
+                { 
+                    for (int i = 0; i < PositionDataGrid.Rows.Count; i++)
+                    {
+                        //PositionDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                        if (!PositionDataGrid.Rows[i].IsNewRow)
+                            PositionDataGrid.Rows.Remove(PositionDataGrid.Rows[i]);
+                    }
+                }
 
                 foreach (KeyValuePair<string, PositionState> items in BotParams.Accnt_Position)
                 {
