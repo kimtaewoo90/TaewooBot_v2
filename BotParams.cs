@@ -110,6 +110,7 @@ namespace TaewooBot_v2
         public static string OrderType { get; set; }
         public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();
         public static List<string> PendingOrders = new List<string>();
+        public static List<string> BuyList = new List<string>();
 
         // Position Dictionary
         public static Dictionary<string, PositionState> PositionDict = new Dictionary<string, PositionState>();

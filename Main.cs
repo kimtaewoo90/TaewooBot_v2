@@ -190,7 +190,7 @@ namespace TaewooBot_v2
                 AccountStatusThread.Start();
 
                 //BlotterThread.Start();
-                PositionThread.Start();
+                //PositionThread.Start();
                 //MonitoringSignalThread.Start();
             }
 

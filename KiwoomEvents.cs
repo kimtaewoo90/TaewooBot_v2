@@ -391,7 +391,7 @@ namespace TaewooBot_v2
                     BotParams.Accnt_Position[shortCode].position_Change = change_in_position.ToString();
                     BotParams.Accnt_Position[shortCode].position_TradingPnL = tradingPnL_in_position.ToString();
 
-                    //position.DisplayPosition(shortCode, krName, balanceQty, buyPrice, price.ToString(), change_in_position.ToString(), tradingPnL_in_position.ToString());
+                    position.DisplayPosition(shortCode, krName, balanceQty, buyPrice, price.ToString(), change_in_position.ToString(), tradingPnL_in_position.ToString());
                 }
 
                 // Strategy1 
@@ -409,8 +409,13 @@ namespace TaewooBot_v2
                     state.signal_3 = false;
 
                     // 매수 주문
-                    if (BotParams.Deposit > 1000000 || !BotParams.Accnt_Position.ContainsKey(code) && !BotParams.PendingOrders.Contains(code))
+                    if (BotParams.Deposit > 1000000 && 
+                        !BotParams.Accnt_Position.ContainsKey(code) && 
+                        !BotParams.PendingOrders.Contains(code) &&
+                        !BotParams.BuyList.Contains(code) )  // 매수주문 반복주문 방지
                     {
+                        BotParams.BuyList.Add(code);
+
                         logs.write_sys_log($"{code} Signal is true", 0);
 
                         telegram.SendTelegramMsg($"[{code}/{krName}] try to send Buy order");
@@ -436,8 +441,15 @@ namespace TaewooBot_v2
                 }
 
                 // 매도
-                if (BotParams.Accnt_Position.ContainsKey(code) && BotParams.BlotterStateDict.ContainsKey(code))
+                if (BotParams.Accnt_Position.ContainsKey(code) && 
+                    BotParams.BlotterStateDict.ContainsKey(code))
                 {
+                    for (int i = 0; i < BotParams.BuyList.Count; i++)
+                    {
+                        if (BotParams.BuyList[i] == code)
+                            BotParams.BuyList.RemoveAt(i);
+                    }
+
                     var shortCode = code;
                     var curPrice = price.ToString();
                     var buyPrice = BotParams.Accnt_Position[shortCode].position_BuyPrice;
@@ -649,6 +661,8 @@ namespace TaewooBot_v2
                     BotParams.todayPnL = double.Parse(API.GetChejanData(990).Trim());
                     BotParams.todayChange = double.Parse(API.GetChejanData(991).Trim());
                     BotParams.Deposit = double.Parse(API.GetChejanData(951).Trim());
+
+                    logs.write_sys_log($"[국내주식 잔고변경] Deposit : {BotParams.Deposit}", 0);
 
                     /* 매도 시 Mode Class를 호출하여 각각의 Mode에서의 전략으로 매도 실행 */
                     /* ver2.0 에서는 여기에 바로 매도 로직 작성 */
