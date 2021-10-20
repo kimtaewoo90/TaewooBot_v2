@@ -414,8 +414,18 @@ namespace TaewooBot_v2
                         !BotParams.PendingOrders.Contains(code) &&
                         !BotParams.BuyList.Contains(code) )  // 매수주문 반복주문 방지
                     {
-                        BotParams.BuyList.Add(code);
+                        if(!BotParams.BuyList.Contains(code))
+                            BotParams.BuyList.Add(code);
 
+                        if (BotParams.SellList.Contains(code))
+                        {
+                            for(int i = 0; i < BotParams.SellList.Count; i++)
+                            {
+                                if (BotParams.SellList[i] == code)
+                                    BotParams.SellList.RemoveAt(i);
+                                break;
+                            }
+                        }
                         logs.write_sys_log($"{code} Signal is true", 0);
 
                         telegram.SendTelegramMsg($"[{code}/{krName}] try to send Buy order");
@@ -442,13 +452,10 @@ namespace TaewooBot_v2
 
                 // 매도
                 if (BotParams.Accnt_Position.ContainsKey(code) && 
-                    BotParams.BlotterStateDict.ContainsKey(code))
+                    BotParams.BlotterStateDict.ContainsKey(code) &&
+                    !BotParams.SellList.Contains(code))
                 {
-                    for (int i = 0; i < BotParams.BuyList.Count; i++)
-                    {
-                        if (BotParams.BuyList[i] == code)
-                            BotParams.BuyList.RemoveAt(i);
-                    }
+                   
 
                     var shortCode = code;
                     var curPrice = price.ToString();
@@ -464,6 +471,8 @@ namespace TaewooBot_v2
                     if (BotParams.SellSignals[code] == true &&
                        !BotParams.PendingOrders.Contains(shortCode))
                     {
+
+                        BotParams.SellSignals[code] = false;
                         BotParams.RqName = "주식주문";
                         var scr_no = utils.get_scr_no();
                         var ordPrice = 0;
@@ -473,6 +482,15 @@ namespace TaewooBot_v2
                         //telegram.SendTelegramMsg($"{krName} request sell order");
                         // 주문접수 단계에서 PendingOrders 추가 됨
                         //BotParams.PendingOrders.Add(shortCode);
+
+                        for (int i = 0; i < BotParams.BuyList.Count; i++)
+                        {
+                            if (BotParams.BuyList[i] == code)
+                                BotParams.BuyList.RemoveAt(i);
+                        }
+
+                        if (!BotParams.SellList.Contains(code))
+                            BotParams.SellList.Add(code);
 
                         telegram.SendTelegramMsg($"request sell order : {krName}/{balanceQty}");
 
@@ -578,7 +596,9 @@ namespace TaewooBot_v2
                         var blotterState = new BlotterState(OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, double.Parse(OrderQty), double.Parse(FilledQty), double.Parse(OrderPrice), double.Parse(FilledPrice));
                         BotParams.BlotterStateDict[ShortCode] = blotterState;
                         
-                        BotParams.OrderedStocks.Add(ShortCode);
+                        if (OrderQty == FilledQty)
+                            BotParams.OrderedStocks.Add(ShortCode);
+
                         logs.write_sys_log($"OrderedStock {KrName}", 0);
 
 
@@ -669,6 +689,9 @@ namespace TaewooBot_v2
 
                     telegram.SendTelegramMsg($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}");
                     logs.write_sys_log($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}", 0);
+
+                    GetAccountInformation();
+                    logs.write_sys_log("GetAccountInformation 실행", 0);
 
                     // Test CurPrice
                     if (double.Parse(CurPrice_in_case_1) == 0.0)

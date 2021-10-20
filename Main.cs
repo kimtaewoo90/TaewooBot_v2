@@ -282,7 +282,7 @@ namespace TaewooBot_v2
                         telegram.SendTelegramMsg("Start Monitoring");
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
                         batchData = true;
-                        BotParams.IsLiquidation = true;
+                        BotParams.IsLiquidation = false;
                         BotParams.OrderType = "market";
 
                         GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?
