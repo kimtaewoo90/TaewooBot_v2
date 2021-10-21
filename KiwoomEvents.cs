@@ -456,7 +456,6 @@ namespace TaewooBot_v2
                     !BotParams.SellList.Contains(code))
                 {
                    
-
                     var shortCode = code;
                     var curPrice = price.ToString();
                     var buyPrice = BotParams.Accnt_Position[shortCode].position_BuyPrice;

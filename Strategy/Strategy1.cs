@@ -61,13 +61,13 @@ namespace TaewooBot_v2.Strategy
                 // 30초 후 현재가 < 매수가 => 매도
                 if (double.Parse(curPrice) < double.Parse(buyPrice))
                 {
-                    BotParams.SellSignals[shortCode] = true;
+                    //BotParams.SellSignals[shortCode] = true;
                     //telegram.SendTelegramMsg($"[{shortCode}] cur_price < buy_price....Lostcut");
-                    return;
+                    //return;
                 }
 
                 // 익절 5% 손절 0.9%
-                if (double.Parse(change) > 5.00 || double.Parse(change) < -0.9)
+                if (double.Parse(change) > 2.00 || double.Parse(change) < -0.9)
                 {
                     BotParams.SellSignals[shortCode] = true;
                     //telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
