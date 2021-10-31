@@ -41,8 +41,14 @@
             this.PositionPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TodayPnLPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TodayDeposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.profitTextBox = new System.Windows.Forms.TextBox();
+            this.losscutTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TodayDataGrid)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PositionDataGrid
@@ -135,17 +141,66 @@
             this.TodayDeposit.HeaderText = "예수금";
             this.TodayDeposit.Name = "TodayDeposit";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.losscutTextBox);
+            this.groupBox1.Controls.Add(this.profitTextBox);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(430, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(335, 59);
+            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "익절/손절";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "익절";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(158, 26);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 12);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "손절";
+            // 
+            // profitTextBox
+            // 
+            this.profitTextBox.Location = new System.Drawing.Point(50, 20);
+            this.profitTextBox.Name = "profitTextBox";
+            this.profitTextBox.Size = new System.Drawing.Size(100, 21);
+            this.profitTextBox.TabIndex = 2;
+            // 
+            // losscutTextBox
+            // 
+            this.losscutTextBox.Location = new System.Drawing.Point(202, 20);
+            this.losscutTextBox.Name = "losscutTextBox";
+            this.losscutTextBox.Size = new System.Drawing.Size(100, 21);
+            this.losscutTextBox.TabIndex = 3;
+            // 
             // Position
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(781, 390);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.TodayDataGrid);
             this.Controls.Add(this.PositionDataGrid);
             this.Name = "Position";
             this.Text = "Position";
             ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TodayDataGrid)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -165,5 +220,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn PositionPnL;
         private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnLPercent;
         private System.Windows.Forms.DataGridViewTextBoxColumn TodayDeposit;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox losscutTextBox;
+        private System.Windows.Forms.TextBox profitTextBox;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -61,6 +61,8 @@ namespace TaewooBot_v2
 
                     BotParams.positionPnL = positionPnL;
 
+                    profitTextBox.Text = BotParams.profitTimes.ToString();
+                    losscutTextBox.Text = BotParams.losscutTimes.ToString();
 
                     for (int cnt = 0; cnt < dataGridCnt; cnt++)
                     {
@@ -94,6 +96,9 @@ namespace TaewooBot_v2
                 }
 
                 BotParams.positionPnL = positionPnL;
+
+                profitTextBox.Text = BotParams.profitTimes.ToString();
+                losscutTextBox.Text = BotParams.losscutTimes.ToString();
 
                 for (int cnt = 0; cnt < dataGridCnt; cnt++)
                 {
@@ -198,6 +203,11 @@ namespace TaewooBot_v2
                 }
                 BotParams.positionPnL = positionPnL;
             }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

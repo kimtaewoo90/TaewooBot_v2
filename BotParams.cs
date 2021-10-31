@@ -106,6 +106,10 @@ namespace TaewooBot_v2
         public static Dictionary<string, BlotterState> BlotterStateDict = new Dictionary<string, BlotterState>();
         public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();
 
+        // 익절/손절 횟수
+        public static int profitTimes { get; set; } = 0;
+        public static int losscutTimes { get; set; } = 0;
+
         // Order
         public static string OrderType { get; set; }
         public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();
