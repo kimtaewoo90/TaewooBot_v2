@@ -67,7 +67,7 @@ namespace TaewooBot_v2.Strategy
                 }
 
                 // 익절 5% 손절 0.9%
-                if (double.Parse(change) > 2.00 || double.Parse(change) < -0.9)
+                if (double.Parse(change) > 2.00 || double.Parse(change) < -1.9)
                 {
                     BotParams.SellSignals[shortCode] = true;
                     //telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
@@ -75,11 +75,11 @@ namespace TaewooBot_v2.Strategy
                 }
 
                 //TODO : 매수 후 리셋 된 avgerage tick list > 현재 1분봉(30초) average * 2  => 매도
-                if (BotParams.BeforeAvg[shortCode] > BotParams.TickOneMinsList[shortCode].Average() * 2)
+                if (BotParams.BeforeAvg[shortCode] > BotParams.TickOneMinsList[shortCode].Average() * 4)
                 {
-                    BotParams.SellSignals[shortCode] = true;
+                    // BotParams.SellSignals[shortCode] = true;
                    // telegram.SendTelegramMsg($"[{shortCode}] BeforeAvg > OneMins Avg * 2");
-                    return;
+                   // return;
                 }
             }
         }

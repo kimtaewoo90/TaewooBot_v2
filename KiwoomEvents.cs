@@ -412,6 +412,7 @@ namespace TaewooBot_v2
                     if (BotParams.Deposit > 1000000 && 
                         !BotParams.Accnt_Position.ContainsKey(code) && 
                         !BotParams.PendingOrders.Contains(code) &&
+                        !BotParams.OrderingStocks.Contains(code) &&
                         !BotParams.BuyList.Contains(code) )  // 매수주문 반복주문 방지
                     {
                         if(!BotParams.BuyList.Contains(code))
@@ -572,9 +573,6 @@ namespace TaewooBot_v2
                             strategy1.ResetTickDataList(ShortCode);
                         }
 
-                        if (BotParams.OrderingStocks.Contains(ShortCode) && OrderQty == FilledQty)
-                            BotParams.OrderingStocks.Remove(ShortCode);
-
                         var change_in_case_0 = (double.Parse(CurPrice) / double.Parse(FilledPrice));
                         var tradingPnL_in_case_0 = (double.Parse(CurPrice) - double.Parse(FilledPrice)) * double.Parse(FilledQty);
 
@@ -596,7 +594,21 @@ namespace TaewooBot_v2
                         BotParams.BlotterStateDict[ShortCode] = blotterState;
                         
                         if (OrderQty == FilledQty)
+                        {
                             BotParams.OrderedStocks.Add(ShortCode);
+                            
+                            if (BotParams.OrderingStocks.Contains(ShortCode))
+                            {
+                                for(int i =0; i < BotParams.OrderingStocks.Count; i++)
+                                {
+                                    if(BotParams.OrderingStocks[i] == ShortCode)
+                                    {
+                                        BotParams.OrderingStocks.RemoveAt(i);
+                                        logs.write_sys_log($"{KrName} Remove OrderingStocks ", 0);
+                                    }
+                                }
+                            }
+                        }
 
                         logs.write_sys_log($"OrderedStock {KrName}", 0);
 
@@ -608,24 +620,32 @@ namespace TaewooBot_v2
                     {
                         telegram.SendTelegramMsg($"매도 => Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
 
-                        // Remove Pending Orders
+
                         if (BotParams.PendingOrders.Contains(ShortCode))// && OrderQty == FilledQty)
                         {
-                            // list 임
-                            for(int i = 0; i < BotParams.PendingOrders.Count; i++)
+                            // Remove Pending Orders
+                            for (int i = 0; i < BotParams.PendingOrders.Count; i++)
                             {
                                 if (BotParams.PendingOrders[i] == ShortCode)
                                     BotParams.PendingOrders.RemoveAt(i);
                             }
 
-                            BotParams.Accnt_Position.Remove(ShortCode);
+                        }
 
-                            // list 임
+                        if (BotParams.OrderedStocks.Contains(ShortCode)) 
+                        { 
+                            // Remove OrderedStocks
                             for (int i = 0; i < BotParams.OrderedStocks.Count; i++)
                             {
                                 if (BotParams.OrderedStocks[i] == ShortCode)
                                     BotParams.OrderedStocks.RemoveAt(i);
                             }
+                        }
+
+                        // remove Acct_position
+                        if (BotParams.Accnt_Position.ContainsKey(ShortCode))
+                        {
+                            BotParams.Accnt_Position.Remove(ShortCode);
                         }
                     }
 

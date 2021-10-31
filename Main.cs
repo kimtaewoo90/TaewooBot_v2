@@ -245,6 +245,7 @@ namespace TaewooBot_v2
             telegram.SendTelegramMsg("GetData Thread is started");
 
             var batchData = false;
+            var lastOne = true;
             var IsLiquidation = true;
 
             GetAccountInformation();
@@ -262,8 +263,11 @@ namespace TaewooBot_v2
                         GetAccountInformation();
                     }
 
-                    if (BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0)
+                    // 한번만 돌기
+                    if (BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0 && lastOne == true)
                     {
+                        lastOne = false;
+
                         for (int Idx = 0; Idx < BotParams.RequestRealDataScrNo.Count; Idx++)
                         {
                             API.DisconnectRealData(BotParams.RequestRealDataScrNo[Idx]);
