@@ -397,6 +397,7 @@ namespace TaewooBot_v2
                 // Strategy1 
                 strategy1.CalculateTickSpeed(code, contractLots, price, startPrice);
                 
+
                 // Buy Signals
                 bool signalsStocks = state.MonitoringSignals_Strategy1();
 
@@ -586,7 +587,7 @@ namespace TaewooBot_v2
 
                         BotParams.Accnt_Position[ShortCode] = positionState;
 
-                        telegram.SendTelegramMsg($"Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
+                        //telegram.SendTelegramMsg($"Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
 
                         // Update Blotter DIctionary
                         var blotterState = new BlotterState(OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, double.Parse(OrderQty), double.Parse(FilledQty), double.Parse(OrderPrice), double.Parse(FilledPrice));
@@ -617,7 +618,7 @@ namespace TaewooBot_v2
                     // 체결 + 매도
                     if (OrderType == "체결" && BotParams.OrderedStocks.Contains(ShortCode) && Type == "-매도")
                     {
-                        telegram.SendTelegramMsg($"매도 => Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
+                        //telegram.SendTelegramMsg($"매도 => Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
                         BotParams.Accnt_Position[ShortCode].position_BalanceQty = FilledQty;
 
                         if (BotParams.PendingOrders.Contains(ShortCode))// && OrderQty == FilledQty)
@@ -647,14 +648,7 @@ namespace TaewooBot_v2
                         if (double.Parse(sell_price) - double.Parse(buy_price) > 0)
                             BotParams.profitTimes += 1;
                         else if (double.Parse(sell_price) - double.Parse(buy_price) <= 0)
-                            BotParams.losscutTimes += 1;
-                        
-
-                        // remove Acct_position
-                        if (BotParams.Accnt_Position.ContainsKey(ShortCode))
-                        {
-                            BotParams.Accnt_Position.Remove(ShortCode);
-                        }
+                            BotParams.losscutTimes += 1;    
                     }
 
                     // 주문 접수
@@ -681,47 +675,111 @@ namespace TaewooBot_v2
                     var OrderQty1 = "0";
                     if(BotParams.Accnt_Position.ContainsKey(ShortCode1))
                         OrderQty1 = BotParams.Accnt_Position[ShortCode1].position_OrderQty;
-
-                    var FilledQty1 = BotParams.Accnt_Position[ShortCode1].position_BalanceQty;
-                    
-                    var BalanceQty = API.GetChejanData(930).Trim().ToString();
-                    var BuyPrice = API.GetChejanData(931).Trim().ToString();
                     var CurPrice_in_case_1 = API.GetChejanData(10).Trim().ToString();
-                    //var Change = API.GetChejanData(8019).Trim().ToString();
-                    var Change = (double.Parse(CurPrice_in_case_1) / double.Parse(BuyPrice)).ToString();
-                    var TradingPnL = (double.Parse(CurPrice_in_case_1) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
+                    var BalanceQty = API.GetChejanData(930).Trim().ToString();
 
                     var OrderType_1 = API.GetChejanData(946).Trim().ToString();
 
-                    BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString() };
+                    // 매도
+                    if (OrderType_1 == "1")
+                    {
+                        if (BalanceQty != "0")
+                        {
+                            logs.write_sys_log($"{KrName1} leaves {BalanceQty} Stocks", 0);
+                            telegram.SendTelegramMsg($"{KrName1} leaves {BalanceQty} Stocks");
 
-                    var state = new PositionState(ShortCode1, 
-                                                  KrName1, 
-                                                  OrderQty1, 
-                                                  BalanceQty, 
-                                                  BuyPrice, 
-                                                  CurPrice_in_case_1, 
-                                                  Change, 
-                                                  TradingPnL.ToString());
+                            var BuyPrice = API.GetChejanData(931).Trim().ToString();
+                            var Change = (double.Parse(CurPrice_in_case_1) / double.Parse(BuyPrice)).ToString();
+                            var TradingPnL = (double.Parse(CurPrice_in_case_1) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
 
-                    BotParams.PositionDict[ShortCode1] = state;
+                            BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString() };
 
-                    position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
+                            var state = new PositionState(ShortCode1,
+                                                          KrName1,
+                                                          OrderQty1,
+                                                          BalanceQty,
+                                                          BuyPrice,
+                                                          CurPrice_in_case_1,
+                                                          Change,
+                                                          TradingPnL.ToString());
+
+                            BotParams.PositionDict[ShortCode1] = state;
+
+                            position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
+                        }
+
+                        else if (BalanceQty == "0")
+                        {
+                            logs.write_sys_log($"{KrName1} are all sold out", 0);
+                            telegram.SendTelegramMsg($"{KrName1} are all sold out");
+
+                            var BuyPrice = BotParams.Accnt_Position[ShortCode1].position_BuyPrice;
+                            var Change = (double.Parse(CurPrice_in_case_1) / double.Parse(BuyPrice)).ToString();
+                            var TradingPnL = (double.Parse(CurPrice_in_case_1) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
+
+                            // remove Acct_position
+                            if (BotParams.Accnt_Position.ContainsKey(ShortCode1))
+                            {
+                                BotParams.Accnt_Position.Remove(ShortCode1);
+                            }
+
+                            BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString() };
+
+                            var state = new PositionState(ShortCode1,
+                                                          KrName1,
+                                                          OrderQty1,
+                                                          BalanceQty,
+                                                          BuyPrice,
+                                                          CurPrice_in_case_1,
+                                                          Change,
+                                                          TradingPnL.ToString());
+
+                            BotParams.PositionDict[ShortCode1] = state;
+
+                            position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
+                        }
+                    }
+
+                    // 매수
+                    else if (OrderType_1 == "2")
+                    {
+                        logs.write_sys_log($"{KrName1} are bought with {BalanceQty} Stocks", 0);
+                        telegram.SendTelegramMsg($"{KrName1} are bought with {BalanceQty} Stocks");
+
+                        var BuyPrice = API.GetChejanData(931).Trim().ToString();
+                        var Change = (double.Parse(CurPrice_in_case_1) / double.Parse(BuyPrice)).ToString();
+                        var TradingPnL = (double.Parse(CurPrice_in_case_1) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
+
+                        BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString() };
+
+                        var state = new PositionState(ShortCode1,
+                                                      KrName1,
+                                                      OrderQty1,
+                                                      BalanceQty,
+                                                      BuyPrice,
+                                                      CurPrice_in_case_1,
+                                                      Change,
+                                                      TradingPnL.ToString());
+
+                        BotParams.PositionDict[ShortCode1] = state;
+
+                        position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
+                    }
+                    
 
                     // Display Account Information
                     BotParams.todayPnL = double.Parse(API.GetChejanData(990).Trim());
                     BotParams.todayChange = double.Parse(API.GetChejanData(991).Trim());
                     BotParams.Deposit = double.Parse(API.GetChejanData(951).Trim());
 
-                    logs.write_sys_log($"[국내주식 잔고변경] Deposit : {BotParams.Deposit}", 0);
 
                     /* 매도 시 Mode Class를 호출하여 각각의 Mode에서의 전략으로 매도 실행 */
                     /* ver2.0 에서는 여기에 바로 매도 로직 작성 */
 
-                    telegram.SendTelegramMsg($"국내주식 잔고변경 주문구분 :{OrderType_1} / KrName : {KrName1} / Balance/OrderQty : {BalanceQty}/{OrderQty1} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}");
-
+                    //telegram.SendTelegramMsg($"국내주식 잔고변경 주문구분 :{OrderType_1} / KrName : {KrName1} / Balance/OrderQty : {BalanceQty}/{OrderQty1} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}");
                     //telegram.SendTelegramMsg($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}");
-                    logs.write_sys_log($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}", 0);
+
+                    //logs.write_sys_log($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}", 0);
 
                     GetAccountInformation();
                     logs.write_sys_log("GetAccountInformation 실행", 0);

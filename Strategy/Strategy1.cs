@@ -34,7 +34,7 @@ namespace TaewooBot_v2.Strategy
                 BotParams.LowPriceOneMinute[shortCode] = curPrice;
 
             // 1분 시간 비교를 위한 comparedTime 선언
-            BotParams.comparedTime = BotParams.stockState[shortCode].states_UpdateTime;
+            //BotParams.comparedTime = BotParams.stockState[shortCode].states_UpdateTime;
 
             // 1분 비교 (1분 시간 계산)
             if (DateTime.Parse(BotParams.CurTime) > BotParams.comparedTime.AddMinutes(1))
@@ -66,8 +66,8 @@ namespace TaewooBot_v2.Strategy
                     //return;
                 }
 
-                // 익절 5% 손절 0.9%
-                if (double.Parse(change) > 2.00 || double.Parse(change) < -1.9)
+                // 익절 1% 손절 -1%
+                if (double.Parse(change) > 1.30 || double.Parse(change) < -0.7)
                 {
                     BotParams.SellSignals[shortCode] = true;
                     //telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");

@@ -141,7 +141,7 @@ namespace TaewooBot_v2
             {
                 // Open Windows
                 logs.StartPosition = FormStartPosition.Manual;
-                logs.Location = new Point(755, 520);
+                logs.Location = new Point(1055, 520);
                 logs.Show();
 
                 universe.StartPosition = FormStartPosition.Manual;
@@ -255,7 +255,7 @@ namespace TaewooBot_v2
             { 
                 try
                 {
-                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("09:05:00") < 0  && IsLiquidation == true)
+                    if (BotParams.CurTime.CompareTo("09:00:30") >= 0 && BotParams.CurTime.CompareTo("09:05:00") < 0  && IsLiquidation == true)
                     {
                         BotParams.IsLiquidation = true;
                         IsLiquidation = false;
@@ -281,7 +281,7 @@ namespace TaewooBot_v2
                         // LiquidationStocks();
                     }
 
-                    if (BotParams.CurTime.CompareTo("09:05:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && batchData == false)
+                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && batchData == false)
                     {
                         telegram.SendTelegramMsg("Start Monitoring");
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
