@@ -116,6 +116,7 @@ namespace TaewooBot_v2
         public static List<string> PendingOrders = new List<string>();
         public static List<string> BuyList = new List<string>();
         public static List<string> SellList = new List<string>();
+        public static Dictionary<string, double> TradedPnL = new Dictionary<string, double>();
 
         // Position Dictionary
         public static Dictionary<string, PositionState> PositionDict = new Dictionary<string, PositionState>();

@@ -49,6 +49,10 @@ namespace TaewooBot_v2
 
             var positionPnL = 0.0;
 
+            var tradedPnL = "";
+            if (BotParams.TradedPnL.ContainsKey(shortCode))
+                tradedPnL = BotParams.TradedPnL[shortCode].ToString();
+
             if (PositionDataGrid.InvokeRequired)
             {
 
@@ -75,6 +79,7 @@ namespace TaewooBot_v2
                             PositionDataGrid["CurPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(curPrice));
                             PositionDataGrid["Change", cnt].Value = String.Format("{0:f2}%", double.Parse(change));
                             PositionDataGrid["TradingPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradingPnL));
+                            PositionDataGrid["TradedPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradedPnL));
 
                             return;
                         }     
@@ -83,7 +88,8 @@ namespace TaewooBot_v2
                                              String.Format("{0:0,0}", double.Parse(buyPrice)),
                                              String.Format("{0:0,0}", double.Parse(curPrice)),
                                              String.Format("{0:f2}%", double.Parse(change)),
-                                             String.Format("{0:0,0}", double.Parse(tradingPnL)));
+                                             String.Format("{0:0,0}", double.Parse(tradingPnL)),
+                                             String.Format("{0:0,0}", double.Parse(tradedPnL)));
 
                 }));
             }
@@ -111,6 +117,8 @@ namespace TaewooBot_v2
                         PositionDataGrid["CurPrice", cnt].Value = String.Format("{0:0,0}", double.Parse(curPrice));
                         PositionDataGrid["Change", cnt].Value = String.Format("{0:f2}%", double.Parse(change));
                         PositionDataGrid["TradingPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradingPnL));
+                        PositionDataGrid["TradedPnL", cnt].Value = String.Format("{0:0,0}", double.Parse(tradedPnL));
+
                         return;
                     }
                 }
@@ -118,7 +126,8 @@ namespace TaewooBot_v2
                                          String.Format("{0:0,0}", double.Parse(buyPrice)),
                                          String.Format("{0:0,0}", double.Parse(curPrice)),
                                          String.Format("{0:f2}%", double.Parse(change)),
-                                         String.Format("{0:0,0}", double.Parse(tradingPnL)));
+                                         String.Format("{0:0,0}", double.Parse(tradingPnL)),
+                                         String.Format("{0:0,0}", double.Parse(tradedPnL)));
             }
         }
 
