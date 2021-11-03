@@ -28,6 +28,7 @@ namespace TaewooBot_v2
         // About Account Status
         public static string AccountNumber { get; set; } = null;
         public static double Deposit { get; set; } = 0.0;
+        public static double Deposit_T_2 { get; set; } = 0.0;
         public static double todayChange { get; set; } = 0.0;
         public static double todayPnL { get; set; } = 0.0;
         public static double positionPnL { get; set; } = 0.0;
@@ -107,6 +108,7 @@ namespace TaewooBot_v2
         public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();
 
         // Order
+        public static string OrderType { get; set; }
         public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();
         public static List<string> PendingOrders = new List<string>();
 

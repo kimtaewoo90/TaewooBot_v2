@@ -62,15 +62,16 @@ namespace TaewooBot_v2.Strategy
                 if (double.Parse(curPrice) < double.Parse(buyPrice))
                 {
                     BotParams.SellSignals[shortCode] = true;
-                    telegram.SendTelegramMsg($"[{shortCode}] cur_price < buy_price....Lostcut");
+                    //telegram.SendTelegramMsg($"[{shortCode}] cur_price < buy_price....Lostcut");
+                    
                     return;
                 }
 
-                // 익절 3% 손절 0.9%
-                if (double.Parse(change) > 0.05 || double.Parse(change) < -0.009)
+                // 익절 5% 손절 0.9%
+                if (double.Parse(change) > 5.00 || double.Parse(change) < -0.9)
                 {
                     BotParams.SellSignals[shortCode] = true;
-                    telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
+                    // telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
                     return;
                 }
 
@@ -78,7 +79,7 @@ namespace TaewooBot_v2.Strategy
                 if (BotParams.BeforeAvg[shortCode] > BotParams.TickOneMinsList[shortCode].Average() * 2)
                 {
                     BotParams.SellSignals[shortCode] = true;
-                    telegram.SendTelegramMsg($"[{shortCode}] BeforeAvg > OneMins Avg * 2");
+                    // telegram.SendTelegramMsg($"[{shortCode}] BeforeAvg > OneMins Avg * 2");
                     return;
                 }
             }
