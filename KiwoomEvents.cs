@@ -134,7 +134,7 @@ namespace TaewooBot_v2
                 BotParams.TargetCodes.Remove(e.sTrCode);
 
                 // Remove 이탈Stock in Dictionary
-                utils.RemoveDict(e.sTrCode);
+                //utils.RemoveDict(e.sTrCode);
 
                 logs.write_sys_log("이탈종목 : " + stockName, 0);
 
@@ -255,16 +255,17 @@ namespace TaewooBot_v2
 
             if (e.sRQName == "예수금상세현황요청")
             {
-                BotParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
+                BotParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "주문가능금액").Trim());
                 logs.write_sys_log(BotParams.Deposit.ToString(), 0);
             }
 
             if (e.sRQName == "계좌평가현황요청")
             {
                 BotParams.Deposit = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "예수금").Trim());
-                BotParams.TotalPnL = Int32.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
+                BotParams.todayPnL = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일투자손익").Trim());
+                BotParams.todayChange = Double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "당일손익율").Trim());
 
-                var positionPnL = 0.0;
+                //var positionPnL = 0.0;
 
                 setText_Control(AccountTextBox, BotParams.AccountNumber.ToString());
                 setText_Control(DepositTextBox, BotParams.Deposit.ToString());
@@ -281,7 +282,7 @@ namespace TaewooBot_v2
                     var balance = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "보유수량").Trim());
                     var buyPrice = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "평균단가").Trim());
                     var curPrice = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "현재가").Trim().Replace("-", ""));
-                    var change = Math.Round(((curPrice / buyPrice) - 1) * 100, 2);
+                    var change = Math.Round(((curPrice / buyPrice) - 1) * 100 - 0.95, 2);
                     var tradingPnL = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, nIdx, "손익금액").Trim());
 
                     var positionState = new PositionState(code, 
@@ -295,18 +296,20 @@ namespace TaewooBot_v2
 
                     BotParams.Accnt_Position[code] = positionState;
 
+                    
                     position.DisplayPosition(code, 
                                              krName, 
-                                             balance.ToString(), 
+                                             balance.ToString(),
                                              buyPrice.ToString(), 
                                              curPrice.ToString(), 
                                              change.ToString(), 
                                              tradingPnL.ToString());
-
+                    /*
                     positionPnL = positionPnL + (curPrice - buyPrice) * balance;
+                    */
                 }
 
-                BotParams.positionPnL = positionPnL;
+                //BotParams.positionPnL = positionPnL;
 
                 // 정리매매
                 if (BotParams.IsLiquidation is true)
@@ -383,8 +386,9 @@ namespace TaewooBot_v2
                     var shortCode = BotParams.Accnt_Position[code].position_ShortCode;
                     var balanceQty = BotParams.Accnt_Position[code].position_BalanceQty;
                     var buyPrice = BotParams.Accnt_Position[code].position_BuyPrice;
-                    var change_in_position = (price / double.Parse(buyPrice) - 1) * 100;
-                    var tradingPnL_in_position = (price - double.Parse(buyPrice)) * double.Parse(balanceQty);
+                    var change_in_position = Math.Round((price / double.Parse(buyPrice) - 1) * 100 - 0.95, 2);
+                    var tradingPnL_in_position = (price - double.Parse(buyPrice)) * double.Parse(balanceQty)
+                                                    - double.Parse(buyPrice)*double.Parse(balanceQty)*0.0095;
 
                     //var positionState = new PositionState(shortCode, krName, balanceQty, balanceQty, buyPrice, price.ToString(), change_in_position.ToString(), tradingPnL_in_position.ToString());
                     BotParams.Accnt_Position[shortCode].position_CurPrice = price.ToString();
@@ -410,7 +414,7 @@ namespace TaewooBot_v2
                     state.signal_3 = false;
 
                     // 매수 주문
-                    if (BotParams.Deposit > 1000000 && 
+                    if (BotParams.Deposit > 2000000 && 
                         !BotParams.Accnt_Position.ContainsKey(code) && 
                         !BotParams.PendingOrders.Contains(code) &&
                         !BotParams.OrderingStocks.Contains(code) &&
@@ -421,7 +425,7 @@ namespace TaewooBot_v2
 
                         if (BotParams.SellList.Contains(code))
                         {
-                            for(int i = 0; i < BotParams.SellList.Count; i++)
+                            for (int i = 0; i < BotParams.SellList.Count; i++)
                             {
                                 if (BotParams.SellList[i] == code)
                                     BotParams.SellList.RemoveAt(i);
@@ -573,7 +577,7 @@ namespace TaewooBot_v2
                             strategy1.ResetTickDataList(ShortCode);
                         }
 
-                        var change_in_case_0 = (double.Parse(CurPrice) / double.Parse(FilledPrice));
+                        var change_in_case_0 = Math.Round((double.Parse(CurPrice) / double.Parse(FilledPrice) - 1) * 100 -0.95, 2);
                         var tradingPnL_in_case_0 = (double.Parse(CurPrice) - double.Parse(FilledPrice)) * double.Parse(FilledQty);
 
                         var positionState = new PositionState(ShortCode, 
@@ -586,8 +590,6 @@ namespace TaewooBot_v2
                                                               tradingPnL_in_case_0.ToString());
 
                         BotParams.Accnt_Position[ShortCode] = positionState;
-
-                        //telegram.SendTelegramMsg($"Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
 
                         // Update Blotter DIctionary
                         var blotterState = new BlotterState(OrderTime, orderNmumber, ShortCode, KrName, OrderType, Type, double.Parse(OrderQty), double.Parse(FilledQty), double.Parse(OrderPrice), double.Parse(FilledPrice));
@@ -615,11 +617,9 @@ namespace TaewooBot_v2
 
                     }
 
-                    // TODO : 매도 시 positionState & BlotterState Update를 해줘야 한다.
                     // 체결 + 매도
                     if (OrderType == "체결" && BotParams.OrderedStocks.Contains(ShortCode) && Type == "-매도")
                     {
-                        //telegram.SendTelegramMsg($"매도 => Type : {Type} / KrName : {KrName} / FilledPrice : {FilledPrice} / Amount : {FilledQty}");
                         BotParams.Accnt_Position[ShortCode].position_BalanceQty = FilledQty;
 
                         if (BotParams.PendingOrders.Contains(ShortCode))// && OrderQty == FilledQty)
@@ -674,7 +674,7 @@ namespace TaewooBot_v2
 
                 // 국내주식 잔고변경
                 case "1":
-                    BotParams.Deposit = double.Parse(API.GetChejanData(951).Trim().ToString());
+                    BotParams.Deposit = double.Parse(API.GetChejanData(951).Trim());
                     var ShortCode1 = API.GetChejanData(9001).Trim().ToString();
                     ShortCode1 = ShortCode1.Replace("A", "");
                     var KrName1 = API.GetChejanData(302).Trim().ToString();
@@ -696,22 +696,9 @@ namespace TaewooBot_v2
 
                             var BuyPrice = API.GetChejanData(931).Trim().ToString();
                             var SellPrice = BotParams.BlotterStateDict[ShortCode1].FilledPrice;
-                            var Change = (SellPrice / double.Parse(BuyPrice)).ToString();
-                            var TradingPnL = (double.Parse(CurPrice_in_case_1) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
+                            var Change = Math.Round((SellPrice / double.Parse(BuyPrice) -1) * 100 - 0.95 ,2).ToString();
+                            var TradingPnL = (SellPrice - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
                             BotParams.TradedPnL[ShortCode1] = (SellPrice - double.Parse(BuyPrice)) * double.Parse(BotParams.Accnt_Position[ShortCode1].position_BalanceQty);
-
-                            BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString() };
-
-                            var state = new PositionState(ShortCode1,
-                                                          KrName1,
-                                                          OrderQty1,
-                                                          BalanceQty,
-                                                          BuyPrice,
-                                                          CurPrice_in_case_1,
-                                                          Change,
-                                                          TradingPnL.ToString());
-
-                            BotParams.PositionDict[ShortCode1] = state;
 
                             position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, SellPrice.ToString(), Change, TradingPnL.ToString());
                         }
@@ -723,29 +710,17 @@ namespace TaewooBot_v2
 
                             var BuyPrice = BotParams.Accnt_Position[ShortCode1].position_BuyPrice;
                             var SellPrice = BotParams.BlotterStateDict[ShortCode1].FilledPrice;
-                            var Change = (SellPrice / double.Parse(BuyPrice)).ToString();
-                            var TradingPnL = (double.Parse(CurPrice_in_case_1) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
+                            var Change = Math.Round((SellPrice / double.Parse(BuyPrice) - 1) * 100 - 0.95, 2).ToString();
+                            var TradingPnL = (SellPrice - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
 
-                            BotParams.TradedPnL[ShortCode1] = (SellPrice - double.Parse(BuyPrice)) * double.Parse(BotParams.Accnt_Position[ShortCode1].position_BalanceQty);
+                            BotParams.TradedPnL[ShortCode1] = (SellPrice - double.Parse(BuyPrice)) * double.Parse(BotParams.Accnt_Position[ShortCode1].position_BalanceQty) 
+                                                            - double.Parse(BuyPrice) * double.Parse(BotParams.Accnt_Position[ShortCode1].position_BalanceQty)* 0.0095;
 
                             // remove Acct_position
                             if (BotParams.Accnt_Position.ContainsKey(ShortCode1))
                             {
                                 BotParams.Accnt_Position.Remove(ShortCode1);
                             }
-
-                            BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString() };
-
-                            var state = new PositionState(ShortCode1,
-                                                          KrName1,
-                                                          OrderQty1,
-                                                          BalanceQty,
-                                                          BuyPrice,
-                                                          CurPrice_in_case_1,
-                                                          Change,
-                                                          TradingPnL.ToString());
-
-                            BotParams.PositionDict[ShortCode1] = state;
 
                             position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, SellPrice.ToString(), Change, TradingPnL.ToString());
                         }
@@ -761,28 +736,20 @@ namespace TaewooBot_v2
                         var Change = (double.Parse(CurPrice_in_case_1) / double.Parse(BuyPrice)).ToString();
                         var TradingPnL = (double.Parse(CurPrice_in_case_1) - double.Parse(BuyPrice)) * double.Parse(BalanceQty);
 
-                        BotParams.PositionList = new List<string> { ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString() };
-
-                        var state = new PositionState(ShortCode1,
-                                                      KrName1,
-                                                      OrderQty1,
-                                                      BalanceQty,
-                                                      BuyPrice,
-                                                      CurPrice_in_case_1,
-                                                      Change,
-                                                      TradingPnL.ToString());
-
-                        BotParams.PositionDict[ShortCode1] = state;
-
                         position.DisplayPosition(ShortCode1, KrName1, BalanceQty, BuyPrice, CurPrice_in_case_1, Change, TradingPnL.ToString());
-                    }
-                    
 
+
+                    }
+
+                    GetAccountInformation();
+                    logs.write_sys_log("GetAccountInformation 실행", 0);
+
+                    /*
                     // Display Account Information
                     BotParams.todayPnL = double.Parse(API.GetChejanData(990).Trim());
                     BotParams.todayChange = double.Parse(API.GetChejanData(991).Trim());
                     BotParams.Deposit = double.Parse(API.GetChejanData(951).Trim());
-
+                    */
 
                     /* 매도 시 Mode Class를 호출하여 각각의 Mode에서의 전략으로 매도 실행 */
                     /* ver2.0 에서는 여기에 바로 매도 로직 작성 */
@@ -792,8 +759,7 @@ namespace TaewooBot_v2
 
                     //logs.write_sys_log($"국내주식 잔고변경 KrName : {KrName1} Balance : {BalanceQty} CurPrice : {CurPrice_in_case_1} Change : {Change} TradingPnL : {TradingPnL}", 0);
 
-                    GetAccountInformation();
-                    logs.write_sys_log("GetAccountInformation 실행", 0);
+
 
                     // Test CurPrice
                     if (double.Parse(CurPrice_in_case_1) == 0.0)

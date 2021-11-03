@@ -57,9 +57,7 @@ namespace TaewooBot_v2
                 signal_1 = true;
 
             // 기준 잡기.  tickList average => OneMinTickList average
-            if (states_TickOneMinList.Average() > BotParams.BeforeAvg[states_ShortCode] * 3 &&
-                states_TickOneMinList.Average() > 0 && 
-                BotParams.BeforeAvg[states_ShortCode] >0 &&
+            if (states_TickOneMinList.Average() > Math.Abs(BotParams.BeforeAvg[states_ShortCode]) * 3 &&
                 BotParams.BeforeAvg[states_ShortCode] != 0)
                 signal_2 = true;
 

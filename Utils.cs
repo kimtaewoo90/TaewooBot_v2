@@ -86,15 +86,5 @@ namespace TaewooBot_v2
             BotParams.ScrNo = 1000;
 
         }
-
-        public void RemoveDict(string StockCode)
-        {
-
-            BotParams.targetDict.Remove(StockCode);
-            BotParams.StockKrNameDict.Remove(StockCode);
-            BotParams.StockPriceDict.Remove(StockCode);
-            BotParams.TickSpeedDict.Remove(StockCode);
-            BotParams.StockPnLDict.Remove(StockCode);
-        }
     }
 }

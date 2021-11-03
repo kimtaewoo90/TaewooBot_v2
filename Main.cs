@@ -27,7 +27,7 @@ namespace TaewooBot_v2
 
         //Thread MonitoringSignalThread = null;
         //Thread BlotterThread = null;
-        Thread PositionThread = null;
+        //Thread PositionThread = null;
 
         // Instance Other WinForms
         Logs logs = new Logs();
@@ -172,13 +172,7 @@ namespace TaewooBot_v2
 
                 // Main Thread
                 GetDataThread = new Thread(new ThreadStart(GetData));
-
-                // Blotter Thread
-                // BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
-
-                // Position Thread
-                PositionThread = new Thread(new ThreadStart(PositionDisplay));
-
+              
                 // AccountStatus Thread
                 AccountStatusThread = new Thread(new ThreadStart(AccountStatus));
                 
@@ -198,18 +192,6 @@ namespace TaewooBot_v2
             {
             } 
         }
-
-        // Position Status Thread
-        public void PositionDisplay()
-        {
-            var tempCnt = 0;
-            while (true)
-            {
-                position.DisplayPositionOnce();
-                tempCnt = BotParams.Accnt_Position.Count;
-            }
-        }
-
 
         // Account Status Thread
         public void AccountStatus()
@@ -289,7 +271,7 @@ namespace TaewooBot_v2
                         BotParams.IsLiquidation = false;
                         BotParams.OrderType = "market";
 
-                        GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?
+                        GetAccountInformation();
                         GetShortCodes("MM");                // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
