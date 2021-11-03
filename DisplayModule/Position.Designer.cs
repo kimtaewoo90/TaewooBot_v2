@@ -29,6 +29,16 @@
         private void InitializeComponent()
         {
             this.PositionDataGrid = new System.Windows.Forms.DataGridView();
+            this.TodayDataGrid = new System.Windows.Forms.DataGridView();
+            this.TodayPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PositionPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TodayPnLPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TodayDeposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.losscutTextBox = new System.Windows.Forms.TextBox();
+            this.profitTextBox = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.Position_StockCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Position_KrName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BalanceQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -36,13 +46,10 @@
             this.CurPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Change = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TradingPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TodayDataGrid = new System.Windows.Forms.DataGridView();
-            this.TodayPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PositionPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TodayPnLPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TodayDeposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TradedPnL = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TodayDataGrid)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PositionDataGrid
@@ -55,47 +62,13 @@
             this.BuyPrice,
             this.CurPrice,
             this.Change,
-            this.TradingPnL});
+            this.TradingPnL,
+            this.TradedPnL});
             this.PositionDataGrid.Location = new System.Drawing.Point(12, 87);
             this.PositionDataGrid.Name = "PositionDataGrid";
             this.PositionDataGrid.RowTemplate.Height = 23;
             this.PositionDataGrid.Size = new System.Drawing.Size(753, 291);
             this.PositionDataGrid.TabIndex = 1;
-            // 
-            // Position_StockCode
-            // 
-            this.Position_StockCode.HeaderText = "종목코드";
-            this.Position_StockCode.Name = "Position_StockCode";
-            // 
-            // Position_KrName
-            // 
-            this.Position_KrName.HeaderText = "종목명";
-            this.Position_KrName.Name = "Position_KrName";
-            // 
-            // BalanceQty
-            // 
-            this.BalanceQty.HeaderText = "BalanceQuantity";
-            this.BalanceQty.Name = "BalanceQty";
-            // 
-            // BuyPrice
-            // 
-            this.BuyPrice.HeaderText = "BuyPrice";
-            this.BuyPrice.Name = "BuyPrice";
-            // 
-            // CurPrice
-            // 
-            this.CurPrice.HeaderText = "현재가";
-            this.CurPrice.Name = "CurPrice";
-            // 
-            // Change
-            // 
-            this.Change.HeaderText = "Change(%)";
-            this.Change.Name = "Change";
-            // 
-            // TradingPnL
-            // 
-            this.TradingPnL.HeaderText = "TradingPnL";
-            this.TradingPnL.Name = "TradingPnL";
             // 
             // TodayDataGrid
             // 
@@ -135,17 +108,106 @@
             this.TodayDeposit.HeaderText = "예수금";
             this.TodayDeposit.Name = "TodayDeposit";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.losscutTextBox);
+            this.groupBox1.Controls.Add(this.profitTextBox);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(430, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(335, 59);
+            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "익절/손절";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // losscutTextBox
+            // 
+            this.losscutTextBox.Location = new System.Drawing.Point(202, 20);
+            this.losscutTextBox.Name = "losscutTextBox";
+            this.losscutTextBox.Size = new System.Drawing.Size(100, 21);
+            this.losscutTextBox.TabIndex = 3;
+            // 
+            // profitTextBox
+            // 
+            this.profitTextBox.Location = new System.Drawing.Point(50, 20);
+            this.profitTextBox.Name = "profitTextBox";
+            this.profitTextBox.Size = new System.Drawing.Size(100, 21);
+            this.profitTextBox.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(158, 26);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 12);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "손절";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "익절";
+            // 
+            // Position_StockCode
+            // 
+            this.Position_StockCode.HeaderText = "종목코드";
+            this.Position_StockCode.Name = "Position_StockCode";
+            // 
+            // Position_KrName
+            // 
+            this.Position_KrName.HeaderText = "종목명";
+            this.Position_KrName.Name = "Position_KrName";
+            // 
+            // BalanceQty
+            // 
+            this.BalanceQty.HeaderText = "BalanceQuantity";
+            this.BalanceQty.Name = "BalanceQty";
+            // 
+            // BuyPrice
+            // 
+            this.BuyPrice.HeaderText = "BuyPrice";
+            this.BuyPrice.Name = "BuyPrice";
+            // 
+            // CurPrice
+            // 
+            this.CurPrice.HeaderText = "현재가";
+            this.CurPrice.Name = "CurPrice";
+            // 
+            // Change
+            // 
+            this.Change.HeaderText = "Change(%)";
+            this.Change.Name = "Change";
+            // 
+            // TradingPnL
+            // 
+            this.TradingPnL.HeaderText = "TradingPnL";
+            this.TradingPnL.Name = "TradingPnL";
+            // 
+            // TradedPnL
+            // 
+            this.TradedPnL.HeaderText = "TradedPnL";
+            this.TradedPnL.Name = "TradedPnL";
+            // 
             // Position
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(781, 390);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.TodayDataGrid);
             this.Controls.Add(this.PositionDataGrid);
             this.Name = "Position";
             this.Text = "Position";
             ((System.ComponentModel.ISupportInitialize)(this.PositionDataGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TodayDataGrid)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -154,6 +216,15 @@
         public System.Windows.Forms.DataGridView PositionDataGrid;
         //private AxKHOpenAPILib.AxKHOpenAPI Position_API;
         private System.Windows.Forms.DataGridView TodayDataGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PositionPnL;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnLPercent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TodayDeposit;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox losscutTextBox;
+        private System.Windows.Forms.TextBox profitTextBox;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position_StockCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn Position_KrName;
         private System.Windows.Forms.DataGridViewTextBoxColumn BalanceQty;
@@ -161,9 +232,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn CurPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn Change;
         private System.Windows.Forms.DataGridViewTextBoxColumn TradingPnL;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnL;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PositionPnL;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TodayPnLPercent;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TodayDeposit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TradedPnL;
     }
 }

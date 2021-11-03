@@ -21,7 +21,6 @@ namespace TaewooBot_v2.Strategy
         {
             // Add Total Tick List
             BotParams.TickList[shortCode].Add(double.Parse(contractLots));
-            logs.write_sys_log($"{shortCode} updated TickList", 0);
 
             // Add 1 Min Tick List                
             BotParams.TickOneMinsList[shortCode].Add(double.Parse(contractLots));
@@ -34,7 +33,7 @@ namespace TaewooBot_v2.Strategy
                 BotParams.LowPriceOneMinute[shortCode] = curPrice;
 
             // 1분 시간 비교를 위한 comparedTime 선언
-            BotParams.comparedTime = BotParams.stockState[shortCode].states_UpdateTime;
+            //BotParams.comparedTime = BotParams.stockState[shortCode].states_UpdateTime;
 
             // 1분 비교 (1분 시간 계산)
             if (DateTime.Parse(BotParams.CurTime) > BotParams.comparedTime.AddMinutes(1))
@@ -61,26 +60,42 @@ namespace TaewooBot_v2.Strategy
                 // 30초 후 현재가 < 매수가 => 매도
                 if (double.Parse(curPrice) < double.Parse(buyPrice))
                 {
+<<<<<<< HEAD
                     BotParams.SellSignals[shortCode] = true;
                     //telegram.SendTelegramMsg($"[{shortCode}] cur_price < buy_price....Lostcut");
                     
                     return;
+=======
+                    //BotParams.SellSignals[shortCode] = true;
+                    //telegram.SendTelegramMsg($"[{shortCode}] cur_price < buy_price....Lostcut");
+                    //return;
+>>>>>>> DeskTop
                 }
 
-                // 익절 5% 손절 0.9%
-                if (double.Parse(change) > 5.00 || double.Parse(change) < -0.9)
+                // 익절 1% 손절 -1%
+                if (double.Parse(change) > 1.000 + 0.95 || double.Parse(change) < -2.000 + 0.95)
                 {
                     BotParams.SellSignals[shortCode] = true;
+<<<<<<< HEAD
                     // telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
+=======
+                    //telegram.SendTelegramMsg($"[{shortCode}] Target change rates : {change}");
+>>>>>>> DeskTop
                     return;
                 }
 
                 //TODO : 매수 후 리셋 된 avgerage tick list > 현재 1분봉(30초) average * 2  => 매도
-                if (BotParams.BeforeAvg[shortCode] > BotParams.TickOneMinsList[shortCode].Average() * 2)
+                if (BotParams.BeforeAvg[shortCode] > BotParams.TickOneMinsList[shortCode].Average() * 4)
                 {
+<<<<<<< HEAD
                     BotParams.SellSignals[shortCode] = true;
                     // telegram.SendTelegramMsg($"[{shortCode}] BeforeAvg > OneMins Avg * 2");
                     return;
+=======
+                    // BotParams.SellSignals[shortCode] = true;
+                   // telegram.SendTelegramMsg($"[{shortCode}] BeforeAvg > OneMins Avg * 2");
+                   // return;
+>>>>>>> DeskTop
                 }
             }
         }

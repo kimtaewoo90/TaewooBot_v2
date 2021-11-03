@@ -8,7 +8,7 @@ namespace TaewooBot_v2
 {
     public static class BotParams
     {
-        public static string version { get; set; } = "2.0.001";
+        public static string version { get; set; } = "2.0.010";
         
         // Initialize global params
         public static string Market { get; set; }
@@ -58,65 +58,40 @@ namespace TaewooBot_v2
         public static string Kosdaq { get; set; } = null;
         public static string AllMarket { get; set; } = null;
 
-        // Thread 간 동기화
-        public static bool signal { get; set; } = false;
-        public static bool order { get; set; } = false;
-        public static string SignalStockCode { get; set; } = null;
-        public static string SignalKrName { get; set; } = null;
-        public static string SignalPrice { get; set; } = null;
+        // Thread
+        public static List<string> AccountList = new List<string>();                                                            // Account 상황 실시간 Display
 
         // Tick Speed Dictionary.
-        public static Dictionary<string, List<double>> TickList = new Dictionary<string, List<double>>();
-        public static Dictionary<string, List<double>> TickOneMinsList = new Dictionary<string, List<double>>();
-        public static Dictionary<string, double> BeforeAvg = new Dictionary<string, double>();
+        public static Dictionary<string, List<double>> TickList = new Dictionary<string, List<double>>();                       // 장시작부터 방금전까지의 Tick 리스트
+        public static Dictionary<string, List<double>> TickOneMinsList = new Dictionary<string, List<double>>();                // 1분동안의 Tick 리스트
+        public static Dictionary<string, double> BeforeAvg = new Dictionary<string, double>();                                  // 장시작부터 방금전까지의 Tick 평균
 
-        // Test
-        public static int StockCnt { get; set; } = 0;
-
-        // 항목별 DIctionary 설정
-
-        public static Dictionary<string, string> targetDict = new Dictionary<string, string>();
-        public static Dictionary<string, string> StockKrNameDict = new Dictionary<string, string>();
-        public static Dictionary<string, string> StockPriceDict = new Dictionary<string, string>();
-        public static Dictionary<string, string> TickSpeedDict = new Dictionary<string, string>();
-        public static Dictionary<string, string> StockPnLDict = new Dictionary<string, string>();
-        public static Dictionary<string, string> StockHighPriceDict = new Dictionary<string, string>();
-
-        public static Dictionary<string, List<string>> TickAvgDict = new Dictionary<string, List<string>>();
-        public static Dictionary<string, List<string>> StockDict = new Dictionary<string, List<string>>();
+        public static int StockCnt { get; set; } = 0;                                                                           // Universe Stock Count
 
         public static Dictionary<string, StockState> stockState = new Dictionary<string, StockState>();
 
-
-        // 계좌관련 Dictionary 설정
-        public static Dictionary<string, PositionState> Accnt_Position = new Dictionary<string, PositionState>();
-
-        public static Dictionary<string, string> Accnt_StockName = new Dictionary<string, string>();
-        public static Dictionary<string, string> Accnt_StockLots = new Dictionary<string, string>();
-        public static Dictionary<string, string> Accnt_StockPnL = new Dictionary<string, string>();
-        public static Dictionary<string, string> Accnt_StockPnL_Won = new Dictionary<string, string>();
+        public static Dictionary<string, PositionState> Accnt_Position = new Dictionary<string, PositionState>();               // 보유 종목 기본 정보 Dictionary
 
         // Blotter List
-        public static List<string> BltList = new List<string>();
-        public static List<string> AccountList = new List<string>();
-        public static List<string> PositionList = new List<string>();
-        public static List<string> OrderedStocks = new List<string>();
-        public static List<string> OrderingStocks = new List<string>();
+        public static List<string> BltList = new List<string>();                                                                // Blotter Display 리스트
+        public static List<string> OrderedStocks = new List<string>();                                                          // 주문 체결 종목
+        public static List<string> OrderingStocks = new List<string>();                                                         // 주문 접수 종목
         
-        public static Dictionary<List<string>, string> OrderNumberAndOrderType = new Dictionary<List<string>, string>();
-        public static Dictionary<string, BlotterState> BlotterStateDict = new Dictionary<string, BlotterState>();
-        public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();
+        public static Dictionary<List<string>, string> OrderNumberAndOrderType = new Dictionary<List<string>, string>();        // Blotter 중복 방지
+        public static Dictionary<string, BlotterState> BlotterStateDict = new Dictionary<string, BlotterState>();               // Display Blotter
+        public static Dictionary<string, double> LowPriceOneMinute = new Dictionary<string, double>();                          // 1분봉 중 저가 계산 시 (calculateTickSpeed Func)
+
+        // 익절/손절 횟수
+        public static int profitTimes { get; set; } = 0;                                                                        // 익절 갯수
+        public static int losscutTimes { get; set; } = 0;                                                                       // 손절 갯수
 
         // Order
-        public static string OrderType { get; set; }
-        public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();
-        public static List<string> PendingOrders = new List<string>();
-
-        // Position Dictionary
-        public static Dictionary<string, PositionState> PositionDict = new Dictionary<string, PositionState>();
-
-
-
+        public static string OrderType { get; set; }                                                                            // 장전, 장후 ( 이건 모의투자에서 제공 x)
+        public static Dictionary<string, bool> SellSignals = new Dictionary<string, bool>();                                    // 매수 시그널
+        public static List<string> PendingOrders = new List<string>();                                                          // Pending 된 주문
+        public static List<string> BuyList = new List<string>();                                                                // 매수주문이 이미 들어간 종목 리스트
+        public static List<string> SellList = new List<string>();                                                               // 매도주문이 이미 들어간 종목 리스트
+        public static Dictionary<string, double> TradedPnL = new Dictionary<string, double>();                                  // 매도 후 손익
 
     }
 }

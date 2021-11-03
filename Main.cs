@@ -141,7 +141,7 @@ namespace TaewooBot_v2
             {
                 // Open Windows
                 logs.StartPosition = FormStartPosition.Manual;
-                logs.Location = new Point(755, 520);
+                logs.Location = new Point(1055, 520);
                 logs.Show();
 
                 universe.StartPosition = FormStartPosition.Manual;
@@ -172,13 +172,7 @@ namespace TaewooBot_v2
 
                 // Main Thread
                 GetDataThread = new Thread(new ThreadStart(GetData));
-
-                // Blotter Thread
-                // BlotterThread = new Thread(new ThreadStart(BlotterDisplay));
-
-                // Position Thread
-                // PositionThread = new Thread(new ThreadStart(PositionDisplay));
-
+              
                 // AccountStatus Thread
                 AccountStatusThread = new Thread(new ThreadStart(AccountStatus));
                 
@@ -190,7 +184,7 @@ namespace TaewooBot_v2
                 AccountStatusThread.Start();
 
                 //BlotterThread.Start();
-               // PositionThread.Start();
+                //PositionThread.Start();
                 //MonitoringSignalThread.Start();
             }
 
@@ -233,6 +227,7 @@ namespace TaewooBot_v2
             telegram.SendTelegramMsg("GetData Thread is started");
 
             var batchData = false;
+            var lastOne = true;
             var IsLiquidation = true;
 
             GetAccountInformation();
@@ -242,7 +237,7 @@ namespace TaewooBot_v2
             { 
                 try
                 {
-                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("09:05:00") < 0  && IsLiquidation == true)
+                    if (BotParams.CurTime.CompareTo("09:00:30") >= 0 && BotParams.CurTime.CompareTo("09:05:00") < 0  && IsLiquidation == true)
                     {
                         BotParams.IsLiquidation = true;
                         IsLiquidation = false;
@@ -250,8 +245,11 @@ namespace TaewooBot_v2
                         GetAccountInformation();
                     }
 
-                    if (BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0)
+                    // 한번만 돌기
+                    if (BotParams.CurTime.CompareTo("15:15:00") >= 0 && BotParams.CurTime.CompareTo("15:19:30") < 0 && lastOne == true)
                     {
+                        lastOne = false;
+
                         for (int Idx = 0; Idx < BotParams.RequestRealDataScrNo.Count; Idx++)
                         {
                             API.DisconnectRealData(BotParams.RequestRealDataScrNo[Idx]);
@@ -265,7 +263,7 @@ namespace TaewooBot_v2
                         // LiquidationStocks();
                     }
 
-                    if (BotParams.CurTime.CompareTo("09:05:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && BotParams.PendingOrders.Count == 0 && batchData == false)
+                    if (BotParams.CurTime.CompareTo("09:01:00") >= 0 && BotParams.CurTime.CompareTo("15:14:59") < 0 && batchData == false)
                     {
                         telegram.SendTelegramMsg("Start Monitoring");
                         BotParams.comparedTime = DateTime.Parse(BotParams.CurTime);
@@ -273,7 +271,7 @@ namespace TaewooBot_v2
                         BotParams.IsLiquidation = false;
                         BotParams.OrderType = "market";
 
-                        GetAccountInformation();         // 정리매매 때 이미 GetAccountInformation을 불러왔으니까 여기선 안불러와도 되나?
+                        GetAccountInformation();
                         GetShortCodes("MM");                // botParams.Codes 에 저장
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
