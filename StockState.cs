@@ -62,7 +62,7 @@ namespace TaewooBot_v2
                 signal_2 = true;
 
             // 거래대금도 detail 하게 다시 잡기
-            if (states_TickOneMinList.Sum() * double.Parse(states_CurPrice) > 100000000)
+            if (states_TickOneMinList.Sum() * double.Parse(states_CurPrice) > 400000000)
                 signal_3 = true;
 
             if (signal_1 && signal_2 && signal_3)
