@@ -57,9 +57,16 @@ namespace TaewooBot_v2
                 string kosdaq = API.GetCodeListByMarket("10");
                 string res = kospi + kosdaq;
                 BotParams.Codes = res.Split(new char[] { ';' });
-            }
+            }           
+        }
 
-            
+        public void GetKosdaqIndex()
+        {
+            API.SetInputValue("시장구분", "1");
+            API.SetInputValue("업종코드", "101");
+
+            var scrNo = utils.get_scr_no();
+            API.CommRqData("주식지수요청", "OPT20001", 0, scrNo);
 
         }
 

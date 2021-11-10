@@ -92,5 +92,8 @@ namespace TaewooBot_v2
         public static List<string> SellList = new List<string>();                                                               // 매도주문이 이미 들어간 종목 리스트
         public static Dictionary<string, double> TradedPnL = new Dictionary<string, double>();                                  // 매도 후 손익
 
+
+        // Index
+        public static double KosdaqIndexChange { get; set; }
     }
 }

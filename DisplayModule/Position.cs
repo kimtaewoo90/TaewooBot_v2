@@ -131,6 +131,10 @@ namespace TaewooBot_v2
             }
         }
 
+        public void DisplayKosdaqIndexChange()
+        {
+            KosdaqIndexChange.Text = String.Format("{0:f2}%", BotParams.KosdaqIndexChange);
+        }
       
 
         private void groupBox1_Enter(object sender, EventArgs e)

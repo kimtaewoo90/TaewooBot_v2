@@ -24,6 +24,7 @@ namespace TaewooBot_v2
         public bool signal_1 { get; set; } = false;
         public bool signal_2 { get; set; } = false;
         public bool signal_3 { get; set; } = false;
+        public bool signal_4 { get; set; } = false;
 
 
         public StockState(string ShortCode,
@@ -65,7 +66,12 @@ namespace TaewooBot_v2
             if (states_TickOneMinList.Sum() * double.Parse(states_CurPrice) > 400000000)
                 signal_3 = true;
 
-            if (signal_1 && signal_2 && signal_3)
+            if(BotParams.KosdaqIndexChange > 0)
+            {
+                signal_4 = true;
+            }
+
+            if (signal_1 && signal_2 && signal_3 & signal_4)
             {
                 Signals = true;
             }

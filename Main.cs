@@ -273,6 +273,7 @@ namespace TaewooBot_v2
 
                         GetAccountInformation();
                         GetShortCodes("MM");                // botParams.Codes 에 저장
+                        GetKosdaqIndex();
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
 
@@ -284,6 +285,7 @@ namespace TaewooBot_v2
 
                         GetAccountInformation();
                         GetShortCodes("MM");            // botParams.Codes 에 저장
+                        GetKosdaqIndex();
                         RequestStocksData();                // Request TrData/TrRealData & Update the stockState Dictionary on realtime.
                     }
                 }

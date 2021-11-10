@@ -185,6 +185,9 @@ namespace TaewooBot_v2
                             logs.write_sys_log("주식기본정보 요청", 0);
                             break;
 
+                        case "주식지수요청":   // 코스닥지수 요청
+                            logs.write_sys_log("주식지수 요청", 0);
+                            break;
 
                         default: break;
                     }
@@ -199,7 +202,7 @@ namespace TaewooBot_v2
 
             if (e.sRQName == "현재가조회")
             {
-                 API.CommGetData(e.sTrCode, "", e.sRQName, 0, "현재가");
+                API.CommGetData(e.sTrCode, "", e.sRQName, 0, "현재가");
 
             }
 
@@ -252,6 +255,13 @@ namespace TaewooBot_v2
                     long volume = long.Parse(API.GetCommData(e.sTrCode, e.sRQName, i, "거래량"));                
                 }
             }
+
+            if (e.sRQName == "주식지수요청")
+            {
+                BotParams.KosdaqIndexChange = double.Parse(API.GetCommData(e.sTrCode, e.sRQName, 0, "등락률"));
+                position.DisplayKosdaqIndexChange();
+            }
+
 
             if (e.sRQName == "예수금상세현황요청")
             {
@@ -338,6 +348,12 @@ namespace TaewooBot_v2
         // Get Real Data
         private void OnReceiveRealData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEvent e)
         {
+
+            if(e.sRealType == "업종지수")
+            {
+                BotParams.KosdaqIndexChange = double.Parse(e.sRealData);
+                position.DisplayKosdaqIndexChange();
+            }
             // A03
             if (e.sRealType == "주식체결")
             {
