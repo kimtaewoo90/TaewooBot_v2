@@ -24,7 +24,8 @@ namespace TaewooBot_v2
         public bool signal_1 { get; set; } = false;
         public bool signal_2 { get; set; } = false;
         public bool signal_3 { get; set; } = false;
-        public bool signal_4 { get; set; } = false;
+        public bool signal_4 { get; set; } = false;  // 코스닥 지수 > 0
+        public bool signal_5 { get; set; } = false;  // 개별 종목 등락률 > 0
 
 
         public StockState(string ShortCode,
@@ -71,7 +72,12 @@ namespace TaewooBot_v2
                 signal_4 = true;
             }
 
-            if (signal_1 && signal_2 && signal_3 & signal_4)
+            if (double.Parse(states_Change) > 0)
+            {
+                signal_5 = true;
+            }
+
+            if (signal_1 && signal_2 && signal_3 & signal_4 & signal_5)
             {
                 Signals = true;
             }
