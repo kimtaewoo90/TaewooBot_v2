@@ -353,9 +353,9 @@ namespace TaewooBot_v2
             {
 
                 //"090100\t-979.75\t-8.00\t-0.81\t3150\t23802\t229298\t-981.42\t-981.42\t-979.71\t5\t-1452700"
-                BotParams.KosdaqIndexChange =double.Parse( API.GetCommRealData(e.sRealData, 12).Trim());
+                BotParams.KosdaqIndexChange =double.Parse(API.GetCommRealData(e.sRealData, 12).Trim());
                     
-                    double.Parse(e.sRealData);
+                    //double.Parse(e.sRealData);
                 position.DisplayKosdaqIndexChange();
             }
             // A03
